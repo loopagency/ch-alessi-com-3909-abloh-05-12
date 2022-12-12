@@ -1,0 +1,102 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Double Image Block
+  - This is an Example Page Builder Block
+------------------------------------------------------------------------------
+{% endcomment %}
+{%- assign block_id = block.id -%}
+{%- assign image1 = block.settings.image1 -%}
+{%- assign image1_mobile = block.settings.image1_mobile -%}
+{%- assign image1_subtitle = block.settings.image1_subtitle -%}
+{%- assign image1_description = block.settings.image1_description -%}
+{%- assign image2 = block.settings.image2 -%}
+{%- assign image2_mobile = block.settings.image2_mobile -%}
+{%- assign image2_subtitle = block.settings.image2_subtitle -%}
+{%- assign image2_description = block.settings.image2_description -%}
+
+{%- if block_settings -%}
+  {%- assign block_settings_array = block_settings | replace: ',"', '##split##' 
+    | replace: '{', '' 
+    | replace: '}', '' 
+    | replace: '"', '' 
+    | split: '##split##' 
+  -%}
+  {%- for block_setting in block_settings_array -%}
+    {%- if block_setting != blank -%}
+      {%- assign block_setting_name_value = block_setting | split: '=>' -%}
+      {%- assign block_setting_name = block_setting_name_value[0] | replace: ' ', '' -%}
+      {%- assign block_setting_value = block_setting_name_value[1] -%}
+      {%- assign block_setting_value_slice = block_setting_value | slice: 0, 5 -%}
+      {%- if block_setting_value_slice == 'files' -%}
+        {%- assign block_setting_value = block_setting_value | replace: 'files/' -%}
+        {%- assign block_setting_value = images[block_setting_value] -%}
+      {%- endif -%}
+      {%- case block_setting_name -%}
+        {%- when 'image1' -%}
+          {%- assign image1 = block_setting_value -%}
+        {%- when 'image1_mobile' -%}
+          {%- assign image1_mobile = block_setting_value -%}
+        {%- when 'image1_subtitle' -%}
+          {%- assign image1_subtitle = block_setting_value -%}
+        {%- when 'image1_description' -%}
+          {%- assign image1_description = block_setting_value -%}
+        {%- when 'image2' -%}
+          {%- assign image2 = block_setting_value -%}
+        {%- when 'image2_mobile' -%}
+          {%- assign image2_mobile = block_setting_value -%}
+        {%- when 'image2_subtitle' -%}
+          {%- assign image2_subtitle = block_setting_value -%}
+        {%- when 'image2_description' -%}
+          {%- assign image2_description = block_setting_value -%}
+      {%- endcase -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+<section
+  id="Block-double-image-{{ block_id }}"
+  class="block-double-image"
+  data-section-id="{{ block_id }}"
+  data-section-type="block-double-image"
+  data-size="fullScreen"
+>
+  <div class="block-double-image__container">
+    <div class="block-double-image__column">
+      <div class="block-double-image__image lazyload">
+        {% render 'art-direction-image' with
+          large_image: image1,
+          small_image: image1_mobile,
+        %}
+
+        <div class="block-double-image__content">
+          {%- if image1_subtitle != blank %}
+            <h3 class="block-double-image__header">{{ image1_subtitle }}</h3>
+          {%- endif -%}
+        
+          {%- if image1_description != blank %}
+            {{ image1_description }}
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+
+    <div class="block-double-image__column">
+      <div class="block-double-image__image lazyload">
+        {% render 'art-direction-image' with
+          large_image: image2,
+          small_image: image2_mobile,
+        %}
+
+        <div class="block-double-image__content">
+          {%- if image2_subtitle != blank %}
+            <h3 class="block-double-image__header">{{ image2_subtitle}}</h3>
+          {%- endif -%}
+        
+          {%- if image2_description != blank %}
+            {{ image2_description }}
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

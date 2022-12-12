@@ -1,0 +1,107 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Hero Banner
+  - Hero banner block for custom content templates
+------------------------------------------------------------------------------
+{% endcomment %}
+{%- assign block_id = block.id -%}
+{%- assign small_image = block.settings.small_image -%}
+{%- assign large_image = block.settings.large_image -%}
+{%- assign video_vimeo_ID = block.settings.video_vimeo_ID -%}
+{%- assign video_hide_mobile = block.settings.video_hide_mobile -%}
+{%- assign title = block.settings.title -%}
+{%- assign copy = block.settings.copy -%}
+{%- assign text_color = block.settings.text_color -%}
+{%- assign text_alignment = block.settings.text_alignment -%}
+{%- assign content_alignment = block.settings.content_alignment -%}
+
+{%-if block_settings -%}
+  {%- assign block_settings_array = block_settings | replace: ',"', '##split##' 
+    | replace: '{', '' 
+    | replace: '}', '' 
+    | replace: '"', '' 
+    | split: '##split##' 
+  -%}
+  {%- for block_setting in block_settings_array -%}
+    {%- if block_setting != blank -%}
+      {%- assign block_setting_name_value = block_setting | split: '=>' -%}
+      {%- assign block_setting_name = block_setting_name_value[0] | replace: ' ', '' -%}
+      {%- assign block_setting_value = block_setting_name_value[1] -%}
+      {%- assign block_setting_value_slice = block_setting_value | slice: 0, 5 -%}
+      {%- if block_setting_value_slice == 'files' -%}
+        {%- assign block_setting_value = block_setting_value | replace: 'files/' -%}
+        {%- assign block_setting_value = images[block_setting_value] -%}
+      {%- endif -%}
+      {%- case block_setting_name -%}
+        {%- when 'small_image' -%}
+          {%- assign small_image = block_setting_value -%}
+        {%- when 'large_image' -%}
+          {%- assign large_image = block_setting_value -%}
+        {%- when 'video_vimeo_ID' -%}
+          {%- assign video_vimeo_ID = block_setting_value -%}
+        {%- when 'video_hide_mobile' -%}
+          {%- assign video_hide_mobile = block_setting_value -%}
+        {%- when 'title' -%}
+          {%- assign title = block_setting_value -%}
+        {%- when 'copy' -%}
+          {%- assign copy = block_setting_value -%}
+        {%- when 'text_color' -%}
+          {%- assign text_color = block_setting_value -%}
+        {%- when 'text_alignment' -%}
+          {%- assign text_alignment = block_setting_value -%}
+        {%- when 'content_alignment' -%}
+          {%- assign content_alignment = block_setting_value -%}
+      {%- endcase -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{% assign video_hide_mobile_boolean = false %}
+
+{% if video_hide_mobile == 'true' %}
+  {% assign video_hide_mobile_boolean = true %}
+{% endif %}
+
+<div
+  id="ImageVideoHero-{{ block_id }}"
+  class="image-video-hero image-video-hero--block"
+  data-section-id="{{ block_id }}"
+  data-section-type="image-video-hero"
+  data-size="fullScreen"
+  js-datalayer-promo="container"
+>
+
+  {% capture video_id %}video-{{ block_id }}{% endcapture %}
+
+  {% render 'image-video' with
+    vimeo_id: video_vimeo_ID,
+    video_id: video_id,
+    video_hidden_mobile: video_hide_mobile_boolean,
+    large_image: large_image,
+    small_image: small_image,
+    location: 'homepage',
+  %}
+
+  <div class="image-video-hero__container">
+    <div class="container image-video-hero__content {{ text_alignment }}">
+      <div class="row {{ content_alignment }}">
+        <div class="col xs12 m6">
+          <h2
+            class="image-video-hero__title d1"
+            style="color: {{ text_color }}"
+            js-datalayer-promo="name"
+          >
+            {{ title }}
+          </h2>
+
+          <p 
+            class="image-video-hero__copy"
+            style="color: {{ text_color }}"
+          >
+            {{ copy }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

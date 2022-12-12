@@ -1,0 +1,334 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Site header
+  - This is a required section for the Shopify Theme Store.
+  - Settings available in `Header` section in the theme editor.
+  - Sticky navigation is set by default.
+------------------------------------------------------------------------------
+{% endcomment %}
+{% assign cart_item_counter = 0 %}
+{% assign logo_modifiers = '' %}
+
+{% for item in cart.items %}
+  {% assign product_type = item.product.type | handleize %}
+
+  {% unless item.product.type == 'add-on' %}
+    {% assign cart_item_counter = cart_item_counter | plus: item.quantity %}
+  {% endunless %}
+{% endfor %}
+
+{% if settings.enable_centenary_logo %}
+  {% assign logo_modifiers = logo_modifiers | append: 'is-centenary' %}
+{% endif %}
+
+<section
+  class="site-header critical-hide"
+  data-section-id="{{ section.id }}"
+  data-section-type="site-header"
+  js-site-header="container"
+>
+  {% render 'top-bar' with
+      text: block.settings.text,
+      link: block.settings.link,
+      date: block.settings.countdown_date,
+      messageExpired: block.settings.message_expired
+    %}
+
+  <div
+    class="
+      site-header__masthead
+      {% if template == 'index' and section.settings.homepage_colourway == 'dark' %}
+        inverse-colourway
+      {% endif %}
+    "
+  >
+    <header class="site-header__container">
+      <div class="row no-gutter">
+        <div class="col xs12">
+          <div class="site-header__inner">
+            
+
+            <div class="site-header__hamburger">
+              <button
+                class="site-header__icon site-header__icon--hamburger"
+                data-target="menuDrawer"
+                js-toggle="menuDrawer"
+              >
+                <span class="visually-hidden">
+                  {{ 'general.accessibility.menu' | t }}
+                </span>
+
+                {% render 'icon-misc' with icon: 'hamburger' %}
+              </button>
+
+            </div>
+
+            <nav
+              class="site-header__navbar"
+              aria-label="{{ 'general.accessibility.sitenav.main_navigation' | t }}"
+            >
+              {% render 'site-nav' with menu: section.settings.menu %}
+            </nav>
+
+            <div class="site-header__brand">
+              {% if template.name == 'index' %}
+                <h1 class="site-header__logo {{ logo_modifiers }}">
+              {% else %}
+                <span class="site-header__logo {{ logo_modifiers }}">
+              {% endif %}
+
+              <a
+                href="{{ shop.url }}"
+                js-header="topLink"
+              >
+                {% render 'site-logo' %}
+              </a>
+
+              {% if template.name == 'index' %}
+                </h1>
+              {% else %}
+                </span>
+              {% endif %}
+            </div>
+
+            <div class="site-header__misc">
+              
+              <button
+                class="site-header__search-toggle algolia-trigger"
+                data-target="searchBarOverlay"
+                js-toggle="searchBarOverlay"
+                onclick="cleanQuery();"
+              >
+                <div class="site-header__search-toggle-label subtitle-2">
+                  <span>
+                    {{ 'general.search.placeholder' | t }}
+                  </span>
+                  {% render 'icon-misc' with icon: 'search' %}
+                </div>
+                <div class="site-header__search-toggle-label subtitle-2">
+                  <span>
+                    {{ 'general.search.close' | t }}
+                  </span>
+                  {% render 'icon-misc' with icon: 'close' %}
+                </div>
+              </button>
+
+              <button
+                class="site-header__icon site-header__icon--cart"
+                {% unless template == 'cart' %}
+                  data-cy="cartIcon"
+                  data-target="cartDrawer"
+                  js-toggle="cartDrawer"
+                {% endunless %}
+              >
+                {% render 'icon-misc' with icon: 'cart' %}
+                <span class="visually-hidden">{{ 'layout.cart' | t }}</span>
+
+                <span
+                  class="
+                    badge badge--primary badge--round
+                    {% if cart_item_counter <= 0 %}is-hidden{% endif %}
+                  "
+                  js-ajax-cart="cartCounter"
+                >
+                  {{ cart_item_counter }}
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+  </div>
+</section>
+
+<script>
+  
+  function cleanQuery() {
+      var algoliaContainer = document.querySelector('.algolia-autocomplete');
+      var algoliaProducts = document.querySelector('.aa-dataset-products');
+      var algoliaMobile = document.querySelector('.aa-columns-container');
+      var algoliaTrigger = document.getElementById('Search');
+
+      algoliaProducts.scrollTo({top: 0});
+      algoliaMobile.scrollTo({top: 0});
+      
+      if (algoliaContainer.style.display !== 'none') {
+        algoliaContainer.style.display = 'none';
+      }
+      else {
+        algoliaContainer.style.display = 'none';
+        algoliaTrigger.focus();
+        algoliaTrigger.value = '';
+      }
+  };
+</script>
+
+{% schema %}
+  {
+    "name": "Header",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Top bar"
+      },
+      {
+        "type": "checkbox",
+        "id": "announcement_bar_enabled",
+        "label": "Show announcement",
+        "default": false
+      },
+      {
+        "type": "color",
+        "id": "bg",
+        "label": "Select background color for Top Bar",
+        "default": "#000"
+      },
+      {
+        "type": "header",
+        "content": "Menu"
+      },
+      {
+        "type": "link_list",
+        "id": "top_menu",
+        "label": "Top bar menu",
+        "default": "main-menu"
+      },
+      {
+        "type": "header",
+        "content": "Header"
+      },
+      {
+        "type": "select",
+        "id": "homepage_colourway",
+        "label": "Select header colour mode",
+        "options": [
+          {
+            "value": "light",
+            "label": "Light"
+          },
+          {
+            "value": "dark",
+            "label": "dark"
+          }
+        ],
+        "default": "light"
+      },
+      {
+        "type": "link_list",
+        "id": "menu",
+        "label": "Main Menu",
+        "default": "main-menu"
+      }
+    ],
+    "max_blocks": 3,
+    "blocks": [
+      {
+        "type": "announce_countdown",
+        "name": "Announce Countdown(MAX 1)",
+        
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "enable_pill",
+            "label": "Allow pulse pill",
+            "default": true
+          },
+          {
+            "type": "color",
+            "id": "pill_bg",
+            "label": "Color for pill",
+            "default": "#ED1C24"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Insert Text",
+            "default": "Text for your announce"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "Insert link",
+            "default": "/collections"
+          },
+          {
+            "type": "text",
+            "id": "countdown_date",
+            "label": "Insert final date",
+            "default": "Nov 29, 2022 00:00:00"
+          },
+          {
+            "type": "text",
+            "id": "message_expired",
+            "label": "Insert final date",
+            "default": "Promozione finita"
+          }
+        ]
+      },
+      {
+        "type": "announce_text",
+        "name": "Announce Text",
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "enable_pill",
+            "label": "Allow pulse pill",
+            "default": true
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Insert Text",
+            "default": "Text for your announce"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "Insert link",
+            "default": "/collections"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Organization",
+    "name": {{ shop.name | json }},
+    {% if section.settings.logo %}
+      {% assign image_size = section.settings.logo.width | append:'x' %}
+      "logo": {{ section.settings.logo | img_url: image_size | prepend: 'https' | json }},
+    {% endif %}
+    "sameAs": [
+      {{ settings.social_twitter_link | json }},
+      {{ settings.social_facebook_link | json }},
+      {{ settings.social_pinterest_link | json }},
+      {{ settings.social_instagram_link | json }},
+      {{ settings.social_tumblr_link | json }},
+      {{ settings.social_snapchat_link | json }},
+      {{ settings.social_youtube_link | json }},
+      {{ settings.social_vimeo_link | json }}
+    ],
+    "url": {{ shop.url | append: page.url | json }}
+  }
+</script>
+
+{% if request.page_type == 'index' %}
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      "name": {{ shop.name | json }},
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "{{ shop.url }}/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
+      "url": {{ shop.url | append: page.url | json }}
+    }
+  </script>
+{% endif %}

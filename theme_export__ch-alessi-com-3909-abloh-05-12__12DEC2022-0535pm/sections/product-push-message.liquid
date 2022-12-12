@@ -1,0 +1,82 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Component: Product push message
+  - Insert specific message to specific products group
+------------------------------------------------------------------------------
+{% endcomment %}
+
+
+{% assign current_tag = '' %}
+{% for block in section.blocks %}
+  {% liquid 
+    assign current_tag = block.settings.tag
+    for tag in product.tags
+      if tag contains current_tag
+        assign tag_accepted = tag
+      endif
+    endfor
+    %}
+
+
+  {% for tag in product.tags %}
+    {% if tag contains current_tag %}
+    <div 
+      class="notification notification__pdp-push-message block--{{ block.id }}" 
+      role="alert"
+      style="background-color: {{ block.settings.bg_color }}!important; color: {{ block.settings.text_color }}!important;"
+    >
+      <div 
+        class="notification__text-wrapper" style="color: {{ block.settings.text_color }}!important;"
+      >
+          {{ block.settings.push_message | replace: '<p', '<p class="notification__text caption"' }} 
+      </div>
+    </div>
+    {% endif %}
+  {% endfor %}
+
+  <style>
+    .block--{{ block.id }} .notification__text a {
+      color: {{ block.settings.text_color }}!important;
+    }
+  </style>
+{% endfor %}
+
+
+
+
+
+{% schema %}
+{
+  "name": "Product push message",
+  "blocks": [
+    {
+      "type": "icon",
+      "name": "Message",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tag",
+          "label": "Tag for matching text to pdp"
+        },
+        {
+          "type": "richtext",
+          "id": "push_message",
+          "label": "Push message"
+        },
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background Color",
+          "default": "#000"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color",
+          "default": "#fff"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,168 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Contacts list
+------------------------------------------------------------------------------
+{% endcomment %}
+<div class="area-contacts" js-fade-in="container">
+  <div class="container">
+    <div class="row">
+      {% if section.settings.contacts_title != blank %}
+        <h3 class="area-contacts__title col xs12">{{ section.settings.contacts_title }}</h2>
+      {% endif %}
+
+      {% assign area_counter = 0 %}
+
+      {% for block in section.blocks %}
+        {% case block.type %}
+        {% when "area-contacts-title" %}
+          {% assign area_counter = 0 %}
+
+          <h4 class="area-contacts__area-title col xs12">
+            {{ block.settings.contacts_area_title }}
+          </h4>
+
+        {% when "area-contacts" %}
+          {% assign area_counter = area_counter | plus: 1 %}
+          {% assign modifier = '' %}
+
+          {% if area_counter == 1 %}
+            {% assign modifier = 'xs-clear l-clear' %}
+          {% endif %}
+
+          {% if area_counter == 3 %}
+            {% assign modifier = 'xs-clear' %}
+          {% endif %}
+
+          <div class="col xs12 l3 {{ modifier }}">
+            <div class="area-contacts__block">
+              {% if block.settings.contacts_area != blank %}
+                <h6 class="area-contacts__area button">
+                  {{ block.settings.contacts_area }}
+                </h6>
+              {% endif %}
+
+              {% if block.settings.contacts_name != blank %}
+                <p class="area-contacts__name subtitle-2">
+                  {{ block.settings.contacts_name }}
+                </p>
+              {% endif %}
+
+              <p class="area-contacts__content body-2">
+                {{ block.settings.contacts_content | newline_to_br }}
+              </p>
+
+              <p class="body-2">
+                {% if block.settings.phone != blank %}
+                  {{ block.settings.phone }}<br>
+                {% endif %}
+
+                {% if block.settings.email != blank %}
+                  <a
+                    class="area-contacts__email"
+                    href="mailto:{{ block.settings.email }}"
+                  >
+                    {{ block.settings.email }}
+                  </a>
+                {% endif %}
+
+                {% if block.settings.additional_email != blank %}
+                  <br>
+                  <a
+                    class="area-contacts__email"
+                    href="mailto:{{ block.settings.additional_email }}"
+                  >
+                    {{ block.settings.additional_email }}
+                  </a>
+                {% endif %}
+              </p>
+            </div>
+          </div>
+
+          {% if area_counter == 4 %}
+            {% assign area_counter = 0 %}
+          {% endif %}
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Area contacts",
+    "class": "custom-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Title"
+      },
+      {
+        "type": "text",
+        "id": "contacts_title",
+        "label": "Main title"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "area-contacts",
+        "name": "Area contacts",
+        "settings": [
+          {
+            "type": "header",
+            "content": "Area contact"
+          },
+          {
+            "type": "text",
+            "id": "contacts_area",
+            "label": "Area"
+          },
+          {
+            "type": "text",
+            "id": "contacts_name",
+            "label": "Name",
+            "default": "Lorem ipsum"
+          },
+          {
+            "type": "textarea",
+            "id": "contacts_content",
+            "label": "Area content",
+            "default": "Default textarea content"
+          },
+          {
+            "type": "text",
+            "id": "phone",
+            "label": "Phone",
+            "default": "Tel. (+39)0323 868611"
+          },
+          {
+            "type": "text",
+            "id": "email",
+            "label": "Email",
+            "default": "corporateb2b@alessi.com"
+          },
+          {
+            "type": "text",
+            "id": "additional_email",
+            "label": "Additional Email",
+            "default": "corporateb2b@alessi.com"
+          }
+        ]
+      },
+      {
+        "type": "area-contacts-title",
+        "name": "Section Title",
+        "settings": [
+          {
+            "type": "header",
+            "content": "Section Title"
+          },
+          {
+            "type": "text",
+            "id": "contacts_area_title",
+            "label": "Title"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

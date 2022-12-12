@@ -1,0 +1,41 @@
+{% liquid
+  assign designer_collection = false
+  if collection.description != blank and collection.metafields.accentuate.main_image != blank 
+    render 'meet-the-designer' with template_snippet: 'collection-mf', main_image: collection.metafields.accentuate.main_image[0]
+    assign designer_collection = true
+
+  elsif collection.description != blank and collection.image != blank
+    render 'meet-the-designer' with template_snippet: 'collection'
+    assign designer_collection = true
+  endif
+%}
+
+{% unless designer_collection %}
+  <div class="container">
+    <div
+      style="{% if collection.description != blank %}margin-bottom: unset;{% endif %}"
+      class="row"
+    >
+      <div class="template-collection__header">
+        <div class="col xs12">
+          <h1
+            style="{% if collection.description != blank %}margin-bottom: unset;{% endif %}"
+            class="h2 template-collection__title"
+          >
+            {{ collection.title }}
+          </h1>
+        </div>
+      </div>
+    </div>
+
+    {% if collection.description != blank %}
+      <div class="row">
+        <div class="template-collection__header template-collection__description">
+          <div class="col xs12">
+            {{ collection.description }}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endunless %}

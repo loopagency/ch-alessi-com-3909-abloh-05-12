@@ -1,0 +1,15 @@
+{% liquid 
+    assign is_bundle = false
+    assign promo_tag = settings.promo_tag
+    for tag in product.tags
+        if tag == promo_tag
+            assign is_bundle = true
+        endif
+    endfor
+
+     assign promo_name = promo_tag | split: ':'
+%}
+
+{% if is_bundle %}
+    <input type="hidden" value="{{ promo_name }}" name="properties[Bundle]">
+{% endif %}

@@ -1,0 +1,36 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Product card swatches
+  - Adding styled color swatches.
+
+  - Dependencies:
+  -- product Object.
+------------------------------------------------------------------------------
+{% endcomment %}
+<div class="product-card__swatches product-card-swatches">
+  {% if option.values.size > 0 %}
+    {% for value in option.values %}
+      {% assign swatch_image =  value
+        | handleize
+        | prepend: 'swatch-'
+        | append: '_20x20.png'
+      %}
+      <a
+        class="product-card-swatches__swatch"
+        href="{{ product.url }}?variant-color={{ value | url_encode }}"
+      >
+        <img
+          alt="{{ value }}"
+          class="product-card-swatches__image"
+          src="{{ swatch_image | file_url }}"
+        />
+      </a>
+    {% endfor %}
+
+    {% if option.values.size > 1 %}
+      <span class="product-card-swatches__message caption">
+        {{ 'collections.product.more_variants_available' | t }}
+      </span>
+    {% endif %}
+  {% endif %}
+</div>

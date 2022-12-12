@@ -1,0 +1,20 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Search overlay
+  - Used globally appears when the search button is clicked.
+----------------------------------------------------------------------------
+{% endcomment %}
+<div
+  id="searchBarOverlay"
+  class="search-overlay background--medium"
+  js-search="overlay"
+>
+  <div class="container">
+    <div class="row">
+      <div class="col xs12 l12">
+        {% render 'search-bar' %}
+        <div class="search-overlay__results"></div>
+      </div>
+    </div>
+  </div>
+</div>

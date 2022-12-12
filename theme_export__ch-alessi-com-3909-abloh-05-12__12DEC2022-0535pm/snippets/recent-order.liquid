@@ -1,0 +1,91 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Recent order
+  - Recent order displayed on account pages.
+----------------------------------------------------------------------------
+{% endcomment %}
+
+<div class="recent-order">
+  {% assign most_recent_order = customer.orders | first %}
+
+  <h2 class="h4 panel__title">
+    {{ 'customer.account.recent_orders' | t }}
+  </h2>
+
+  {% if customer.orders.size != 0 %}
+    <div class="panel__body">
+      <div class="panel__grid">
+        <div class="row">
+          <div class="col xs6 m6">
+            <span class="panel__label label color--light">
+              {{ 'customer.orders.order_number' | t }}
+            </span>
+
+            <p data-label="{{ 'customer.orders.date' | t }}">
+              <a
+                href="{{ most_recent_order.customer_url }}"
+                class="body-1 color--primary"
+              >
+                {{ most_recent_order.name }}
+              </a>
+            </p>
+          </div>
+
+          <div class="col xs6 m6">
+            <span class="panel__label label color--light">
+              {{ 'customer.orders.fulfillment_status' | t }}
+            </span>
+
+            <p
+              class="body-1 color--primary"
+              data-label="{{ 'customer.orders.date' | t }}"
+              data-label="{{ 'customer.orders.fulfillment_status' | t }}"
+            >
+              {{ most_recent_order.fulfillment_status_label }}
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col xs6 m6">
+            <span class="panel__label label color--light">
+              {{ 'customer.orders.date' | t }}
+            </span>
+
+            <p
+              class="body-1 color--primary"
+              data-label="{{ 'customer.orders.date' | t }}"
+            >
+              {{ most_recent_order.created_at | date: format: 'month_day_year' }}
+            </p>
+          </div>
+
+          <div class="col xs6 m6">
+            <span class="panel__label label color--light">
+              {{ 'customer.orders.total' | t }}
+            </span>
+
+            <p
+              class="body-1 color--primary"
+              data-label="{{ 'customer.orders.total' | t }}"
+            >
+              {{ most_recent_order.total_price | money | remove: '.00' }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel__footer">
+      <a
+        href="{{ routes.account_url }}?view=orders"
+        class="text-link pabel__link"
+      >
+        {{ 'customer.account.view_orders' | t }}
+      </a>
+    </div>
+
+  {% else %}
+    <p>{{ 'customer.orders.none' | t }}</p>
+  {% endif %}
+</div>

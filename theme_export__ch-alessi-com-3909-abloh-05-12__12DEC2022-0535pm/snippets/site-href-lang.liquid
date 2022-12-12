@@ -1,0 +1,21 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet - Href-lang
+  - https://moz.com/learn/seo/hreflang-tag
+  - Serve alternate languages on search engines.
+  - Sample tags for EU and US stores below.
+
+  <link href="{{ canonical_url | replace: shop.domain, 'eu.mystore.com' }}" hreflang="en-EU" rel="alternate">
+  <link href="{{ canonical_url | replace: shop.domain, 'us.mystore.com' }}" hreflang="en-US" rel="alternate">
+------------------------------------------------------------------------------
+{% endcomment %}
+<link href="{{ canonical_url | replace: shop.domain, 'www.alessi.com' }}" hreflang="x-default" rel="alternate">
+<link href="{{ canonical_url | replace: shop.domain, 'us.alessi.com' }}" hreflang="en-US" rel="alternate">
+<link href="{{ canonical_url | replace: shop.domain, 'uk.alessi.com' }}" hreflang="en-GB" rel="alternate">
+<link href="{{ canonical_url | replace: shop.domain, 'ch.alessi.com' }}" hreflang="de-CH" rel="alternate">
+<link href="{{ canonical_url | replace: shop.domain, 'ch.alessi.com/fr' }}" hreflang="fr-CH" rel="alternate">
+<link href="{{ canonical_url | replace: shop.domain, 'ch.alessi.com/it' }}" hreflang="it-CH" rel="alternate">
+<link href="{{ canonical_url | replace: shop.domain, 'eu.alessi.com' }}" hreflang="en-EU" rel="alternate">
+<link href="{{ canonical_url | replace: shop.domain, 'eu.alessi.com/de' }}" hreflang="de-EU" rel="alternate">
+<link href="{{ canonical_url | replace: shop.domain, 'eu.alessi.com/es' }}" hreflang="es-EU" rel="alternate">
+<link href="{{ canonical_url | replace: shop.domain, 'eu.alessi.com/fr' }}" hreflang="fr-EU" rel="alternate">

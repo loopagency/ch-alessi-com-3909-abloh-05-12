@@ -1,0 +1,64 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Text Callout
+  - Page Builder text callout block
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- assign call_to_action_link = block.settings.call_to_action_link -%}
+{%- assign call_to_action_text = block.settings.call_to_action_text -%}
+{%- assign text = block.settings.text -%}
+
+{%-if block_settings -%}
+{%- assign block_settings_array = block_settings | replace: ',"', '##split##' | replace: '{', '' | replace: '}', '' | replace: '"', '' | split: '##split##' -%}
+  {%- for block_setting in block_settings_array -%}
+    {%- if block_setting != blank -%}
+      {%- assign block_setting_name_value = block_setting | split: '=>' -%}
+      {%- assign block_setting_name = block_setting_name_value[0] | replace: ' ', '' -%}
+      {%- assign block_setting_value = block_setting_name_value[1] -%}
+      {%- assign block_setting_value_slice = block_setting_value | slice: 0, 5 -%}
+      {%- if block_setting_value_slice == 'files' -%}
+        {%- assign block_setting_value = block_setting_value | replace: 'files/' -%}
+        {%- assign block_setting_value = images[block_setting_value] -%}
+      {%- endif -%}
+      {%- case block_setting_name -%}
+        {%- when 'call_to_action_link' -%}
+          {%- assign call_to_action_link = block_setting_value -%}
+        {%- when 'call_to_action_text' -%}
+          {%- assign call_to_action_text = block_setting_value -%}
+        {%- when 'text' -%}
+          {%- assign text = block_setting_value | replace: '`', '"' -%}
+      {%- endcase -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+<section
+  class="text-callout text-callout--block"
+  data-section-id="{{ section.id }}"
+  data-section-type="text-callout"
+  js-fade-in="container"
+>
+  <div
+    class="
+      container
+      animate
+      animate--opacity
+      animate--translateY
+    "
+    js-fade-in="item"
+    >
+    <div class="row">
+      <div class="col xs12 m8 offset-m2">
+        <p class="h1">
+          {{ text }}
+        </p>
+        {% if call_to_action_link != blank %}
+          <a href="{{ call_to_action_link }}" class="button button--secondary button--dark">
+            {{ call_to_action_text }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,128 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Template: Article
+  - Article comments have been removed from template.
+------------------------------------------------------------------------------
+{% endcomment %}
+<header class="template-article__header">
+  <div class="container">
+    <div class="row">
+      <div class="col xs12">
+        <h1 class="template-article__title d3">
+          {{ article.title }}
+        </h1>
+      </div>
+    </div>
+  </div>
+</header>
+
+<article class="template-article__article" role="article">
+  {% if article.image %}
+    <div
+      class="template-article__hero lazyload"
+      data-bgset="{% render 'responsive-bg-image', image: article.image %}"
+    >
+    </div>
+  {% endif %}
+
+  <div class="container">
+    <div class="template-article__container">
+      <div class="row no-gutter">
+        <div class="col xs12 m8 offset-m2">
+          <header class="template-article__container-header" role="banner">
+            <p class="template-article__title h1">
+              {{ article.title }}
+            </p>
+
+            {% capture date %}
+              {{ article.published_at | time_tag: format: 'month_day_year' }}
+            {% endcapture %}
+
+            {% assign blog_handle = article.handle | split: '/' | first %}
+
+            <div class="template-article__meta">
+              <div class="template-article__meta-container">
+
+                <p class="template-article__meta-content">
+                  <a class="template-article__meta-blog subtitle-1" href="{{ blogs[blog_handle].url }}">
+                    {{ blogs[blog_handle].title }}
+                  </a>
+                  {{ 'blogs.article.author_on_date_html'
+                    | t: date: date
+                  }}
+                </p>
+
+                {% if article.tags.size > 0 %}
+                  <ul class="template-article__categories">
+                    {% for tag in article.tags %}
+                      <li class="template-article__category-item">
+                        {{ tag | link_to_tag: tag }}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </div>
+            </div>
+          </header>
+        </div>
+      </div>
+
+      <div class="row no-gutter">
+        <div class="col xs12 m8 offset-m2">
+          <div class="template-article__body">
+            {{ article.content }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "articleBody": {{ article.content | strip_html | json }},
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": {{ shop.url | append: page.url | json }}
+    },
+    "headline": {{ article.title | json }},
+    {% if article.excerpt != blank %}
+      "description": {{ article.excerpt | strip_html | json }},
+    {% endif %}
+    {% if article.image %}
+      {% assign image_size = article.image.width | append: 'x' %}
+      "image": [
+        {{ article | img_url: image_size | prepend: 'https' | json }}
+      ],
+    {% endif %}
+    "datePublished": {{ article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
+    "dateCreated": {{ article.created_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
+    "author": {
+      "@type": "Person",
+      "name": {{ article.author | json }}
+    },
+    "publisher": {
+      "@type": "Organization",
+      {% if settings.share_image %}
+        {% assign image_size = settings.share_image.width | append: 'x' %}
+        "logo": {
+          "@type": "ImageObject",
+          "height": "{{ settings.share_image.height | json }},
+          "url": {{ settings.share_image | img_url: image_size | prepend: 'https' | json }},
+          "width": {{ settings.share_image.width | json }}
+        },
+      {% elsif article.image %}
+        {% assign image_size = article.image.width | append: 'x' %}
+        "logo": {
+          "@type": "ImageObject",
+          "height": {{ article.image.height | json }},
+          "url": {{ article.image | img_url: image_size | prepend: 'https' | json }},
+          "width": {{ article.image.width | json }}
+        },
+      {% endif %}
+      "name": {{ shop.name | json }}
+    }
+  }
+</script>

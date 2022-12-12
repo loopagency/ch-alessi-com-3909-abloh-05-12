@@ -1,0 +1,36 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Component: Currency selector
+  - A dropdown selector allowing the user to see different prices on the
+  store to the selected currency.
+  - Requires coupled JS and CSS to function.
+  - Currencies defined in theme settings.
+------------------------------------------------------------------------------
+{% endcomment %}
+{% unless id %}
+  {% assign id = 1 %}
+{% endunless %}
+
+<div class="currency-selector" js-currency-selector="container">
+  <div class="currency-selector__icon">
+    <span js-currency-selector="icon"></span>
+  </div>
+
+  <label
+    class="label currency-selector__label"
+    for="CurrencySelector-{{ id }}"
+    js-currency-selector="label"
+  >
+    {{ 'layout.currency_selector.label' | t }}
+  </label>
+
+  <select
+    id="CurrencySelector-{{ id }}"
+    class="currency-selector__select"
+    name="currency-selector"
+    style="background-image: url({{ 'icon-caret-down.svg' | asset_url }});"
+    js-currency-selector="selector"
+  >
+    <option disabled value="" js-currency-selector="option">-</option>
+  </select>
+</div>

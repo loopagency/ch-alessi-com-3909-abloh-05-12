@@ -1,0 +1,348 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Boxes Featured Collections
+  - This section requires two collection objects.
+------------------------------------------------------------------------------
+{% endcomment %}
+{% assign box1_collection = collections[section.settings.box1_collection] %}
+{% assign box2_collection = collections[section.settings.box2_collection] %}
+
+{% assign cta1_color =  section.settings.cta1_background_color | color_modify: 'alpha', section.settings.cta1_opacity %}
+{% assign cta2_color =  section.settings.cta2_background_color | color_modify: 'alpha', section.settings.cta2_opacity %}
+
+<section
+  class="boxes-featured-collections"
+  data-section-id="{{ section.id }}"
+  data-section-type="boxes-featured-collections"
+  js-fade-in="container"
+>
+  <div class="boxes-featured-collections__container">
+    <div
+      class="
+      boxes-featured-collections__small
+      {{ section.settings.box1_text_color }}
+      "
+      js-datalayer-promo="container"
+    >
+      <div class="boxes-featured-collections__card">
+        <a
+          href="{{ section.settings.box1_cta_link }}"
+          class="boxes-featured-collections__link"
+          js-datalayer-promo="cta"
+        >
+          <div
+            class="
+              boxes-featured-collections__video-image
+              animate
+              animate--opacity
+              animate--translateY
+            "
+            js-fade-in="item"
+            js-video-image="box01"
+          >
+            {% assign video_1_id = section.id | append: '-box01_video' %}
+            {% render 'image-video' with
+              video_card: true,
+              vimeo_id: section.settings.box1_video,
+              video_id: video_1_id,
+              large_image: section.settings.box1_image,
+              small_image: section.settings.box1_image
+            %}
+            {% if section.settings.gradient1 == true %}
+              <div class="boxes-featured-collections__gradient"></div>
+            {% endif %}
+          </div>
+        </a>
+
+        <div class="boxes-featured-collections__footer">
+          <h3
+            class="h2 boxes-featured-collections__title"
+            js-datalayer-promo="name"
+          >
+            {% if section.settings.box1_heading != blank  %}
+              {{ section.settings.box1_heading }}
+            {% else %}
+              {{ box1_collection.title }}
+            {% endif %}
+          </h3>
+
+          <a
+            style="
+            background: {{ cta1_color }};
+            border: 1px solid {{ section.settings.cta1_border_color}};"
+            href="{{ section.settings.box1_cta_link }}"
+            class="
+            button 
+            button--primary
+            button--{{ section.settings.box1_text_color }}
+            "
+            js-datalayer-promo="cta"
+          >
+            {{ section.settings.box1_cta_text }}
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="
+        boxes-featured-collections__big
+        lazyload
+        {{ section.settings.box2_text_color }}
+      "
+      js-datalayer-promo="container"
+    >
+      <div
+        class="
+          boxes-featured-collections__video-image-box02
+          animate
+          animate--opacity
+          animate--translateY
+        "
+        data-size="fullScreen"
+        js-fade-in="item"
+        js-video-image="box02"
+      >
+      <a
+        href="{{ section.settings.box2_cta_link }}"
+        class="boxes-featured-collections__link"
+        js-datalayer-promo="cta"
+      >
+        {% assign video_2_id = section.id | append: '-box02_video' %}
+        {% render 'image-video' with
+          vimeo_id: section.settings.box2_video,
+          video_id: video_2_id,
+          large_image: section.settings.box2_image,
+          small_image: section.settings.box2_image,
+          image_alignment: section.settings.box2_image__alignment
+        %}
+        {% if section.settings.gradient2 == true %}
+          <div class="boxes-featured-collections__gradient"></div>
+        {% endif %}
+      </a>
+      </div>
+
+      <div class="boxes-featured-collections__content">
+        <h3
+          class="d2 boxes-featured-collections__title"
+          js-datalayer-promo="name"
+        >
+          {% if section.settings.box2_heading != blank  %}
+            {{ section.settings.box2_heading }}
+          {% else %}
+            {{ box2_collection.title }}
+          {% endif %}
+        </h3>
+
+        <a
+          href="{{ section.settings.box2_cta_link }}"
+          style="
+          background: {{ cta2_color }};
+          border: 1px solid {{ section.settings.cta2_border_color}};"
+          class="
+            button button--primary
+            button--{{ section.settings.box2_text_color }}
+            button--small
+          "
+        >
+          {{ section.settings.box2_cta_text }}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Boxes of Collections",
+    "class": "index-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Box 1"
+      },
+      {
+        "type": "collection",
+        "id": "box1_collection",
+        "label": "Box 1 Collection"
+      },
+      {
+        "type": "image_picker",
+        "id": "box1_image",
+        "label": "Box 1 Image",
+        "info": "Recommended min dimensions: 550x720px (.jpg)"
+      },
+      {
+        "type": "checkbox",
+        "id": "gradient1",
+        "label": "Show gradient",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "box1_video",
+        "label": "Vimeo video ID for Box 1"
+      },
+      {
+        "type": "text",
+        "id": "box1_heading",
+        "label": "Box 1 Heading",
+        "default": "Featured collection"
+      },
+      {
+        "type": "text",
+        "id": "box1_cta_text",
+        "label": "Box 1 CTA Text",
+        "default": "Shop now"
+      },
+      {
+        "type": "url",
+        "id": "box1_cta_link",
+        "label": "Box 1 CTA Link"
+      },
+      {
+		"type": "color",
+		"id": "cta1_background_color",
+		"label": "Box 1 CTA Background Color",
+        "default": "transparent"
+	  },
+      {
+       "type": "color",
+       "id": "cta1_border_color",
+       "label": "Border Color",
+       "default": "#000000"
+      },
+      {
+        "type": "range",
+        "id": "cta1_opacity",
+        "min": 0,
+        "max": 1,
+        "step": 0.1,
+        "label": "CTA1 Opacity",
+        "default": 0
+      },
+      {
+        "type": "select",
+        "id": "box1_text_color",
+        "label": "Text and CTA color",
+        "default": "dark",
+        "options": [
+          {
+            "label": "Black",
+            "value": "dark"
+          },
+          {
+            "label": "White",
+            "value": "light"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Box 2"
+      },
+      {
+        "type": "collection",
+        "id": "box2_collection",
+        "label": "Box 2 Collection"
+      },
+      {
+        "type": "image_picker",
+        "id": "box2_image",
+        "label": "Box 2 Image",
+        "info": "Recommended min dimensions: 550x720px (.jpg)"
+      },
+      {
+        "type": "checkbox",
+        "id": "gradient2",
+        "label": "Show gradient",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "box2_image__alignment",
+        "label": "Image alignment",
+        "default": "image-center",
+        "options": [
+          {
+            "label": "Left",
+            "value": "image-left"
+          },
+          {
+            "label": "Center",
+            "value": "image-center"
+          },
+          {
+            "label": "Right",
+            "value": "image-right"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "box2_video",
+        "label": "Vimeo video ID for Box 2"
+      },
+      {
+        "type": "text",
+        "id": "box2_heading",
+        "label": "Box 2 Heading",
+        "default": "Featured collection"
+      },
+      {
+        "type": "text",
+        "id": "box2_cta_text",
+        "label": "Box 2 CTA Text",
+        "default": "Shop now"
+      },
+      {
+        "type": "url",
+        "id": "box2_cta_link",
+        "label": "Box 2 CTA Link"
+      },
+      {
+		"type": "color",
+		"id": "cta2_background_color",
+		"label": "Background Color",
+        "default": "transparent"
+	  },
+      {
+       "type": "color",
+       "id": "cta2_border_color",
+       "label": "Border Color",
+       "default": "#000000"
+      },
+      {
+        "type": "range",
+        "id": "cta2_opacity",
+        "min": 0,
+        "max": 1,
+        "step": 0.1,
+        "label": "CTA2 Opacity",
+        "default": 0
+      },
+      {
+        "type": "select",
+        "id": "box2_text_color",
+        "label": "Text and CTA color",
+        "default": "dark",
+        "options": [
+          {
+            "label": "Black",
+            "value": "dark"
+          },
+          {
+            "label": "White",
+            "value": "light"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Boxes of Collections",
+        "category": "Collection"
+      }
+    ]
+  }
+{% endschema %}

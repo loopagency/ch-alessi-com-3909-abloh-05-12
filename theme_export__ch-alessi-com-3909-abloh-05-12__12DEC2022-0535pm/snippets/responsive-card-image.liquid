@@ -1,0 +1,58 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Responsive card image.
+
+  - Dependencies:
+  -- Lazysizes plugin (https://github.com/aFarkas/lazysizes) which enable
+  responsive image with faster load time and better performance.
+  -- Lazysizes Responsive Images as a Service (https://github.com/aFarkas/lazysizes/tree/gh-pages/plugins/rias)
+  to load the correct image size with our CDN.
+  -- Lazysizes Bgset (https://github.com/aFarkas/lazysizes/tree/gh-pages/plugins/bgset)
+  to use responsive images on background-image (CSS).
+
+  -Accepts:
+  -- image: {Object} Image object.
+  -- image_class: {String} class name of the <img>.
+  -- image_attributes: {String}  additional HTML attributes of the <img>.
+  -- wrapper_class: {String} class name of the <div> wrapper.
+  -- wrapper_attributes: {String} additional HTML attributes of the <div> wrapper.
+
+  - Usage:
+  -- In your liquid template file, copy the following line:
+
+  {% render 'responsive-card-image' with
+    image: featured_image,
+    image_class: 'css-class',
+    wrapper_class: 'wrapper-css-class',
+  %}
+------------------------------------------------------------------------------
+{% endcomment %}
+{% assign img_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+
+<div
+  class="responsive-card-image__wrapper {{ wrapper_class }}"
+  {{ wrapper_attributes }}
+  data-image-id="{{ image.id }}"
+  js-responsive-image
+>
+  <img
+    class="responsive-card-image__image lazyload blur-up {{ image_class }}"
+    {{ image_attributes }}
+    alt="{{ image.alt | escape }}"
+    src="{% unless product_card_blank %}{{ image | img_url: '1x1.33' }}{% endunless %}"
+    tabindex="-1"
+    data-aspectratio="{{ image.aspect_ratio }}"
+    data-expand="-60"
+    data-sizes="auto"
+    data-src="{% unless product_card_blank %}{{ img_url }}{% endunless %}"
+    data-widths="[180, 360, 540, 720, 900, 1080, 1296]"
+  >
+</div>
+
+<noscript>
+  <img
+    class="{{ image_class }}"
+    alt="{{ image.alt | escape }}"
+    src="{{ image | img_url: '900x900' }}"
+  >
+</noscript>

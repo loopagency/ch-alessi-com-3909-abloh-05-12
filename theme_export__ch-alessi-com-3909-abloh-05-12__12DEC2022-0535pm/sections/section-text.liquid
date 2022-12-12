@@ -1,0 +1,236 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Section Text
+------------------------------------------------------------------------------
+{% endcomment %}
+{% render 'section-padding' %}
+
+<section
+  class="section-{{ section.id }}{% if section.settings.allow_padding %}-padding{% endif %} section-boxed"
+  data-section-id="{{ section.id }}"
+>
+  <div class="row no-gutter">
+    <div class="col xs12{% unless section.settings.section_boxed %} m8 offset-m2 {% else %} m12{% endunless %} {{ section.settings.text_aligment }}">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'caption' %}
+            <p class="{{ block.settings.heading_size }}">
+              {{ block.settings.text }}
+            </p>
+          {% when 'heading' %}
+            <h3 class="{{ block.settings.heading_size}}">
+              {% if block.settings.text != blank %}
+                {{ block.settings.text | replace: 'p>', 'span>' }}
+              {% endif %}
+            </h3>
+          {% when 'button' %}
+            {% if block.settings.url != blank %}
+              <a href="{{ block.settings.url }}" class="button {{ block.settings.btn_style }} button--dark">
+                {{ block.settings.text }}
+              </a>
+            {% endif %}
+        {% endcase %}
+      {% endfor %}
+      
+      
+    </div>
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "BETA - Section Text",
+    "class": "beta-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Text Alignment"
+      },
+      {
+        "type": "select",
+        "id": "text_aligment",
+        "label": "Text Alignment",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "Text Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Text Center"
+          },
+          {
+            "value": "text-right",
+            "label": "Text Right"
+          }
+        ],
+        "default": "text-left"
+      },
+      {
+        "type": "header",
+        "content": "Padding Section"
+      },
+      {
+        "type": "checkbox",
+        "id": "section_boxed",
+        "label": "Use margin left/right for box the section",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "allow_padding",
+        "label": "Show Padding on top and bottom",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding top",
+        "default": 12
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding bottom",
+        "default": 12
+      }
+    ],
+    "blocks": [
+      {
+        "type": "caption",
+        "name": "Caption",
+        "settings": [
+          {
+            "type": "text",
+            "id": "text",
+            "label": "Caption Text",
+            "default": "Caption Text"
+          },
+          {
+            "type": "select",
+            "id": "heading_size",
+            "label": "Heading Size",
+            "options": [
+              {
+                "value": "caption",
+                "label": "Extra small"
+              },
+              {
+                "value": "body-2",
+                "label": "Small"
+              },
+              {
+                "value": "body-1",
+                "label": "body"
+              }
+            ],
+            "default": "body-1"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "name": "Heading",
+        "settings": [
+          {
+            "type": "richtext",
+            "id": "text",
+            "label": "Text Callout",
+            "default": "<p>Alessi has been described as The Dream Factory our products are designed to provide people with the art and poetry that they seek</p>"
+          },
+          {
+            "type": "select",
+            "id": "heading_size",
+            "label": "Heading Size",
+            "options": [
+              {
+                "value": "d1",
+                "label": "Heading 1"
+              },
+              {
+                "value": "d2",
+                "label": "Heading 2"
+              },
+              {
+                "value": "d3",
+                "label": "Heading 3"
+              },
+              {
+                "value": "d4",
+                "label": "Heading 4"
+              },
+              {
+                "value": "d5",
+                "label": "Heading 5"
+              },
+              {
+                "value": "d6",
+                "label": "Heading 6"
+              }
+            ],
+            "default": "d3"
+          }
+        ]
+      },
+      {
+        "type": "button",
+        "name": "Button",
+        "settings": [
+          {
+            "type": "text",
+            "id": "text",
+            "label": "Button Text",
+            "default": "Discover more"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "Button Link",
+            "default": "/collections"
+          },
+          {
+            "type": "select",
+            "id": "btn_style",
+            "label": "Button style",
+            "options": [
+              {
+                "value": "button--primary",
+                "label": "Primary Button"
+              },
+              {
+                "value": "button--secondary",
+                "label": "Secondary Button"
+              }
+            ],
+            "default": "button--primary"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "BETA - Section Text",
+        "category": "BETA",
+        "blocks": [
+          {
+            "type": "caption"
+          },
+          {
+            "type": "heading"
+          },
+          {
+            "type": "button"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

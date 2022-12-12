@@ -1,0 +1,234 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Site navigation
+----------------------------------------------------------------------------
+{% endcomment %}
+
+
+<ul class="site-nav">
+  {% for link in linklists[section.settings.menu].links %}
+    
+    {% liquid 
+      assign hasDropdown = ''
+      assign linkHandle = link.handle | downcase
+      assign effect_link = link.title | split:'_' | last
+      assign cleanTitleLink = link.title | split:'_' | first 
+      if link.levels != 0
+        assign hasDropdown = ' site-nav__item--has-meganav'
+      endif
+  	%}
+
+    {% comment %}
+    ----------------------------------------------------------------------------
+      0 levels
+    ----------------------------------------------------------------------------
+    {% endcomment %}
+    <li
+      class="site-nav__item{{ hasDropdown }}"
+      data-parent="{{ link.handle }}"
+      js-site-header="siteNavItem"
+    >
+      <a
+        class="site-nav__link text-link text-link--reverse"
+        aria-haspopup="false"
+        href="{{ link.url }}"
+        {% if hasDropdown != blank %}
+          js-site-header="megaNavToggle"
+          aria-expanded
+        {% endif %}
+      >
+        {{ cleanTitleLink }}
+      </a>
+
+      {% comment %}
+      --------------------------------------------------------------------------
+        If has dropdown
+      --------------------------------------------------------------------------
+      {% endcomment %}
+      {% if link.levels != 0 %}
+        <div
+          class="site-nav__meganav meganav critical-hide"
+          js-site-header="megaNav"
+        >
+
+          <div class="meganav__column meganav__column--primary" js-simplebar="container">
+            <div class="meganav__wrapper">
+              <ul class="meganav__primary">
+                {% for mega_link in linklists[section.settings.menu].links %}
+                  {% liquid
+                    if mega_link.levels != 0 
+                      assign mega_hasDropdown = ' meganav__item--has-meganav'
+                    endif 
+                    assign effect_link = mega_link.title | split:'_' | last
+                    assign mega_cleanTitleLink = mega_link.title | split:'_' | first
+                    %}
+
+                  <li class="meganav__item{{ mega_hasDropdown }}"
+                    js-site-header="siteNavItem"
+                    aria-expanded="false"
+                  >
+                    <a
+                    {% if effect_link contains '_' %}
+                      style="{{ effect_link }}"
+                    {% endif%}
+                      class="
+                        meganav__link
+                        text-link
+                        subtitle-1
+                      "
+                      aria-haspopup="false"
+                      href="{{ mega_link.url }}"
+                      data-meganav="{{ mega_link.handle }}"
+                      {% if mega_hasDropdown != blank %}
+                       js-site-header="megaNavToggle"
+                      {% endif %}
+                    >
+                      {{ mega_cleanTitleLink }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+
+              <div class="meganav__list">
+                <ul class="meganav__secondary">
+                  {% for child_link in link.links %}
+                  {% liquid 
+                    assign effect_link = child_link.title | split:'_' | last
+                    assign cleanChildTitleLink = child_link.title | split:'_' | first
+                    if link.levels != 0
+                      assign hasDropdown = ' site-nav__item--has-meganav'
+                    endif
+                  %}
+                  
+                    {% unless forloop.length < 2 %}
+                      <li class="meganav__item">
+                        <a
+                          style="{{ effect_link }}"
+                          class="meganav__link body-1"
+                          href="{{ child_link.url }}"
+                          {% if child_link.links != blank %}
+                            data-children="{{ child_link.handle }}"
+                          {% endif %}
+                          data-list="{{ child_link.handle }}"
+                          js-site-header="navLink"
+                        >
+                          {{ cleanChildTitleLink }}
+                        </a>
+                      </li>
+                    {% endunless %}
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+
+            <button class="meganav__close" js-site-header="close">
+              <span class="visually-hidden">
+                {{ 'general.accessibility.close' | t }}
+              </span>
+              {% render 'icon-misc' with icon: 'close' %}
+              {% render 'icon-direction' with icon: 'arrow-left' %}
+            </button>
+          </div>
+
+          {% comment %}
+          --------------------------------------------------------------------
+            Meganav images
+          --------------------------------------------------------------------
+          {% endcomment %}
+          <div
+            class="meganav__column meganav__column--secondary is-active"
+            js-site-header="subNav"
+            js-simplebar="container"
+          >
+            {% assign has_image = false %}
+
+            {% for child_link in link.links %}
+              {% for sub_link in child_link.links %}
+                {% if sub_link.title contains 'https' %}
+                  {% assign has_image = true %}
+                  {% assign image = sub_link.title %}
+                  {% assign image_link = child_link %}
+                    <div
+                      class="meganav__wrapper meganav__wrapper--image"
+                      data-parent="{{ image_link.handle }}"
+                    >
+                      <a
+                        class="meganav__image"
+                        style="background-image: url({{ image }})"
+                      ></a>
+                    </div>
+                  {% break %}
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+
+            {% unless has_image %}
+              {% for child_link in link.links %}
+                {% if child_link.links != blank %}
+                  {% if forloop.first %}
+                    <div class="meganav__wrapper">
+                  {% endif %}
+                  
+
+                  <ul
+                    class="
+                      navlist
+                      meganav__secondary-list
+                      {% if forloop.first %} is-active{% endif %}
+                    "
+                    data-parent="{{ child_link.handle }}"
+                  >
+                    {% for sub_link in child_link.links %}
+                      {% liquid 
+                        assign hasDropdown = ''
+                        assign linkHandle = sub_link.handle | downcase
+                        assign effect_link = sub_link.title | split:'_' | last
+                        assign cleanTitleLink = sub_link.title | split:'_' | first | replace: '--', ''
+                        if link.levels != 0
+                          assign hasDropdown = ' site-nav__item--has-meganav'
+                        endif
+                      %}
+                      <li class="
+                        navlist__item
+                        {% if sub_link.title contains '--' %}
+                          navlist__item--break
+                        {% endif %}
+                      ">
+                        <a
+                          class="
+                            meganav__link
+                            navlist__link
+                            body-1
+                            text-link--reverse
+                          "
+                          href="{{ sub_link.url }}"
+                          data-handle="{{ sub_link.object.handle }}"
+                          js-site-nav="child"
+                          style="{{ effect_link }}"
+                        >
+                          {{ cleanTitleLink }}
+                        </a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+
+                  {% if forloop.last %}
+                    </div>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            {% endunless %}
+
+            <button class="meganav__close" js-site-header="close">
+              <span class="visually-hidden">
+                {{ 'general.accessibility.close' | t }}
+              </span>
+              {% render 'icon-misc' with icon: 'close' %}
+              {% render 'icon-direction' with icon: 'arrow-left' %}
+            </button>
+          </div>
+        </div>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>

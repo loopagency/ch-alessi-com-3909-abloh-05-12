@@ -1,0 +1,273 @@
+{% assign pageType = '' %}
+{% assign pageCat = 'others' %}
+{% assign pageId = handle | replace: '-', '_' %}
+{% assign product_name = 'other' %}
+
+{% case template %}
+  {% when 'index' %}
+    {% assign pageType = 'homepage' %}
+    {% assign pageCat = 'homepage' %}
+    {% assign pageId = 'homepage' %}
+  {% when 'collection' or 'search' %}
+    {% assign pageType = 'category_listing' %}
+    {% assign pageCat = 'collections' %}
+    {% if handle contains 'spare-parts' %}
+      {% assign pageId = 'spare_parts' %}
+      {% assign pageCat = 'spare_parts' %}
+    {% endif %}
+  {% when 'product' %}
+    {% assign pageType = 'product' %}
+    {% assign pageId = 'product' %}
+    {% assign product_name = handle | replace: '-', '_' %}
+  {% when 'cart' %}
+    {% assign pageId = 'cart' %}
+    {% assign pageType = 'checkout' %}
+  {% when null %}
+    {% if request.path contains 'checkouts' 'cart' %}
+      {% if request.path contains 'thank_you' %}
+        {% assign pageType = 'purchase' %}
+      {% else %}
+        {% assign pageType = 'checkout' %}
+      {% endif %}
+    {% endif %}
+    {% assign pageId = 'others' %}
+
+  {% when 'page.store-locator' %}
+    {% assign pageType = 'store_locator' %}
+    {% assign pageCat = 'store_locator' %}
+    {% assign pageId = 'store_locator' %}
+
+  {% when 'page.contact' %}
+    {% assign pageType = 'contact_us' %}
+    {% assign pageCat = 'contact_us' %}
+    {% assign pageId = 'contact_us' %}
+
+  {% when 'blog'
+    or 'page.about-us'
+    or 'page.history'
+    or 'page.commitment'
+    or 'page.museum'
+    or 'page.partnerships'
+    or 'page.press-room'
+    or 'page.professionals.gifts'
+    or 'page.professionals.horeca'
+    or 'page.professionals.tools'
+  %}
+    {% assign pageType = 'company' %}
+
+  {% when 'page' %}
+    {% if handle == 'payment-methods'
+     or handle == 'time-of-delivery'
+     or handle == 'returns-refunds'
+     or handle == 'faqs'
+    %}
+      {% assign pageType = 'customer_service' %}
+      {% assign pageCat = 'legal' %}
+    {% endif %}
+
+  {% else %}
+    {% if request.path contains 'account' %}
+      {% assign pageType = 'reserved_area' %}
+    {% else %}
+      {% assign pageType = 'others' %}
+    {% endif %}
+    {% assign pageId = 'others' %}
+{% endcase %}
+
+{% assign login_status = '0' %}
+{% assign userID = 'not_logged' %}
+{% if customer %}
+  {% assign login_status = '1' %}
+  {% assign userID = customer.id %}
+{% endif %}
+
+<script>
+  var dataLayerSetup = {
+    'event': 'wSetup',
+    'country' : {{ settings.store_code | json }},
+    'language' : {{ request.locale.iso_code | json }},
+    'pageType' : {{ pageType | json }},
+    'pageCat' : {{ pageCat | json }},
+    'pageId' : {{ pageId | json }},
+    'productName' :  {{ product_name | json }},
+    'currencyCode' : {{ shop.currency | json }},
+    'userLogged' : {{ login_status }},
+    'userID' : {{ userID | json }}
+  };
+
+  {% if request.path contains 'checkouts' %}
+    var products_checkout = [
+      {%- for line_item in checkout.line_items -%}
+        {%- assign product = line_item.product -%}
+        {%- assign category_tag = '' -%}
+        {%- assign macro_category_tag = '' -%}
+        {%- for tag in product.tags -%}
+          {% assign sanitized_tag = tag | downcase %}
+          {%- if sanitized_tag contains 'category:' -%}
+            {%- assign split_tag = sanitized_tag | split: ':' -%}
+            {%- if split_tag[0] == 'macro_category' -%}
+              {%- assign macro_category_tag = split_tag | last | strip -%}
+            {%- else -%}
+              {%- assign category_tag = split_tag | last | strip -%}
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- assign variant = '' -%}
+        {%- assign dimension16 = '' -%}
+        {%- if line_item.variant.option1 -%}
+          {%- assign variant = line_item.variant.option1 -%}
+        {%- endif -%}
+        {%- if line_item.variant.option2 -%}
+          {%- assign dimension16 = line_item.variant.option2 -%}
+        {%- endif -%}
+
+        {%- assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." -%}
+        {%- assign integral = price_value[0] -%}
+        {%- assign decimal = price_value[1] | append: "00" | truncate: 2, "" -%}
+
+        { 'name': '{{ product.title | handleize | replace: '-', '_' }}',
+        id: '{{ product.id }}',
+        price: {{ integral }}.{{ decimal }},
+        brand: 'alessi',
+        category: '{{ category_tag | handleize | replace: '-', '_' }}',
+        variant: "{{ variant }}",
+        quantity: {{ line_item.quantity }},
+        dimension15: '{{ macro_category_tag | handleize | replace: '-', '_' }}',
+        dimension16: '{{ dimension16 | handleize | replace: '-', '_' }}' },
+      {% endfor %}
+    ];
+
+    {%- assign user_logged_status = '' -%}
+    {%- if customer -%}
+      {%- assign user_logged_status = 'already_logged' -%}
+    {%- endif -%}
+
+    var userLogged = "{{ user_logged_status }}";
+
+    var shippingMethod = "{{ checkout.shipping_method.title handleize | handleize | replace: '-', '_' }}";
+  {%- endif -%}
+
+  {%- if request.path contains 'thank_you' -%}
+    {%- assign coupon_code = '' -%}
+    {%- for discount_application in order.discount_applications -%}
+      {% assign discount_title = discount_application.title | handleize | replace: '-', '_' %}
+      {%- assign coupon_code = coupon_code | append: discount_title | append: '|' -%}
+    {%- endfor -%}
+
+    {% assign total_net_amount = order.total_net_amount | divided_by: 100.00 | round: 2 | split: "." %}
+    {% assign total_net_amount_integral = total_net_amount[0] %}
+    {% assign total_net_amount_decimal = total_net_amount[1] | append: "00" | truncate: 2, "" %}
+
+    {% assign tax_price = order.tax_price | divided_by: 100.00 | round: 2 | split: "." %}
+    {% assign tax_price_integral = tax_price[0] %}
+    {% assign tax_price_decimal = tax_price[1] | append: "00" | truncate: 2, "" %}
+
+    {% assign shipping_price = order.shipping_price | divided_by: 100.00 | round: 2 | split: "." %}
+    {% assign shipping_price_integral = shipping_price[0] %}
+    {% assign shipping_price_decimal = shipping_price[1] | append: "00" | truncate: 2, "" %}
+
+    var dataLayerThankYou = {
+      event: 'purchase',
+      ecommerce: {
+        currencyCode: '',
+        purchase: {
+          actionField: {
+            id: {{ order.order_number }},
+            revenue: {{ total_net_amount_integral }}.{{ total_net_amount_decimal }},
+            tax: {{ tax_price_integral }}.{{ tax_price_decimal }},
+            shipping: {{ shipping_price_integral }}.{{ shipping_price_decimal }},
+            coupon: "{{ coupon_code }}",
+            checkoutType: "",
+          },
+          products: [
+            {%- for line_item in order.line_items -%}
+              {%- assign product = line_item.product -%}
+              {%- assign category_tag = '' -%}
+              {%- assign macro_category_tag = '' -%}
+              {%- for tag in product.tags -%}
+                {% assign sanitized_tag = tag | downcase %}
+                {%- if sanitized_tag contains 'category:' -%}
+                  {%- assign split_tag = sanitized_tag | split: ':' -%}
+                  {%- if split_tag[0] == 'macro_category' -%}
+                    {%- assign macro_category_tag = split_tag | last | strip -%}
+                  {%- else -%}
+                    {%- assign category_tag = split_tag | last | strip -%}
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+              {%- assign variant = '' -%}
+              {%- assign dimension16 = '' -%}
+              {%- if line_item.variant.option1 -%}
+                {%- assign variant = line_item.variant.option1 -%}
+              {%- endif -%}
+              {%- if line_item.variant.option2 -%}
+                {%- assign dimension16 = line_item.variant.option2 -%}
+              {%- endif -%}
+
+              {% assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." %}
+              {% assign integral = price_value[0] %}
+              {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
+
+              { 'name': '{{ product.title | handleize | replace: '-', '_' }}',
+              id: '{{ product.id }}',
+              price: {{ integral }}.{{ decimal }},
+              brand: 'alessi',
+              category: '{{ category_tag | handleize | replace: '-', '_' }}',
+              variant: "{{ variant }}",
+              quantity: {{ line_item.quantity }},
+              dimension15: '{{ macro_category_tag | handleize | replace: '-', '_' }}',
+              dimension16: '{{ dimension16 | handleize | replace: '-', '_' }}' },
+            {% endfor %}
+          ]
+        }
+      }
+    };
+  {%- endif -%}
+
+  {% case template %}
+    {% when 'product' %}
+      {% assign category_tag = '' %}
+      {% assign macro_category_tag = '' %}
+
+      {% for tag in product.tags %}
+        {% assign sanitized_tag = tag | downcase %}
+
+        {% if sanitized_tag contains 'category:' %}
+          {% assign split_tag = sanitized_tag | split: ':' %}
+
+          {% if split_tag[0] == 'macro_category' %}
+            {% assign macro_category_tag = split_tag | last | strip %}
+          {% else %}
+            {% assign category_tag = split_tag | last | strip %}
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+
+
+      {% assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." %}
+      {% assign integral = price_value[0] %}
+      {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
+
+      window.productDataLayer = {
+        event: 'productDetail',
+        ecommerce: {
+          currencyCode: {{ cart.currency.iso_code | json }},
+          detail: {
+            actionField: {
+              list: localStorage.getItem('datalayerList')
+            },
+            products: [{
+              name: '{{ product.title | handleize | replace: '-', '_' }}',
+              id: '{{ product.id }}',
+              price: {{ integral }}.{{ decimal }},
+              brand: 'alessi',
+              category: '{{ category_tag | handleize | replace: '-', '_' }}',
+              {% comment %} position: $$$product_position$$$, {% endcomment %}
+              dimension15: '{{ macro_category_tag | handleize | replace: '-', '_' }}'
+            }]
+          }
+        }
+      };
+    {% else %}
+  {% endcase %}
+</script>

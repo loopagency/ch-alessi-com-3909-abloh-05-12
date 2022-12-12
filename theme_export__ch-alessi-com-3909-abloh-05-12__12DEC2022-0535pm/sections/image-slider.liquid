@@ -1,0 +1,280 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Section: Image slider
+  - Full width slider with title, text, and CTA.
+----------------------------------------------------------------------------
+{% endcomment %}
+<div
+  id="ImageSlider-{{ section.id }}"
+  class="image-slider carousel swiper-container"
+  data-autoplay="{{ section.settings.autoplay }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="image-slider"
+  js-carousel="container"
+  js-image-slider="container"
+>
+  <div class="swiper-wrapper">
+    {% for block in section.blocks %}
+      {% if block.settings.image == blank %}
+        {% capture background_placeholder %}
+          <div class="image-slider__placeholder placeholder-background">
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+        {% endcapture %}
+      {% endif %}
+
+      <div
+        id="{{ block.id }}"
+        class="
+          image-slider__cell
+          {{ block.settings.content_alignment }}
+          lazyload
+          swiper-slide
+        "
+        {% unless block.settings.image == blank %}
+          style="background-position: {{ block.settings.alignment }}"
+          data-bgset="{% render 'responsive-bg-image', image: block.settings.image %}"
+        {% endunless %}
+        js-carousel="cell"
+        js-image-slider="cell"
+        {{ block.shopify_attributes }}
+      >
+        {% if
+          block.settings.small_image == blank and
+          block.settings.large_image == blank
+        %}
+          {{ background_placeholder }}
+
+        {% else %}
+          <div class="image-slider__image">
+            {% render 'art-direction-image' with
+              alt: block.settings.alt_text
+              large_image: block.settings.large_image,
+              small_image: block.settings.small_image,
+            %}
+          </div>
+        {% endif %}
+
+        <div class="container">
+          <div class="row">
+            <div class="col xs12">
+              <div class="image-slider__content">
+                <div class="image-slider__body {{ block.settings.text_alignment }}">
+                  <h2
+                    class="d1 image-slider__title"
+                    style="color: {{ block.settings.text_color }}"
+                  >
+                    {{ block.settings.title }}
+                  </h2>
+
+                  {% if block.settings.subtitle != blank %}
+                    <p
+                      class="image-slider__subtitle"
+                      style="color: {{ block.settings.text_color }}"
+                    >
+                      {{ block.settings.subtitle }}
+                    </p>
+                  {% endif %}
+
+                  {% if block.settings.link %}
+                    <a
+                      class="
+                        button button--primary button--dark image-slider__button
+                        {{ block.settings.call_to_action_theme }}
+                      "
+                      href="{{ block.settings.link }}"
+                      js-image-slider="link"
+                    >
+                      {{ block.settings.cta_text }}
+                    </a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div
+    class="swiper-pagination"
+    js-image-slider="pagination"
+  ></div>
+</div>
+
+{% schema %}
+  {
+    "name": "Image slider",
+    "class": "index-section",
+    "settings": [
+      {
+        "type": "text",
+        "id": "autoplay",
+        "label": "Auto-rotate slide speed",
+        "default": "5000",
+        "info": "In milliseconds. 0 to disable."
+      }
+    ],
+    "max_blocks": 3,
+    "blocks": [
+      {
+        "type": "image",
+        "name": "Image slide",
+        "settings": [
+          {
+            "type": "header",
+            "content": "Image",
+            "info": "Both images are required."
+          },
+          {
+            "type": "image_picker",
+            "id": "small_image",
+            "label": "Mobile image",
+            "info": "Recommended min dimensions: 340x270px (.jpg)"
+          },
+          {
+            "type": "image_picker",
+            "id": "large_image",
+            "label": "Desktop image",
+            "label": "Mobile image",
+            "info": "Recommended min dimensions: 2000x1280px (.jpg)"
+          },
+          {
+            "type": "header",
+            "content": "Content",
+            "info": "Leave fields empty to hide."
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Slide title"
+          },
+          {
+            "type": "textarea",
+            "id": "subtitle",
+            "label": "Subtitle",
+            "default": "Use overlay text to give your customers insight into your brand. Select imagery and text that relates to your style and story."
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "Slide link"
+          },
+          {
+            "type": "text",
+            "id": "cta_text",
+            "label": "Call to action text",
+            "default": "Discover more"
+          },
+          {
+            "type": "header",
+            "content": "Options",
+            "info": "Options to define styling of the content."
+          },
+          {
+            "type": "select",
+            "id": "content_alignment",
+            "label": "Content alignment",
+            "default": "is-middle is-center",
+            "options": [
+              {
+                "label": "Top left",
+                "value": "is-top is-left"
+              },
+              {
+                "label": "Top center",
+                "value": "is-top is-center"
+              },
+              {
+                "label": "Top right",
+                "value": "is-top is-right"
+              },
+              {
+                "label": "Middle left",
+                "value": "is-middle is-left"
+              },
+              {
+                "label": "Middle center",
+                "value": "is-middle is-center"
+              },
+              {
+                "label": "Middle right",
+                "value": "is-middle is-right"
+              },
+              {
+                "label": "Bottom left",
+                "value": "is-bottom is-left"
+              },
+              {
+                "label": "Bottom center",
+                "value": "is-bottom is-center"
+              },
+              {
+                "label": "Bottom right",
+                "value": "is-bottom is-right"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "text_alignment",
+            "label": "Text alignment",
+            "default": "is-center",
+            "options": [
+              {
+                "label": "Left",
+                "value": "is-left"
+              },
+              {
+                "label": "Center",
+                "value": "is-center"
+              },
+              {
+                "label": "Right",
+                "value": "is-right"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "call_to_action_theme",
+            "default": "button--primary button--dark",
+            "label": "Call to action colour",
+            "options": [
+              {
+                "value": "button--primary button--dark",
+                "label": "Primary"
+              },
+              {
+                "value": "button--secondary button--dark",
+                "label": "Secondary"
+              }
+            ]
+          },
+          {
+            "type": "color",
+            "id": "text_color",
+            "label": "Text Colour",
+            "default": "#000000"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Image slider",
+        "category": "Image",
+        "blocks": [
+          {
+            "type": "image"
+          },
+          {
+            "type": "image"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

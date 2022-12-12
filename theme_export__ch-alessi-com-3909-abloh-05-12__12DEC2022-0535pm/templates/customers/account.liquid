@@ -1,0 +1,29 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Template: Account
+  - Account area landing page.
+----------------------------------------------------------------------------
+{% endcomment %}
+
+<div class="template-account">
+  <div class="template-account__container">
+    <div class="template-account__wrapper">
+      <div class="template-account__content">
+        <div class="row template-account__row">
+          <div class="col xs12 m4 template-account__col">
+            {% render 'account-nav' %}
+          </div>
+
+          <div class="col xs12 m4 template-account__col">
+            {% render 'account-overview-recent-order' %}
+          </div>
+
+          <div class="col xs12 m3 template-account__col">
+            {% render 'account-overview-address-book' %}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

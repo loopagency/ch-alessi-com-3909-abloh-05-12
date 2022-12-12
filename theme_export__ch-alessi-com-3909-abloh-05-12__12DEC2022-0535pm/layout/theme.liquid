@@ -1,0 +1,231 @@
+<!doctype html>
+{% liquid 
+  if template.suffix contains 'empty'
+    assign emptyPage = true
+  else
+    assign emptyPage = false
+  endif
+%}
+<html class="no-js" lang="{{ shop.locale }}">
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width,initial-scale=1" name="viewport">
+    <meta content="{{ settings.application_color }}" name="theme-color">
+
+    {% if settings.enable_href_lang %}
+      {% render 'site-href-lang' %}
+    {% endif %}
+
+
+    {% if settings.favicon != blank %}
+      {% render 'site-favicon' %}
+    {% endif %}
+
+    {% if
+      template contains 'search' or
+      template contains 'account' or
+      template contains 'customer' or
+      template contains 'cart' or
+      template.suffix contains "showroom" or
+      shop.url contains 'alessi-dev'
+    %}
+      <meta content="noindex, nofollow" name="robots">
+    {% endif %}
+
+    {% if page_description %}
+      <meta content="{{ page_description | escape }}" name="description">
+    {% endif %}
+
+    {% render 'theme-title' %}
+
+    <link href="{{ canonical_url }}" rel="canonical">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
+    {% render 'theme-fonts' %}
+    {% unless template.suffix == 'beta' %}
+      {% include 'bc-sf-filter-style' %}
+    {% endunless %}
+
+    {% render 'critical' %}
+    {% render 'social-meta-tags' %}
+    {% render 'theme-strings' %}
+    {% section 'redirects-strings' %}
+
+    {% liquid 
+        if request.design_mode == false 
+          if emptyPage == false
+            unless settings.enable_developer_mode
+              render 'iubenda-script'
+            endunless
+          endif
+        endif
+    %}
+ 
+
+
+    {% if template.directory == 'customers' %}
+      {{ 'shopify_common.js' | shopify_asset_url | script_tag }}
+    {% endif %}
+
+    {{ content_for_header }}
+
+  <!-- Algolia head -->
+    {{ 'algolia_config.js' | asset_url | script_tag  }}
+    <script type="text/template" id="template_algolia_money_format">{% include 'algolia_money_format' %}</script>
+    <script type="text/template" id="template_algolia_current_collection_id">{% include 'algolia_current_collection_id' %}</script>
+    <script type="text/template" id="template_algolia_autocomplete">{% include 'algolia_autocomplete.hogan' %}</script>
+    <script type="text/template" id="template_algolia_autocomplete_pages_empty">{% include 'algolia_autocomplete_pages_empty.hogan' %}</script>
+    <script type="text/template" id="template_algolia_autocomplete_page">{% include 'algolia_autocomplete_page.hogan' %}</script>
+    <script type="text/template" id="template_algolia_autocomplete_collection">{% include 'algolia_autocomplete_collection.hogan' %}</script>
+    <script type="text/template" id="template_algolia_autocomplete_collections_empty">{% include 'algolia_autocomplete_collections_empty.hogan' %}</script>
+    <script type="text/template" id="template_algolia_autocomplete_article">{% include 'algolia_autocomplete_article.hogan' %}</script>
+    <script type="text/template" id="template_algolia_autocomplete_articles_empty">{% include 'algolia_autocomplete_articles_empty.hogan' %}</script>
+    <script type="text/template" id="template_algolia_autocomplete_product">{% include 'algolia_autocomplete_product.hogan' %}</script>
+    <script type="text/template" id="template_algolia_autocomplete_products_empty">{% include 'algolia_autocomplete_products_empty.hogan' %}</script>
+    <script type="text/template" id="template_algolia_autocomplete_footer">{% include 'algolia_autocomplete_footer.hogan' %}</script>
+    <script src="{{ 'algolia_externals.js' | asset_url }}" defer></script>
+    <script src="{{ 'algolia_init.js' | asset_url }}" defer></script>
+    <script src="{{ 'algolia_analytics.js' | asset_url }}" defer></script>
+    <script src="{{ 'algolia_helpers.js' | asset_url }}" defer></script>
+    <script src="{{ 'algolia_autocomplete.js' | asset_url }}" defer></script>
+  <!-- /Algolia head -->
+  
+
+  </head>
+
+  <body
+    id="{{ page_title | handle }}"
+    class="template-{{ template.name | handle }}{% if request.path contains '/challenge' %}standard{% endif %} {{ template.suffix | handle }}"
+    data-cy="body"
+  >
+<script>window.KlarnaThemeGlobals={};{%case template.name%} {%when"product"%} {% if product.first_available_variant.price %}window.KlarnaThemeGlobals.data_purchase_amount = {{ product.first_available_variant.price }};{% endif %}window.KlarnaThemeGlobals.productVariants={{product.variants|json}};window.KlarnaThemeGlobals.documentCopy=document.cloneNode(true);{%when"cart"%} window.KlarnaThemeGlobals.data_purchase_amount={{cart.total_price}};window.KlarnaThemeGlobals.documentCopy=document.cloneNode(true);{%endcase%}</script>
+
+
+  {% liquid 
+    if request.design_mode == false 
+      if emptyPage == false
+        unless settings.enable_developer_mode
+        render 'script-gtm-scripts'
+        render 'script-gtm-library'
+        endunless
+      endif
+    endif
+  %}
+
+    <a class="in-page-link visually-hidden skip-link" href="#MainContent">
+      {{ 'general.accessibility.skip_to_content' | t }}
+    </a>
+    {% if emptyPage == false %}
+      <header class="site-header-wrapper" js-site-header="wrapper">
+        {% section 'site-header' %}
+        <div class="site-header-wrapper__overlay" js-site-header="overlay"></div>
+      </header>
+
+      {% section 'menu-drawer' %}
+      {% section 'cart-drawer' %}
+    {% else %}
+      <div class="site-header__brand">
+        {% render 'site-logo' %}
+      </div>
+      <style>
+        .site-header__brand {
+          margin: 0 auto;
+          padding-top: 2rem;
+          fill: #ed1c24
+        }
+        .template-page__container {
+          margin-top: 0 !important;
+          padding-top: 0 !important 
+        }
+        svg rect {
+          fill: none;
+        }
+      </style>
+    {% endif %}
+
+    <main id="MainContent" class="main-content critical-clear">
+      {{ content_for_layout }}
+    </main>
+    {% liquid 
+        if emptyPage == false
+          section 'site-footer'
+        endif
+  %}
+    {% render 'search-overlay' %}
+
+    {% render 'modal-redirect' %}
+
+    {% if settings.enable_developer_mode %}
+      {% render 'frame-developer-mode' %}
+    {% endif %}
+    
+    {% if emptyPage == false %}
+      {{ '//geoip-js.com/js/apis/geoip2/v2.1/geoip2.js' | script_tag }}
+      {{ 'multi-store.config.js' | asset_url | script_tag }}
+
+      {% if settings.enable_currency_converter %}
+        {{ 'multi-currency.config.js' | asset_url | script_tag }}
+      {% endif %}
+
+      {% section 'collection-boost-scripts' %}
+
+      {% if template.name == 'collection' and template.suffix != 'beta' %}
+        {% include 'bc-sf-filter' %}
+      {% endif %}
+    {% endif %}
+
+    <script>
+      var checkProduct = `{{ checkProduct }}`;
+    </script>
+
+    {% render 'theme-scripts' %}
+    {% render 'style-tags' with layout: 'theme' %}
+    {% render 'script-tags' with layout: 'theme' %}
+    {% render 'facebook-verification-snippet' %}
+  
+
+  {% liquid 
+    if request.design_mode == false 
+      if emptyPage == false
+        unless settings.enable_developer_mode
+        if settings.enable_hotjar
+          render 'script-hotjar'
+        endif
+        if settings.enable_optimize
+          render 'script-optimize'
+        endif
+        section 'app-optimization'
+        if settings.enable_gorgias == true
+          render 'gorgias-library'
+        endif
+        section 'newsletter-modal'
+        endunless
+      endif
+    endif
+  %}
+
+  {% liquid
+    if emptyPage == false
+      section 'newsletter-modal'
+      if settings.klarna_show_pdp == true or settings.klarna_show_cart == true
+        render 'script-klarna'
+      endif
+    endif
+  %}
+
+  {% liquid 
+    if request.design_mode == false 
+      unless settings.enable_developer_mode
+        render 'script-klaviyo-library'
+      endunless
+    endif
+  %}
+
+    {% render 'script-google-verification' %}
+    {{ 'https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/css/flag-icon.min.css' | stylesheet_tag }}
+    {% if settings.enable_accessibly == true %}
+      {% render 'accessibly' %}
+    {% endif %}
+  </body>
+</html>

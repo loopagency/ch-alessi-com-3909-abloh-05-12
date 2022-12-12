@@ -1,0 +1,92 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Social icons
+----------------------------------------------------------------------------
+{% endcomment %}
+{% assign modifiers = '' %}
+
+{% if class %}
+  {% assign modifiers = modifiers | append: class %}
+{% endif %}
+
+<ul class="social-icons {{ modifiers }}">
+  {% if settings.social_facebook_link != ''%}
+    <li class="social-icons__item">
+      <a
+        class="social-icons__link text-link--reset"
+        href="{{ settings.social_facebook_link }}"
+        data-datalayer-social="Facebook"
+        js-footer-social
+      >
+        <span class="visually-hidden">
+          Facebook
+        </span>
+        {% render 'icon-social-media' with icon: 'facebook' %}
+      </a>
+    </li>
+  {% endif %}
+
+  {% if settings.social_instagram_link != ''%}
+    <li class="social-icons__item">
+      <a
+        class="social-icons__link text-link--reset"
+        href="{{ settings.social_instagram_link }}"
+        data-datalayer-social="Instagram"
+        js-footer-social
+      >
+        <span class="visually-hidden">
+          Instagram
+        </span>
+        {% render 'icon-social-media' with icon: 'instagram' %}
+      </a>
+    </li>
+  {% endif %}
+
+  {% if settings.social_twitter_link != ''%}
+    <li class="social-icons__item">
+      <a
+        class="social-icons__link text-link--reset"
+        href="{{ settings.social_twitter_link }}"
+        data-datalayer-social="Twitter"
+        js-footer-social
+      >
+        <span class="visually-hidden">
+          Twitter
+        </span>
+        {% render 'icon-social-media' with icon: 'twitter' %}
+      </a>
+    </li>
+  {% endif %}
+
+  {% if settings.social_youtube_link != ''%}
+    <li class="social-icons__item">
+      <a
+        class="social-icons__link text-link--reset"
+        href="{{ settings.social_youtube_link }}"
+        data-datalayer-social="YouTube"
+        js-footer-social
+      >
+        <span class="visually-hidden">
+          YouTube
+        </span>
+        {% render 'icon-social-media' with icon: 'youtube' %}
+      </a>
+    </li>
+  {% endif %}
+
+  {% if settings.social_pinterest_link != ''%}
+    <li class="social-icons__item">
+      <a
+        class="social-icons__link text-link--reset"
+        href="{{ settings.social_pinterest_link }}"
+        data-datalayer-social="Pinterest"
+        js-footer-social
+      >
+        <span class="visually-hidden">
+          Pinterest
+        </span>
+        {% render 'icon-social-media' with icon: 'pinterest' %}
+      </a>
+    </li>
+  {% endif %}
+</ul>

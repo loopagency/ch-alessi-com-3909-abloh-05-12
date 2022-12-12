@@ -1,0 +1,87 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Cart add-on modal
+------------------------------------------------------------------------------
+{% endcomment %}
+{% assign cart_add_on = all_products[settings.cart_addon_product] %}
+{% assign modal_image = cart_add_on.featured_image %}
+
+<div
+  id="add-on-modal"
+  class="modal modal--light cart-add-on__modal"
+  role="dialog"
+  tabindex="-1"
+  js-cart-add-on="modal"
+  js-disable-scroll="true"
+>
+  <div class="modal__card" js-cart-add-on="modalCard">
+    <div class="modal__body">
+      <button class="button cart-add-on__modal-close" js-cart-add-on="closeModal">
+        <span class="visually-hidden">
+          {{ 'general.accessibility.close' | t }}
+        </span>
+
+        {% render 'icon-misc' with icon: 'close' %}
+      </button>
+
+      <div class="container">
+        <div class="row">
+          <div class="cart-add-on__modal-container" js-cart-add-on="description">
+            {% assign addon_image = modal_image %}
+
+            {% if settings.cart_addon_image != '' %}
+              {% assign addon_image = settings.cart_addon_image %}
+            {% endif %}
+
+            <div
+              class="col xs12 m6 lazyload cart-add-on__modal-image"
+              data-bgset="{% render 'responsive-bg-image', image: addon_image %}"
+            ></div>
+
+            <div class="col xs12 m6">
+              <div class="cart-add-on__description">
+                <h2 class="h3 cart-add-on__description-title">
+                  {{ 'cart.add_on.title' | t: product: cart_add_on.title }}
+                </h2>
+
+                <div>
+                  {{ cart_add_on.description | replace: '<p', '<p class="body-2"' }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cart-add-on__modal-container" js-cart-add-on="previewContainer">
+            {% assign preview_image = modal_image %}
+
+            {% if settings.cart_addon_image_preview != '' %}
+              {% assign preview_image = settings.cart_addon_image_preview %}
+            {% endif %}
+
+            <div
+              class="col xs12 m6 lazyload cart-add-on__modal-image"
+              data-bgset="{% render 'responsive-bg-image', image: preview_image %}"
+              js-cart-add-on="image"
+            ></div>
+
+            <div class="col xs12 m6">
+              <div class="cart-add-on__message-preview">
+                <h2 class="h3">
+                  {{ 'cart.add_on.message.preview_title' | t }}
+                </h2>
+
+                <p class="cart-add-on__preview-text body-2">
+                  {{ 'cart.add_on.message.preview_text' | t }}
+                </p>
+
+                <div class="cart-add-on__message-text">
+                  <p class="body-2" js-cart-add-on="previewMessage">{{ cart.note }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

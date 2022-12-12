@@ -1,0 +1,358 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Newsletter modal
+  - This is an optional section for Frame.
+  - It is available in the global theme settings in the theme editor.
+------------------------------------------------------------------------------
+{% endcomment %}
+{%- liquid
+  assign allow_modal = section.settings.allow_modal 
+  assign successMessage = section.settings.success_text
+  assign currentPage = request.path 
+  assign closeDelay = section.settings.close_delay
+  assign hideAcceptMarketing = section.settings.hideAccept_marketing
+  -%}
+{% if allow_modal == true %}
+  {%- if hideAcceptMarketing == true -%}
+    {% if customer.email == blank %}
+      {% if customer.accepts_marketing == false %}
+  {%- endif -%}
+    <section
+      id="newsletter-modal"
+      class="modal newsletter-modal critical-clear"
+      aria-hidden="true"
+      data-section-id="{{ section.id }}"
+      data-section-type="newsletter-modal"
+      data-delay="{{ section.settings.delayShow }}"
+      {% if allow_modal == true %}
+        js-newsletter-show="true"
+      {% endif %}
+    >
+        <div js-modal="body">
+          <div class="newsletter-modal__card" js-modal="card">
+            <button
+              class="newsletter-modal__close button"
+              aria-label="Close modal"
+              data-micromodal-close
+            >
+              {% render 'icon-misc' with icon: 'close' %}
+            </button>
+            <div
+              class="newsletter-modal__body modal__body{% unless section.settings.hide_form == false %} with-countdown{% endunless %} row no-gutter"
+              role="dialog"
+              aria-labelledby="newsletter-signup"
+              aria-modal="true"
+            >
+              {% if section.settings.large_image %}
+                <div class="newsletter-modal__image col l3">
+                  {% render 'art-direction-image' with
+                    alt: section.settings.alt_text,
+                    large_image: section.settings.large_image,
+                    small_image: section.settings.small_image,
+                  %}
+                </div>
+              {% endif %}
+              {% if section.settings.title != blank %}
+              <div class="newsletter-modal__container-text col xs12 l3">
+                <div class="newsletter-modal__sub">
+                  {% if section.settings.pretext != blank %}
+                    <h6 class="newsletter-modal__pretext caption">
+                      {{ section.settings.pretext | escape }}
+                    </h4>
+                  {% endif %}
+                  <h2 id="newsletter-signup" class="newsletter-modal__title h1">
+                    {{ section.settings.title | escape }}
+                  </h2>
+                </div>
+                {% if section.settings.postext != blank %}
+                    <h6 class="newsletter-modal__postext caption">
+                      {{ section.settings.postext | escape }}
+                    </h4>
+                  {% endif %}
+              </div>
+              {% endif %}
+              {% unless section.settings.hide_form == false %}
+                {% if section.settings.image_mobile_countdown %}
+                  <div class="newsletter-modal__image{% unless section.settings.hide_form == false %} with-countdown{% endunless %} col l3">
+                    {% render 'art-direction-image' with
+                      alt: section.settings.alt_text,
+                      large_image: section.settings.image_mobile_countdown,
+                      small_image: section.settings.image_mobile_countdown,
+                    %}
+                  </div>
+                {% endif %}
+                  {% render 'countdown', 
+                    date: section.settings.date,
+                    snippetStyle: "newsletter-modal__countdown col xs12 l4 h1",
+                    messageExpired: section.settings.messageExpired 
+                  %}
+                  {% if section.settings.button_text %}
+                    <button 
+                      id="limitedButton"
+                      class="newsletter-modal__customButton"
+                    >
+                      <a href="{{ section.settings.button_link }}"
+                        class="button button--dark button--primary button--fill push-submit button--small"
+                        >
+                        {{ section.settings.button_text }}</a>
+                    </button>
+                  {% endif %}
+              {% endunless %}
+              <div class="newsletter-modal__form col xs12 l4"{% unless section.settings.hide_form == false %}style="display:none"{% endunless %}>
+                  {% if section.settings.body != blank %}
+                    <p class="newsletter-modal__paragraph h4">
+                      {{ section.settings.body | escape }}
+                    </p>
+                  {% endif %}
+                  <div class="newsletter-modal__input col xs12 l9">
+                    <form
+                      id="NewsletterModal"
+                      class="klaviyo_gdpr_embed_{{ settings.esp_form_list_id }}"
+                      action="//manage.kmail-lists.com/subscriptions/subscribe"
+                      data-ajax-submit="//manage.kmail-lists.com/ajax/subscriptions/subscribe"
+                      method="GET"
+                      target="_blank"
+                      novalidate="novalidate"
+                    >
+                      <div class="newsletter-modal__container klaviyo_form_actions">
+                        <input type="hidden" name="g" value="{{ settings.esp_form_list_id }}">
+                        <input type="hidden" name="$fields" value="$consent">
+                        <input type="hidden" name="$list_fields" value="$consent">
+
+                        <label
+                          class="newsletter-modal__label visually-hidden"
+                          for="kModal_id_email"
+                        >
+                          {{ 'customer.login.email' | t }}
+                        </label>
+
+                        <input
+                          id="kModal_id_email"
+                          class="newsletter-modal__input"
+                          autocapitalize="off"
+                          autocorrect="off"
+                          name="email"
+                          placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}"
+                          type="email"
+                          value="
+                            {% if customer.email != blank %}
+                              {{ customer.email }}
+                            {% endif %}
+                          "
+                          required
+                        />
+                      </div>
+
+                      <div class="newsletter-modal__checkbox checkbox__container klaviyo_form_actions">
+                        <input
+                          id="acceptsMarketingModal"
+                          class="checkbox__input"
+                          name="acceptsMarketingModal"
+                          required
+                          type="checkbox"
+                          value="new"
+                          aria-checked="false"
+                          js-newsletter-modal="consent"
+                        >
+                        <label
+                          for="acceptsMarketingModal"
+                          class="caption checkbox__label newsletter-modal__checkbox-label"
+                        >
+                          {{ 'general.newsletter_form.accepts_marketing_html' | t }}
+                        </label>
+                        <button
+                        class="button button--dark button--primary button--fill klaviyo-submit button--small"
+                        disabled="true"
+                        type="submit"
+                        js-newsletter-modal="submit"
+                      >
+                    
+                        {{ 'general.newsletter_form.submit' | t }}
+                      
+                      </button>
+                      </div>
+
+                      <div class="klaviyo_messages">
+                        <div
+                          class="success_message newsletter-modal__confirmation"
+                          style="display:none;"
+                        ></div>
+                        <div class="error_message" style="display:none;"></div>
+                      </div>
+                      
+                    </form>
+                  </div>
+              </div>
+
+            <script type="text/javascript" src="//www.klaviyo.com/media/js/public/klaviyo_subscribe.js"></script>
+            <script type="text/javascript">
+              var successMessage = `{{ successMessage }}`;
+              var currentPage = `{{ currentPage }}`;
+              var closeDelay = `{{ closeDelay }}`;
+
+              KlaviyoSubscribe.attachToForms('#NewsletterModal', {
+                hide_form_on_success: true,
+                success_message: successMessage,
+                extra_properties: {
+                  $consent: true,
+                  $source: 'CustomModalNewsletter',
+                  Page: currentPage,
+                },
+                success: function() {
+                  document.cookie = "newsletter_modal=dismissed";
+                  modal = document.getElementById('newsletter-modal');
+                  window.setTimeout(() => {
+                    modal.classList.remove("is-active");
+                  }, closeDelay);
+
+                  dataLayer.push({
+                    'event': 'GAevent',
+                    'eventID': '05',
+                    'eventCategory': 'newsletter',
+                    'eventAction': 'newsletter_subscribe',
+                    'eventLabel': 'popup_home'
+                  });
+                }
+              });
+            </script>
+          </div>
+        </div>
+    </section>
+    {% if hideAcceptMarketing == true %}
+      {% endif %}
+      {% endif %}
+    {% endif %}
+{% endif %}
+
+
+
+
+{% schema %}
+  {
+    "name": "Newsletter Modal",
+    "settings": [
+      {
+       "type": "checkbox",
+       "id": "allow_modal",
+       "label": "Show Newsletter modal",
+       "default": false
+      },
+     {
+      "type": "checkbox",
+      "id": "hideAccept_marketing",
+      "label": "Hide if customer subscribed",
+      "default": true
+     },
+    
+     {
+      "type": "text",
+      "id": "delayShow",
+      "label": "Delay show ",
+      "default": "20000",
+      "placeholder": "ms"
+     },
+      {
+        "type": "text",
+        "id": "pretext",
+        "label": "label",
+        "default": "DESIGN VIRGIL ABLOH"
+      },
+      {
+        "type": "textarea",
+        "id": "title",
+        "label": "Heading",
+        "default": "Receive 10% off your first purchase"
+      },
+      {
+        "type": "text",
+        "id": "postext",
+        "label": "label",
+        "default": "LIMITED EDITION 999 PIECES"
+      },
+      {
+        "type": "textarea",
+        "id": "body",
+        "label": "Body",
+        "default": "Be the first to know the latest news, promotions and Alessi design pills."
+      },
+      {
+        "type": "header",
+        "content": "Form Klaviyo"
+      },
+      {
+        "type": "textarea",
+        "id": "success_text",
+        "label": "Success Mesage",
+        "default": "Thanks for subscribing! Check your email for the confirmation message."
+      },
+      {
+        "type": "number",
+        "id": "close_delay",
+        "label": "Delay for hide modal (ms)",
+        "default": 2000
+      },
+      {
+        "type": "header",
+        "content": "Featured image"
+      },
+      {
+        "type": "image_picker",
+        "id": "large_image",
+        "label": "Large image",
+        "info": "Upload a 2:3 portrait image. (Required)"
+      },
+      {
+        "type": "image_picker",
+        "id": "small_image",
+        "label": "Small image",
+        "info": "Upload a 3:2 landscape image. (Required)"
+      },
+      {
+        "type": "text",
+        "id": "alt_text",
+        "label": "Image description",
+        "info": "This text will be used as the alt tag for accessibility and SEO."
+      },
+     {
+      "type": "header",
+      "content": "Countdown",
+      "info": "Banner for push product"
+     },
+     {
+      "type": "checkbox",
+      "id": "hide_form",
+      "label": "Hide form",
+      "default": false
+     },
+     {
+      "type": "image_picker",
+      "id": "image_mobile_countdown",
+      "label": "Image mobile countdown",
+      "info": "Upload a 2:3 portrait image. (Required)"
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "label": "date",
+      "default": "Jul 15, 2022 16:00:00",
+      "info": "Format (Jul 15, 2022 16:00:00)"
+    },
+    {
+      "type": "text",
+      "id": "messageExpired",
+      "label": "Ending message",
+      "default": "NOW AVAILABLE"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Text button",
+      "default": "Learn more"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link button"
+    }]
+  }
+{% endschema %}

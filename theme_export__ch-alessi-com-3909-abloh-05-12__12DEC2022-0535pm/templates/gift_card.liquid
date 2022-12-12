@@ -1,0 +1,151 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Template: Gift card
+  - Gift card template
+  - This is not the gift card product template.
+  - QR code is rendered in `#QrCode`
+  - `gift_card.pass_url` is true if apple wallet is enabled for the shop
+----------------------------------------------------------------------------
+{% endcomment %}
+{% layout 'gift_card' %}
+
+{% assign gift_card_expiry_date = gift_card.expires_on | date: '%d/%m/%y' %}
+{% assign formatted_current_balance = gift_card.balance | money %}
+{% assign code_size = gift_card.code | format_code | size %}
+
+{% assign formatted_initial_value = gift_card.initial_value |
+  money_without_trailing_zeros: gift_card.currency
+%}
+
+<main
+  class="
+    template-gift-card
+    {% if gift_card.expired or gift_card.enabled != true %}is-disabled{% endif %}
+  ">
+  <div class="container">
+    <div class="row">
+      <div class="col xs12">
+        <div class="template-gift-card__inner">
+          <div class="template-gift-card__logo">
+            <a href="{{ shop.url }}">{% render 'site-logo' %}</a>
+          </div>
+
+          <div class="gift-card">
+            <header class="gift-card__header" role="banner">
+              <h1 class="gift-card__title h4">
+                {{ 'gift_cards.issued.subtext' | t }}
+
+                {% if gift_card.balance != gift_card.initial_value %}
+                  <p class="h5">
+                    {{ 'gift_cards.issued.remaining_html' | t: balance: formatted_current_balance }}
+                  </p>
+                {% endif %}
+              </h1>
+
+              <div class="gift-card__status">
+                {% unless gift_card.enabled %}
+                  <span class="gift-card__tag is-disabled">
+                    {{ 'gift_cards.issued.disabled' | t }}
+                  </span>
+                {% endunless %}
+
+                {% if gift_card.expired and gift_card.enabled %}
+                  <span class="gift-card__tag">
+                    {{ 'gift_cards.issued.expired' | t: expiry: gift_card_expiry_date }}
+                  </span>
+                {% endif %}
+
+                {% if gift_card.expired != true and gift_card.expires_on and gift_card.enabled %}
+                  <span class="gift-card__tag is-active">
+                    {{ 'gift_cards.issued.active' | t: expiry: gift_card_expiry_date }}
+                  </span>
+                {% endif %}
+              </div>
+            </header>
+
+            <div class="gift-card__thumbnail-container">
+              <div class="gift-card__thumbnail">
+                <div class="gift-card__initial-balance">
+                  {{ gift_card.balance | money_without_trailing_zeros }}
+                </div>
+
+                {% if settings.gift_card_image != 'blank' %}
+                  <img
+                    alt="Gift card illustration"
+                    src="{{ settings.gift_card_image | img_url: '900x' }}"
+                  >
+
+                {% else %}
+                  <img
+                    alt="Gift card illustration"
+                    src="{{ 'gift-card/card.jpg' | shopify_asset_url }}"
+                  >
+                {% endif %}
+
+                <span id="GiftCardDigits" class="gift-card__code-wrapper">
+                  <input
+                    class="gift-card__code"
+                    type="text"
+                    readonly
+                    value="{{ gift_card.code | format_code }}"
+                    js-gift-card="code"
+                  >
+                </span>
+              </div>
+
+              <p>
+                <small>{{ 'gift_cards.issued.redeem' | t }}</small>
+              </p>
+            </div>
+
+            <div class="gift-card__body">
+              <div
+                id="QrCode"
+                class="gift-card__qr"
+                data-identifier="{{ gift_card.qr_identifier }}"
+              >
+              </div>
+
+              {% if gift_card.pass_url %}
+                <a
+                  class="apple-wallet"
+                  href="{{ gift_card.pass_url }}"
+                >
+                  <img
+                    class="apple-wallet-image"
+                    alt="{{ 'gift_cards.issued.add_to_apple_wallet' | t }}"
+                    height="40"
+                    src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}"
+                    width="120"
+                  >
+                </a>
+              {% endif %}
+            </div>
+
+            <div class="gift-card__footer">
+              <div class="gift-card__button-group">
+                <a
+                  class="button button--primary button--dark"
+                  href="{{ shop.url }}"
+                  target="_blank"
+                >
+                  {{ 'gift_cards.issued.shop_link' | t }}
+                </a>
+
+                {% if settings.enable_gift_card_print %}
+                  <a
+                    id="PrintGiftCard"
+                    class="button button--primary button--dark"
+                    href="#"
+                  >
+                    {{ 'gift_cards.issued.print' | t }}
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

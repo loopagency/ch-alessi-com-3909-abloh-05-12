@@ -1,0 +1,198 @@
+{% comment %}
+------------------------------------------------------------------------------
+	Collection
+	- Menu link 
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{% style %}
+	#shopify-section-{{ section.id }} {
+		min-height: 64px;
+		width: 100%;
+		display: flex;
+		justify-content: space-around;
+	}
+	.pill-list__container { 
+		padding-top: 0;
+		padding-bottom: var(--spacing-s);
+		display: flex;
+		flex-direction: row;
+		column-gap: var(--spacing-s);
+
+		justify-content: flex-start;
+		overflow-x: auto;
+		overflow-y: hide;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.pill-list__item {
+		scroll-snap-align: start;
+	}
+	.pill-list__item sup {
+		letter-spacing: 0;
+	}
+	.pill-list__item > span {
+		white-space: nowrap;
+	}
+ 
+	.pill-list__item.current {
+		background: black;
+		color: white !important;
+	}
+	.container { 
+		max-width: 100%;
+	}
+
+
+	.pill-list__container::-webkit-scrollbar-track {
+		background-color: #edede8;
+		border-radius: 10px;
+	}
+
+	.pill-list__container::-webkit-scrollbar {
+		height: 2px;
+	}
+
+	.pill-list__container::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		box-shadow: 0;
+		background-color: #ed1c24;
+	}
+	{% if section.settings.allow_sticky %}
+		#shopify-section-{{ section.id }} {
+				z-index: 23;
+				position: sticky;
+				background: rgb(246,246,242);
+				top: 0;
+		}
+	{% endif %}
+{% endstyle %}
+
+{% render 'section-padding' %}
+<div class='pill-list__container text-center section-{{ section.id }}{% if section.settings.allow_padding %}-padding{% endif %}{% if section.settings.section_boxed %} section-boxed{% endif %}'>
+	{% liquid
+    assign thisCollections = collection.url 
+    assign thisLink = collection.url 
+  %}
+	{% for block in section.blocks %}
+    {% case block.type %}
+      {% when 'collection' %}
+        {% if block.settings.collection != blank %}
+          <a href="{{ block.settings.collection.url }}" class="button button--primary button--dark button--small pill-list__item {% if block.settings.collection.url == thisCollections %}current{% endif %}">
+            <span>
+              {{ block.settings.collection.title }}
+            </span>
+            {% if section.settings.allow_counter %}
+              <sup>
+                {{ block.settings.collection.all_products_count }}
+              </sup>
+            {% endif %}
+          </a> 
+        {% endif %}
+      {% when 'link' %}
+        {% if block.settings.url != blank %}
+          <a href="{{ block.settings.url }}" class="button button--primary button--dark button--small pill-list__item {% if block.settings.url == thisCollections %}current{% endif %}">
+            <span>
+              {{ block.settings.title }}
+            </span>
+          </a> 
+        {% endif %}
+    {% endcase %}
+	{% endfor %}
+</div>
+
+{% schema %}
+	{
+		"name": "BETA - Menu list pills",
+		"class": "beta-section",
+		"settings": [
+			{
+				"type": "header",
+				"content": "Menu list for launch collections"
+			},
+		  {
+				"type": "checkbox",
+				"id": "allow_counter",
+				"label": "Allow products counter on Collections title",
+				"default": true
+			},
+			{
+				"type": "checkbox",
+				"id": "allow_sticky",
+				"label": "Allow Sticky bar on scroll",
+				"default": true
+			},
+			{
+				"type": "checkbox",
+				"id": "allow_title",
+				"label": "Show title",
+				"default": false
+			},
+			{
+				"type": "header",
+				"content": "Padding Section"
+			},
+			{
+				"type": "checkbox",
+				"id": "allow_padding",
+				"label": "Show Padding on top and bottom",
+				"default": true
+			},
+			{
+				"type": "checkbox",
+				"id": "section_boxed",
+				"label": "Use margin left/right for box the section",
+				"default": true
+			},
+			{
+				"type": "range",
+				"id": "padding_top",
+				"min": 0,
+				"max": 100,
+				"step": 4,
+				"unit": "px",
+				"label": "Padding top",
+				"default": 12
+			},
+			{
+				"type": "range",
+				"id": "padding_bottom",
+				"min": 0,
+				"max": 100,
+				"step": 4,
+				"unit": "px",
+				"label": "Padding bottom",
+				"default": 12
+			}
+		],
+		"blocks": [
+			{
+				"type": "collection",
+				"name": "collection",
+				"settings": [
+					{
+						"type": "collection",
+						"id": "collection",
+						"label": "Select your collection"	
+					}
+				]
+			},
+      {
+				"type": "link",
+				"name": "Link",
+				"settings": [
+          {
+						"type": "text",
+						"id": "title",
+						"label": "Text your title"	
+					},
+					{
+						"type": "url",
+						"id": "url",
+						"label": "Select your link"	
+					}
+				]
+			}
+		]
+	}
+{% endschema %}

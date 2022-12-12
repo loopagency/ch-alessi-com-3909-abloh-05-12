@@ -1,0 +1,48 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Text Callout
+  - Page Builder text callout block
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- assign spacing_pixel = block.settings.spacing_pixel -%}
+{%- assign mobile_spacing_pixel = block.settings.spacing_pixel -%}
+
+{%-if block_settings -%}
+  {%- assign block_settings_array = block_settings | replace: ',"', '##split##' 
+    | replace: '{', '' 
+    | replace: '}', '' 
+    | replace: '"', '' 
+    | split: '##split##' 
+  -%}
+
+  {%- for block_setting in block_settings_array -%}
+    {%- if block_setting != blank -%}
+      {%- assign block_setting_name_value = block_setting | split: '=>' -%}
+      {%- assign block_setting_name = block_setting_name_value[0] | replace: ' ', '' -%}
+      {%- assign block_setting_value = block_setting_name_value[1] -%}
+      {%- assign block_setting_value_slice = block_setting_value | slice: 0, 5 -%}
+      {%- if block_setting_value_slice == 'files' -%}
+        {%- assign block_setting_value = block_setting_value | replace: 'files/' -%}
+        {%- assign block_setting_value = images[block_setting_value] -%}
+      {%- endif -%}
+      {%- case block_setting_name -%}
+        {%- when 'spacing_pixel' -%}
+          {%- assign spacing_pixel = block_setting_value -%}
+        {%- when 'mobile_spacing_pixel' -%}
+          {%- assign mobile_spacing_pixel = block_setting_value -%}
+      {%- endcase -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+<section
+  class="
+    spacer 
+    spacer--block 
+    spacer--desktop-{{ spacing_pixel }} 
+    spacer--mobile-{{ mobile_spacing_pixel }}
+  "
+  data-section-id="{{ section.id }}"
+  data-section-type="spacer"
+></section>

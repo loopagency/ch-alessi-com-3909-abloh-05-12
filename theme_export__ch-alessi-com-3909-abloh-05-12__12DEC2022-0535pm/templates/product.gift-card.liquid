@@ -1,0 +1,50 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Template: Gift card product
+----------------------------------------------------------------------------
+{% endcomment %}
+<div class="template-product__container critical-clear">
+  <div class="container">
+    {% if settings.enable_breadcrumbs %}
+      <div class="row">
+        <div class="template-product__header">
+          <div class="col xs12">
+            <div class="template-product__breadcrumb">
+              {% render 'breadcrumb' %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="row">
+      <div class="col xs12 m5">
+        <div class="template-product__gallery">
+          {% render 'product-gallery' %}
+        </div>
+      </div>
+
+      <div class="col xs12 m5 offset-m1">
+        <div class="container">
+          <div class="template-product__aside">
+            {% render 'product-form' %}
+
+            <div class="template-product__description">
+              <h4>{{ 'products.product.description' | t }}</h4>
+
+              <p>
+                {{ product.description }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    {% section 'recommended-products' %}
+  </div>
+</div>
+
+{% render 'product-schema' %}

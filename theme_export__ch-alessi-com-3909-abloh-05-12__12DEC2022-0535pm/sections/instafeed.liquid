@@ -1,0 +1,48 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Instafeed
+  - This section requires an Instafeed installation.
+------------------------------------------------------------------------------
+{% endcomment %}
+<section
+  class="instafeed"
+  data-section-id="{{ section.id }}"
+  data-section-type="instafeed"
+>
+  <div class="container">
+    {% if section.settings.title != blank %}
+      <div class="instafeed__header">
+        <h3 class="instafeed__title">{{ section.settings.title }}</h3>
+      </div>
+    {% endif %}
+
+    <div class="row">
+      <div id="insta-feed"></div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Instafeed",
+    "class": "index-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Content"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Instagram"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Instafeed",
+        "category": "Apps"
+      }
+    ]
+  }
+{% endschema %}

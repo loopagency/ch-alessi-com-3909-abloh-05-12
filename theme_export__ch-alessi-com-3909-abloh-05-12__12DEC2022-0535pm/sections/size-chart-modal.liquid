@@ -1,0 +1,112 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Product Size Chart modal
+------------------------------------------------------------------------------
+{% endcomment %}
+{% liquid 
+  assign modal_show = false
+  assign modal_image = cart_add_on.featured_image
+  unless product.has_only_default_variant  
+    for tag in product.tags
+      if tag contains 'Size:'
+        assign modal_show = true
+      endif
+    endfor
+  endunless 
+  assign current_tag = ''
+  for block in section.blocks
+    assign current_tag = block.settings.tag
+    for tag in product.tags
+      if tag contains current_tag
+        assign tag_accepted = tag
+        assign title = pages[block.settings.page_chart].title
+        assign desc = pages[block.settings.page_chart].content | replace: '<p', '<p class="body-2"'
+        assign image_chart = ''
+        if block.settings.image_chart != blank 
+          assign image_chart = block.settings.image_chart 
+        endif
+      endif
+    endfor
+  endfor
+%}
+
+  {% if modal_show == true and tag_accepted != '' %}
+    <div
+      id="size-chart-modal"
+      class="modal modal--light size-chart__modal"
+      role="dialog"
+      tabindex="-1"
+      js-size-chart="modal"
+      js-disable-scroll="true"
+    >
+      <div class="modal__card" js-size-chart="modalCard">
+        <div class="modal__body">
+          <button class="button size-chart__modal-close" js-size-chart="closeModal">
+            <span class="visually-hidden">
+              {{ 'general.accessibility.close' | t }}
+            </span>
+
+            {% render 'icon-misc' with icon: 'close' %}
+          </button>
+
+          <div class="container">
+            <div class="row">
+              <div class="size-chart__modal-container" js-size-chart="description">
+                {% if image_chart != '' %}
+                  <div class="col xs12 m6 lazyload size-chart__modal-image"
+                      data-bgset="{% render 'responsive-bg-image', image: image_chart %}"
+                    ></div>
+                {% endif %}
+
+                <div class="col xs12 {% if image_chart != '' %}m6{% else %}m12{% endif %}">
+                  <div class="size-chart__description">
+                    <h2 class="h3 size-chart__description-title">
+                      {{ title }}
+                    </h2>
+
+                    <div>
+                      {{ desc }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+{% schema %}
+{
+  "name": "Size Chart",
+  "settings": [
+
+  ],
+  "blocks": [
+    {
+      "type": "icon",
+      "name": "Chart",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tag",
+          "label": "Tag for matching chart to product"
+        },
+       {
+        "type": "image_picker",
+        "id": "image_chart",
+        "label": "Image for this chart"
+       },
+      {
+        "type": "page",
+        "id": "page_chart",
+        "label": "Page"
+      }
+      ]
+    }
+  ]
+}
+{% endschema %}

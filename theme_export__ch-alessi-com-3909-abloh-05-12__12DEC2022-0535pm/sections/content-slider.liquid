@@ -1,0 +1,207 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Content Slider
+  - This section requires a block-content-slider template.
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- render 'block-content-slider' with block: section -%}
+
+<style>
+  .block-content-slider__heading:empty {
+    display:none;
+  }
+</style>
+
+{% schema %}
+  {
+    "name": "Content Slider",
+    "class": "index-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Header"
+      },
+      {
+        "type": "text",
+        "id": "slider_heading",
+        "label": "Slider Heading",
+        "default": "Lorem"
+      },
+      {
+        "type": "header",
+        "content": "Card 1"
+      },
+      {
+        "type": "image_picker",
+        "id": "card1_image",
+        "label": "Card 1 - Image",
+        "info": "Recommended size 320 x 400"
+      },
+      {
+        "type": "text",
+        "id": "card1_title",
+        "label": "Card 1 - Title",
+        "default": "Alessi"
+      },
+      {
+        "type": "url",
+        "id": "card1_link",
+        "label": "Card 1 - Link destination"
+      },
+      {
+        "type": "header",
+        "content": "Card 2"
+      },
+      {
+        "type": "image_picker",
+        "id": "card2_image",
+        "label": "Card 2 - Image",
+        "info": "Recommended size 320 x 400"
+      },
+      {
+        "type": "text",
+        "id": "card2_title",
+        "label": "Card 2 - Title",
+        "default": "Alessi"
+      },
+      {
+        "type": "url",
+        "id": "card2_link",
+        "label": "Card 2 - Link destination"
+      },
+      {
+        "type": "header",
+        "content": "Card 3"
+      },
+      {
+        "type": "image_picker",
+        "id": "card3_image",
+        "label": "Card 3 - Image",
+        "info": "Recommended size 320 x 400"
+      },
+      {
+        "type": "text",
+        "id": "card3_title",
+        "label": "Card 3 - Title",
+        "default": "Alessi"
+      },
+      {
+        "type": "url",
+        "id": "card3_link",
+        "label": "Card 3 - Link destination"
+      },
+      {
+        "type": "header",
+        "content": "Card 4"
+      },
+      {
+        "type": "image_picker",
+        "id": "card4_image",
+        "label": "Card 4 - Image",
+        "info": "Recommended size 320 x 400"
+      },
+      {
+        "type": "text",
+        "id": "card4_title",
+        "label": "Card 4 - Title",
+        "default": "Alessi"
+      },
+      {
+        "type": "url",
+        "id": "card4_link",
+        "label": "Card 4 - Link destination"
+      },
+      {
+        "type": "header",
+        "content": "Card 5"
+      },
+      {
+        "type": "image_picker",
+        "id": "card5_image",
+        "label": "Card 5 - Image",
+        "info": "Recommended size 320 x 400"
+      },
+      {
+        "type": "text",
+        "id": "card5_title",
+        "label": "Card 5 - Title",
+        "default": "Alessi"
+      },
+      {
+        "type": "url",
+        "id": "card5_link",
+        "label": "Card 5 - Link destination"
+      },
+      {
+        "type": "header",
+        "content": "Card 6"
+      },
+      {
+        "type": "image_picker",
+        "id": "card6_image",
+        "label": "Card 6 - Image",
+        "info": "Recommended size 320 x 400"
+      },
+      {
+        "type": "text",
+        "id": "card6_title",
+        "label": "Card 6 - Title",
+        "default": "Alessi"
+      },
+      {
+        "type": "url",
+        "id": "card6_link",
+        "label": "Card 6 - Link destination"
+      },
+      {
+        "type": "header",
+        "content": "Card 7"
+      },
+      {
+        "type": "image_picker",
+        "id": "card7_image",
+        "label": "Card 7 - Image",
+        "info": "Recommended size 320 x 400"
+      },
+      {
+        "type": "text",
+        "id": "card7_title",
+        "label": "Card 7 - Title",
+        "default": "Alessi"
+      },
+      {
+        "type": "url",
+        "id": "card7_link",
+        "label": "Card 7 - Link destination"
+      },
+      {
+        "type": "header",
+        "content": "Card 8"
+      },
+      {
+        "type": "image_picker",
+        "id": "card8_image",
+        "label": "Card 8 - Image",
+        "info": "Recommended size 320 x 400"
+      },
+      {
+        "type": "text",
+        "id": "card8_title",
+        "label": "Card 8 - Title",
+        "default": "Alessi"
+      },
+      {
+        "type": "url",
+        "id": "card8_link",
+        "label": "Card 8 - Link destination"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Content Slider",
+        "category": "Custom Content Blocks"
+      }
+    ]
+  }
+{% endschema %}

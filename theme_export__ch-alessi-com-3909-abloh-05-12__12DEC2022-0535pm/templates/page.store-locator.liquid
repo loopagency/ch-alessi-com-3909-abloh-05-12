@@ -1,0 +1,127 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Template: Store locator page
+  - Able to search for local store using Storelocator app
+----------------------------------------------------------------------------
+{% endcomment %}
+<div class="template-page template-store-locator">
+  <header class="template-store-locator__header">
+    <div class="container">
+      <div class="row">
+        <div class="col xs12">
+          <h1 class="template-store-locator__title d3">
+            {{ page.title }}
+          </h1>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="row">
+      <div class="col xs12">
+        <div class="rte">
+          {{ page.content }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+var cityName = '';
+
+function returnCity(latLng) {
+  var city = false;
+  var geocoder = new google.maps.Geocoder();
+
+  geocoder.geocode({'latLng': latLng}, function(results, status) {
+    results[0].address_components.forEach((component) => {
+      if (city === false &&
+        (component.types[0] === 'locality' ||
+        component.types[0] === 'postal_town' ||
+        component.types[0] === 'administrative_area_level_3' ||
+        component.types[0] === 'administrative_area_level_1' )
+        ) {
+        city = true;
+        cityName = component.long_name;
+        linksListener();
+      }
+    });
+  });
+}
+
+function linksListener() {
+  var allLinks = document.querySelectorAll('#storemapper a');
+
+  allLinks.forEach((link) => {
+    link.removeEventListener('click', clickOnElement);
+    link.addEventListener('click', clickOnElement, true);
+  });
+}
+
+var clickOnElement = function(event) {
+  var link = event.target;
+  var eventActionLabel;
+
+  if (link.parentNode.tagName !== 'P') {
+    return;
+  }
+
+  var parent = link.closest('p');
+  var parentClasses = parent.className;
+
+  if (parent.closest('.storemapper-popup')) {
+    var shopName = parent.closest('.storemapper-popup').querySelector('h4').innerHTML.replace(/ /g, '_').toLowerCase();
+  } else {
+    var shopName = parent.closest('.tier').querySelector('h4').innerHTML.replace(/ /g, '_').toLowerCase();
+  }
+
+  if (parentClasses) {
+    if (parentClasses.includes('phone')) {
+      eventActionLabel = 'phone';
+    } else if (parentClasses.includes('email')) {
+      eventActionLabel = 'email';
+    } else if (parentClasses.includes('url')) {
+      eventActionLabel = 'website';
+    } else if (parentClasses.includes('view')) {
+      eventActionLabel = 'view_on_map';
+    }
+  } else if (link.className.includes('storelink')) {
+    eventActionLabel = 'view_on_map';
+  } else if (link.className.includes('map-directions')) {
+    eventActionLabel = 'directions';
+  }
+
+  window.dataLayer.push({
+    'event': 'GAevent',
+    'eventID': '17',
+    'eventCategory': 'store_locator',
+    'eventAction': eventActionLabel,
+    'eventLabel': cityName,
+    'moreInfo': shopName
+  });
+}
+
+function storemapper_after_search_result() {
+  document.querySelectorAll('.storemapper-storelink').forEach((btn, index) => {
+    var latLng = {lat: Number(btn.dataset.lat), lng: Number(btn.dataset.lng)};
+
+    if(index === 0) {
+      returnCity(latLng);
+    }
+
+    btn.addEventListener('click', () => {
+      returnCity(latLng);
+    })
+  })
+
+  window.Storemapper.markers.forEach((marker) => {
+    marker.addListener('click', () => {
+      var latLng = {lat: marker.position.lat(), lng: marker.position.lng()};
+      returnCity(latLng);
+    })
+  });
+}
+</script>

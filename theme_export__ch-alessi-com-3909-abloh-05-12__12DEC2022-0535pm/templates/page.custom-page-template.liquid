@@ -1,0 +1,65 @@
+
+{% comment %}
+------------------------------------------------------------------------------
+  Custom Page Template
+  - Use this template for Custom Pages created using the Custom Page Builder
+  - Use the commented out code snippet below to create new blocks
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- comment -%}
+  {%- assign example_variable = block.settings.example_variable -%}
+
+  {%-if block_settings -%}
+    {%- assign block_settings_array = block_settings | replace: ',"', '##split##' | replace: '{', '' | replace: '}', '' | replace: '"', '' | split: '##split##' -%}
+    {%- for block_setting in block_settings_array -%}
+      {%- if block_setting != blank -%}
+        {%- assign block_setting_name_value = block_setting | split: '=>' -%}
+        {%- assign block_setting_name = block_setting_name_value[0] | replace: ' ', '' -%}
+        {%- assign block_setting_value = block_setting_name_value[1] -%}
+        {%- assign block_setting_value_slice = block_setting_value | slice: 0, 5 -%}
+        {%- if block_setting_value_slice == 'files' -%}
+          {%- assign block_setting_value = block_setting_value | replace: 'files/' -%}
+          {%- assign block_setting_value = images[block_setting_value] -%}
+        {%- endif -%}
+        {%- case block_setting_name -%}
+          {%- when 'example_variable' -%}
+            {%- assign example_variable = block_setting_value -%}
+        {%- endcase -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcomment -%}
+
+{% capture page_content %}
+  {{ page.content }}
+{% endcapture %}
+
+{%- assign blocks = page_content | split: '<!--[[' | last | remove: ']]-->' | split: '||' -%}
+
+{%- for block in blocks -%}
+  {%- assign block_type = block | split: '==>' | first | replace: ' ', '' | strip_newlines -%}
+  {%- assign block_settings = block | split: '==>' | last | strip_newlines -%}
+  {%- assign block_id = block.id -%}
+
+  {%- case block_type -%}
+    {%- when 'example-block' -%}
+      {%- render 'example-block' block_id: forloop.index, block_settings: block_settings -%}
+    {%- when 'image-video-hero' -%}
+      {%- render 'block-image-video-hero' block_id: forloop.index, block_settings: block_settings -%}
+    {%- when 'text-callout' -%}
+      {%- render 'block-text-callout' block_id: forloop.index, block_settings: block_settings -%}
+    {%- when '50-50' -%}
+      {%- render 'block-50-50' block_id: forloop.index, block_settings: block_settings -%}
+    {%- when 'content-grid' -%}
+      {%- render 'block-content-grid' block_id: forloop.index, block_settings: block_settings -%}
+    {%- when 'spacer' -%}
+      {%- render 'block-spacer' block_id: forloop.index, block_settings: block_settings -%}
+    {%- when 'double-image' -%}
+      {%- render 'block-double-image' block_id: forloop.index, block_settings: block_settings -%}
+    {%- when 'bleed-image-text' -%}
+      {%- render 'block-bleed-image-text' block_id: forloop.index, block_settings: block_settings -%}
+    {%- when 'content-slider' -%}
+      {%- render 'block-content-slider' block_id: forloop.index, block_settings: block_settings -%}
+  {%- endcase -%}
+{%- endfor -%}

@@ -1,0 +1,46 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Quickview modal
+  - Available in the global theme settings in the theme editor.
+------------------------------------------------------------------------------
+{% endcomment %}
+<div
+  id="quick-view"
+  class="modal quick-view critical-clear"
+  aria-hidden="true"
+>
+  <div
+    class="modal__overlay"
+    tabindex="-1"
+    data-micromodal-close
+  >
+    <div
+      class="quick-view__card is-loading"
+      data-cy="quickview"
+      js-modal="body"
+      js-quick-view="viewport"
+    >
+      <div js-modal="card">
+        <button
+          class="quick-view__close button"
+          aria-label="Close modal"
+          data-micromodal-close
+        >
+          <span class="visually-hidden">
+            {{ 'general.accessibility.close' | t }}
+          </span>
+
+          {% render 'icon-misc' with icon: 'close' %}
+        </button>
+
+        <div
+          class="quick-view__body"
+          aria-modal="true"
+          role="dialog"
+          js-quick-view="body"
+        >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

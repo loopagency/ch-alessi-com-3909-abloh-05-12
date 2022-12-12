@@ -1,0 +1,77 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Breadcrumb
+  - https://help.shopify.com/en/themes/customization/navigation/add-breadcrumb
+  - HTML entities: https://dev.w3.org/html5/html-author/charref
+------------------------------------------------------------------------------
+{% endcomment %}
+{% capture breadcrumb_seperator %}
+  <span aria-hidden="true" class="breadcrumb__separator">&#47;</span>
+{% endcapture %}
+
+{% unless
+  template.name == 'index' or
+  template.name == 'cart' or
+  template.name == 'list-collections'
+%}
+  <nav
+    class="breadcrumb"
+    role="navigation"
+    aria-label="breadcrumb"
+  >
+    <a
+      class="breadcrumb__item breadcrumb__link"
+      href="{{ shop.url }}"
+      title="Home"
+    >{{ 'collections.general.breadcrumb_home' | t }}</a>
+
+    {% if template.name contains 'page' %}
+      {{ breadcrumb_seperator }}
+      <span class="breadcrumb__item">{{ page.title }}</span>
+
+    {% elsif template.name contains 'product' %}
+      {% if collection.url %}
+        {{ breadcrumb_seperator }}
+        {{ collection.title | link_to: collection.url }}
+      {% endif %}
+
+      {{ breadcrumb_seperator }}
+      <span class="breadcrumb__item">{{ product.title }}</span>
+
+    {% elsif template.name contains 'collection' and collection.handle %}
+      {{ breadcrumb_seperator }}
+
+      {% if current_tags %}
+        {% capture url %}/collections/{{ collection.handle }}{% endcapture %}
+        {{ collection.title | link_to: url }}
+        {{ breadcrumb_seperator }}
+        <span>{{ current_tags | join: " + " }}</span>
+
+      {% else %}
+        <span class="breadcrumb__item">{{ collection.title }}</span>
+      {% endif %}
+
+    {% elsif template.name == 'blog' %}
+      {{ breadcrumb_seperator }}
+
+      {% if current_tags %}
+        {{ blog.title | link_to: blog.url }}
+        {{ breadcrumb_seperator }}
+        <span class="breadcrumb__item">{{ current_tags | join: " + " }}</span>
+
+      {% else %}
+        <span class="breadcrumb__item">{{ blog.title }}</span>
+      {% endif %}
+
+    {% elsif template.name == 'article' %}
+      {{ breadcrumb_seperator }}
+      {{ blog.title | link_to: blog.url }}
+      {{ breadcrumb_seperator }}
+      <span class="breadcrumb__item">{{ article.title }}</span>
+
+    {% else %}
+      {{ breadcrumb_seperator }}
+      <span class="breadcrumb__item">{{ page_title }}</span>
+    {% endif %}
+  </nav>
+{% endunless %}

@@ -1,0 +1,111 @@
+<script>
+  // Declare bcSfFilterConfig variable
+  var bcSfFilterConfig = {
+    label: {
+      sorting: {{ 'collections.sorting.sort_by' | t | json }},
+      sorting_best_selling: {{ 'collections.sorting.best_selling' | t | json }},
+      sorting_featured: {{ 'collections.sorting.manual' | t | json }},
+      sorting_title_ascending: {{ 'collections.sorting.title_ascending' | t | json }},
+      sorting_title_descending: {{ 'collections.sorting.title_descending' | t | json }},
+      sorting_price_ascending: {{ 'collections.sorting.price_ascending' | t | json }},
+      sorting_price_descending: {{ 'collections.sorting.price_descending' | t | json }},
+      sorting_date_ascending: {{ 'collections.sorting.created_ascending' | t | json }},
+      sorting_date_descending: {{ 'collections.sorting.created_descending' | t | json }},
+
+      sale: {{ 'products.product.on_sale' | t | json }},
+      sale_price: {{ 'products.product.sale_price' | t | json }},
+      sold_out: {{ 'products.product.sold_out' | t | json }},
+      vendor: {{ 'products.product.vendor' | t |json }},
+      regular_price: {{ 'products.product.regular_price' | t | json }},
+      items_with_count_one: {{ 'collections.general.items_with_count.one' | t | json}},
+      items_with_count_other: {{ 'collections.general.items_with_count.other' | t | json }},
+      current_page: {{ 'general.pagination.current_page' | t | json }},
+    },
+    label_basic: {
+      sale: {{ 'products.product.on_sale' | t | json }},
+      sold_out: {{ 'products.product.from_text_html' | t | json }},
+      from: {{ 'products.product.from_text_html' | t | json }},
+    },
+    custom: {
+      // Add custom value here
+      show_sorting: true,
+      filters: [
+        {% if section.settings.sorting_relevance %}"relevance",{% endif %}
+        {% if section.settings.sorting_best_selling %}"best-selling",{% endif %}
+        {% if section.settings.sorting_manual %}"manual",{% endif %}
+        {% if section.settings.sorting_price_ascending %}"price-ascending",{% endif %}
+        {% if section.settings.sorting_price_descending %}"price-descending",{% endif %}
+        {% if section.settings.sorting_title_ascending %}"title-ascending",{% endif %}
+        {% if section.settings.sorting_title_descending %}"title-descending",{% endif %}
+        {% if section.settings.sorting_date_ascending %}"created-descending",{% endif %}
+        {% if section.settings.sorting_date_descending %}"created-ascending",{% endif %}
+      ]
+    }
+  };
+</script>
+
+{% schema %}
+  {
+    "name": "Boost Settings",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Sorting options"
+      },
+      {
+        "type": "checkbox",
+        "id": "sorting_relevance",
+        "default": true,
+        "label": "Relevance"
+      },
+      {
+        "type": "checkbox",
+        "id": "sorting_best_selling",
+        "default": true,
+        "label": "Best Selling"
+      },
+      {
+        "type": "checkbox",
+        "id": "sorting_manual",
+        "default": true,
+        "label": "Manual"
+      },
+      {
+        "type": "checkbox",
+        "id": "sorting_price_ascending",
+        "default": true,
+        "label": "Price Ascending"
+      },
+      {
+        "type": "checkbox",
+        "id": "sorting_price_descending",
+        "default": true,
+        "label": "Price Descending"
+      },
+      {
+        "type": "checkbox",
+        "id": "sorting_title_ascending",
+        "default": true,
+        "label": "Title Ascending"
+      },
+      {
+        "type": "checkbox",
+        "id": "sorting_title_descending",
+        "default": true,
+        "label": "Title Descending"
+      },
+      {
+        "type": "checkbox",
+        "id": "sorting_date_ascending",
+        "default": true,
+        "label": "Date Ascending"
+      },
+      {
+        "type": "checkbox",
+        "id": "sorting_date_descending",
+        "default": true,
+        "label": "Date Descending"
+      }
+    ]
+  }
+{% endschema %}

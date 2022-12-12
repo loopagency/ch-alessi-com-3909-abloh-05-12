@@ -1,0 +1,45 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Account nav
+  - Navigation displayed on account pages.
+----------------------------------------------------------------------------
+{% endcomment %}
+{% assign has_active_link = false %}
+{% assign template_is_order = false %}
+
+{% if template.suffix contains 'order' or template.name contains 'order' %}
+  {% assign template_is_order = true %}
+{% endif %}
+
+<div class="account-nav">
+  <h1 class="d3 account-nav__title">
+    {{ 'customer.account.title' | t }}
+  </h1>
+
+  <ul class="account-nav__list">
+    {% for link in linklists['account'].links %}
+      {% assign modifier = '' %}
+
+      {% if link.title == 'Orders' and template_is_order %}
+        {% assign modifier = modifier | append: ' is-active' %}
+        {% assign has_active_link = true %}
+
+      {% elsif
+        link.current and
+        has_active_link == false and
+        template_is_order == false
+      %}
+        {% assign modifier = modifier | append: ' is-active' %}
+      {% endif %}
+
+      <li class="account-nav__item">
+        <a
+          href="{{ link.url }}"
+          class="account-nav__link body-1 {{ modifier }}"
+        >
+          {{ link.title }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</div>

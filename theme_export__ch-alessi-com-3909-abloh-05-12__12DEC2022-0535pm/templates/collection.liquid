@@ -1,0 +1,187 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Collection
+  - Main collection template.
+------------------------------------------------------------------------------
+{% endcomment %}
+
+
+
+{% liquid
+  assign designer_collection = false
+  if collection.description != blank and collection.metafields.accentuate.main_image != blank 
+    render 'meet-the-designer' with template_snippet: 'collection-mf', main_image: collection.metafields.accentuate.main_image[0]
+    assign designer_collection = true
+
+  elsif collection.description != blank and collection.image != blank
+    render 'meet-the-designer' with template_snippet: 'collection'
+    assign designer_collection = true
+  endif
+%}
+
+{% paginate collection.products by 24 %}
+  <div
+    class="critical-clear bc-sf-filter-wrapper-page"
+  >
+    
+    {% unless designer_collection %}
+      <div class="container">
+        <div
+          style="{% if collection.description != blank %}margin-bottom: unset;{% endif %}"
+          class="row"
+        >
+          <div class="template-collection__header">
+            <div class="col xs12">
+              <h1
+                style="{% if collection.description != blank %}margin-bottom: unset;{% endif %}"
+                class="h2 template-collection__title"
+              >
+                {{ collection.title }}
+              </h1>
+            </div>
+          </div>
+        </div>
+
+        {% if collection.description != blank %}
+          <div class="row">
+            <div class="template-collection__header template-collection__description">
+              <div class="col xs12">
+                {{ collection.description }}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    {% endunless %}
+
+    <div
+      class="
+        container
+        template-collection__tools-container
+        container--full-width
+      "
+    >
+      <div
+        class="
+          container
+          template-collection__bs-tools
+          template-collection__bs-tools--desktop
+        "
+      >
+        <span class="bc-sf-filter-total-product body-2">
+          {% include 'bc-sf-filter-skeleton', width: 1 %}
+        </span>
+
+        <div
+          id="bc-sf-filter-tree-h"
+          js-filters-container
+        >
+          {% include 'bc-sf-filter-tree-placeholder-h' %}
+        </div>
+
+        <div
+          id="bc-sf-filter-top-sorting"
+          class="
+            bc-sf-filter-custom-sorting
+            bc-sf-filter-toolbar-item
+            text-right
+          "
+        >
+          {% include 'bc-sf-filter-skeleton', width: 1 %}
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="
+        container
+        template-collection__bs-tools
+        template-collection__bs-tools--mobile
+      "
+    >
+      <div class="row">
+        <div
+          id="bc-sf-filter-tree-mobile"
+          class="col xs6"
+        >
+          {% include 'bc-sf-filter-skeleton', type: 'button' %}
+        </div>
+
+        <div
+          id="bc-sf-filter-top-sorting-mobile"
+          class="bc-sf-filter-custom-sorting col xs6"
+        >
+          {% include 'bc-sf-filter-skeleton', type: 'button' %}
+        </div>
+
+        <div
+          id="bc-sf-filter-tree"
+          js-filters-container
+        >
+          {% include 'bc-sf-filter-tree-placeholder' %}
+        </div>
+
+        <div class="col xs12">
+          <span class="bc-sf-filter-total-product body-2">
+            {% include 'bc-sf-filter-skeleton', width: 1 %}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    {% comment %}
+    ----------------------------------------------------------------------------
+      Product cards
+    ----------------------------------------------------------------------------
+    {% endcomment %}
+    <div class="container">
+      <div class="row">
+        <div id="bc-sf-filter-btn-load-previous-page-wrapper"></div>
+
+        <div class="template-collection__body">
+
+          {% if collection.products.size <= 0 %}
+            <h2 class="text-center">
+              {{ 'collections.general.no_matches' | t }}
+            </h2>
+          {% else %}
+            <div
+              id="bc-sf-filter-products"
+              class="template-collection__grid products-list__grid card-grid"
+              data-bc-sort="{{ collection.default_sort_by }}"
+            >
+              {% for product in collection.products %}
+                <div class="card-grid__item">
+                  {% render 'product-card' with product: product %}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <div>
+          <div id="bc-sf-filter-bottom-pagination">
+            {% if paginate.pages > 1 %}
+              {% include 'bc-sf-filter-pagination' %}
+            {% endif %}
+          </div>
+          <div id="bc-sf-filter-load-more"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if collection.metafields.accentuate.subdescription != blank %}
+    <div class="container template-collection__description-container">
+      <div class="subdescription">
+        {{collection.metafields.accentuate.subdescription}}
+      </div>
+    </div>
+  {% endif %}
+{% endpaginate %}
+
+<div class="template-collection__breadcrumb">
+  {% render 'breadcrumb' %}
+</div>
+
+{% section 'collection-promo-boxes' %}

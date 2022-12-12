@@ -1,0 +1,372 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippets: Critical base
+------------------------------------------------------------------------------
+{% endcomment %}
+<style>
+
+  /**
+   * Reset.
+   */
+  *,
+  :after,
+  :before,
+  html {
+    box-sizing: border-box;
+  }
+
+  body,
+  html {
+    height: 100%;
+    font-size: var(--ms-0);
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    line-height: var(--line-height-body);
+    text-rendering: optimizeLegibility;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    margin: 0;
+  }
+
+  main {
+    display: block;
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+  }
+
+  a {
+    background-color: transparent;
+  }
+
+  button,
+  input,
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0;
+    background-color: transparent;
+    color: #adadad;
+    font-family: inherit;
+    font-size: 100%;
+    line-height: 1.15;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  a,
+  button,
+  input,
+  label,
+  select {
+    font-family: inherit;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+  }
+
+  .icon {
+    display: inline-block;
+    fill: currentColor;
+    height: 24px;
+    vertical-align: middle;
+    width: 24px;
+  }
+
+  svg circle,
+  svg g,
+  svg path {
+    max-width: 100%;
+  }
+
+  .button {
+    border: 1px solid transparent;
+  }
+
+  .icon-fallback-text {
+    border: 0;
+    clip: rect(0 0 0 0);
+    -webkit-clip-path: inset(100%);
+    clip-path: inset(100%);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+
+  img,
+  picture,
+  video {
+    margin: 0;
+    max-width: 100%;
+  }
+
+  /**
+   * Helpers.
+   */
+  .critical-hide {
+    display: none;
+  }
+
+  .critical-clear {
+    opacity: 0;
+    transition: opacity 0.6s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+  }
+
+  .main-content .shopify-section {
+    display: none;
+  }
+
+  .main-content .shopify-section:first-child {
+    display: inherit;
+  }
+
+  .is-hidden,
+  .visually-hidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    -webkit-clip-path: inset(100%);
+    clip-path: inset(100%);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .text-right {
+    text-align: right;
+  }
+
+  /**
+   * Grid.
+   */
+  .container {
+    margin: 0 auto;
+    max-width: var(--grid-wide);
+    padding: 0 var(--spacing-xs);
+  }
+
+  .row {
+    margin-bottom: var(--spacing-m);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .row:last-child {
+    margin-bottom: 0;
+  }
+
+  .row.no-margin {
+    margin: 0;
+  }
+
+  .row:after {
+    clear: both;
+    content: '';
+    display: table;
+  }
+
+  .row .col {
+    box-sizing: border-box;
+    float: left;
+    min-height: 1px;
+    padding: 0 var(--spacing-3xs);
+  }
+
+  .row .col.xs2 {
+    left: auto;
+    margin-left: auto;
+    right: auto;
+    width: 16.66667%;
+  }
+
+  .row .col.xs3 {
+    left: auto;
+    margin-left: auto;
+    right: auto;
+    width: 25%;
+  }
+
+  .row .col.xs6 {
+    left: auto;
+    margin-left: auto;
+    right: auto;
+    width: 50%;
+  }
+
+  .row .col.xs12 {
+    left: auto;
+    margin-left: auto;
+    right: auto;
+    width: 100%;
+  }
+
+  .row .col.offset-xs1 {
+    margin-left: 8.33333%;
+  }
+
+  /**
+   * Typography.
+   */
+  body,
+  html {
+    font-family: var(--font-body);
+    font-weight: var(--weight-medium);
+  }
+
+  .d1 {
+    font-family: var(--font-display);
+    font-size: var(--ms-3);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--letter-spacing-display);
+    line-height: var(--line-height-display);
+  }
+
+  h1 {
+    font-family: var(--font-heading);
+    font-size: var(--ms-3);
+    font-weight: var(--weight-medium);
+    line-height: var(--line-height-display);
+    margin: 0 0 var(--spacing-xl);
+  }
+
+  h2 {
+    font-family: var(--font-heading);
+    font-size: var(--ms-2);
+    font-weight: var(--weight-medium);
+    line-height: var(--line-height-display);
+    margin: 0 0 var(--spacing-l);
+  }
+
+  .h3,
+  h3 {
+    font-family: var(--font-heading);
+    font-size: var(--ms-1);
+    font-weight: var(--weight-medium);
+    line-height: var(--line-height-display);
+    margin: 0 0 var(--spacing-m);
+  }
+
+  .subtitle-1 {
+    font-size: var(--ms-minus-1);
+    font-weight: var(--weight-bold);
+    letter-spacing: 0;
+  }
+
+  .subtitle-2 {
+    font-size: var(--ms-minus-2);
+    font-weight: var(--weight-bold);
+    letter-spacing: 0;
+  }
+
+  p {
+    font-family: var(--font-body);
+    font-size: var(--ms-minus-1);
+    line-height: var(--line-height-body);
+    margin: 0 0 var(--spacing-l);
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+
+  .text-link,
+  a {
+    color: var(--color-link);
+    text-decoration: none;
+  }
+
+  .text-link {
+    background: none;
+    border: 0;
+    font: inherit;
+    padding: 0;
+    text-decoration: underline;
+  }
+
+  label {
+    font-size: var(--ms-minus-2);
+    font-weight: var(--weight-bold);
+    letter-spacing: 0;
+  }
+
+  .caption {
+    font-size: var(--ms-minus-2);
+  }
+
+  ul {
+    font-size: var(--ms-minus-1);
+    line-height: var(--line-height-body);
+  }
+
+  @media (min-width: 768px) {
+    .row .col.m6 {
+      left: auto;
+      margin-left: auto;
+      right: auto;
+      width: 50%;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      padding: 0 var(--spacing-m);
+    }
+
+    .row .col {
+      padding: 0 var(--spacing-xs);
+    }
+
+    .d1 {
+      font-size: var(--ms-7);
+    }
+
+    h1 {
+      font-size: var(--ms-4);
+    }
+
+    h2 {
+      font-size: var(--ms-3);
+    }
+
+    .h3,
+    h3 {
+      font-size: var(--ms-2);
+    }
+
+    .subtitle-1 {
+      font-size: var(--ms-0);
+    }
+
+    .subtitle-2 {
+      font-size: var(--ms-minus-1);
+    }
+
+    p {
+      font-size: var(--ms-0);
+    }
+
+    label {
+      font-size: var(--ms-minus-1);
+    }
+
+    ul {
+      font-size: var(--ms-0);
+    }
+  }
+</style>

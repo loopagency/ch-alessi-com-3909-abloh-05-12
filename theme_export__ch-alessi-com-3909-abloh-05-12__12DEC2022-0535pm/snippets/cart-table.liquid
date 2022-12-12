@@ -1,0 +1,150 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Cart table
+  - Line items shown in cart table, excludes sidebar.
+------------------------------------------------------------------------------
+{% endcomment %}
+{% assign enable_product_vendor = false %}
+
+<div
+  class="cart-table"
+  data-enable-vendor-title="{{ enable_product_vendor }}"
+  js-cart-table="container"
+>
+  <div class="cart-table__body ajax-cart">
+    {% for item in cart.items %}
+      {% liquid
+        assign product_type = item.product.type | handleize
+        assign property_size = item.properties | size
+        assign is_free_gift = false
+
+        for property in item.properties
+          if property.first == 'Free Gift' and property.last == 'Yes'
+            assign is_free_gift = true
+            break
+          endif
+        endfor
+      %}
+        
+
+      {% unless product_type == 'add-on' %}
+        <div
+          class="cart-table__item ajax-cart__line-item"
+          data-index="{{ forloop.index0 }}"
+          data-key="{{ item.key }}"
+          js-cart-table="lineItem"
+        >
+          {% if item.image %}
+            <div
+              class="cart-table__image ajax-cart__image"
+              data-label="{{ 'customer.order.product' | t }}"
+            >
+              <a href="{{ item.url | within: collections.all }}">
+                <img
+                  alt="{{ item.image.alt }}"
+                  sizes="auto"
+                  src="{{ item.image | img_url: '50x' }}"
+                  srcset="
+                    {{ item.image | img_url: '120x' }} 120w,
+                    {{ item.image | img_url: '240x' }} 240w,
+                    {{ item.image | img_url: '320x' }} 320w
+                  "
+                >
+              </a>
+            </div>
+          {% endif %}
+
+          <div class="cart-table__description">
+            <div class="row no-margin no-gutter">
+              <div class="col xs12">
+                <div class="ajax-cart__inner">
+                  {% if enable_product_vendor %}
+                    <p class="ajax-cart__vendor meta">
+                      {{ item.product.vendor }}
+                    </p>
+                  {% endif %}
+
+                  <a class="ajax-cart__title" href="{{ item.url }}">
+                    {{ item.product.title }}
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="row no-margin no-gutter">
+              <div class="col xs12 s6 m7">
+                {% unless item.product.has_only_default_variant %}
+                  <p class="ajax-cart__variant-title caption">
+                    {{ item.variant.title }}
+                  </p>
+                {% endunless %}
+
+                {% if property_size > 0 %}
+                  <p class="ajax-cart__properties caption">
+                    {% for property in item.properties %}
+                      {% assign first_character_in_key = property.first | slice: 0 %}
+
+                      {% unless property.last == blank or first_character_in_key == '_' %}
+                        {{ property.first }}:
+
+                        {% if property.last contains '/uploads/' %}
+                          <a href="{{ property.last }}">
+                            {{ property.last | split: '/' | last }}
+                          </a>
+
+                        {% else %}
+                          {{ property.last }}
+                        {% endif %}
+                      <br>
+                      {% endunless %}
+                    {% endfor %}
+                  </p>
+                {% endif %}
+
+                <button
+                  class="ajax-cart__remove"
+                  type="button"
+                  data-cy="removeProduct"
+                  data-key="{{ item.key }}"
+                  js-ajax-cart="remove"
+                >
+                  {{ 'cart.general.remove' | t }}
+                </button>
+
+                {% if template contains 'cart' and item.product.tags contains 'large-item' %}
+                  <p class="cart-table__large-message caption">
+                    <span>{% render 'icon-misc' with icon: 'information' %}</span>
+                    <span>{{ 'cart.add_on.large_item.message' |  t }}</span>
+                  </p>
+                {% endif %}
+              </div>
+
+              <div class="col xs12 s6 m5">
+                <div class="ajax-cart__amount">
+                  <div
+                    class="cart-table__quantity-selector"
+                    data-label="{{ 'cart.label.quantity' | t }}"
+                  >
+                    {% render 'quantity-selector' with
+                      id: forloop.index,
+                      is_free_gift: is_free_gift,
+                      key: item.key,
+                      namespace: 'cart-table',
+                      selected_variant: item.variant,
+                      size: 'small',
+                      value: item.quantity,
+                    %}
+                  </div>
+
+                  <div class="ajax-cart__price" js-cart-table="lineItemPrice">
+                    {% render 'line-item-price' with item: item %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endunless %}
+    {% endfor %}
+  </div>
+</div>

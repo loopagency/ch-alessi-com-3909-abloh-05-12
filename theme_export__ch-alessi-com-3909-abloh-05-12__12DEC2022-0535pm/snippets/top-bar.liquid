@@ -1,0 +1,263 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Site header top bar
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{% liquid
+    assign date = date
+    assign messageExpired = messageExpired
+%}
+
+<div
+  class="site-header__announcement top-bar top-bar--primary"
+  role="dialog"
+>
+  <div class="top-bar__container" style="background: {{ section.settings.bg }}">
+    {% assign url = 'announcement_bar_link_#' | replace: '#', url %}
+    {% assign title = 'announcement_bar_text_#' | replace: '#', title %}
+
+
+    {% if section.settings.announcement_bar_enabled %}
+      <div
+        id="AnnouncementSlider"
+        class="top-bar__messages swiper-container"
+        js-announcement-messages="carousel"
+      >
+        <div class="top-bar__content swiper-wrapper">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'announce_countdown' %}
+                {% if url != blank %}
+                  <span
+                    class="top-bar__announcement caption swiper-slide"
+                    js-announcement-messages="slide"
+                  >
+                    {% if block.settings.enable_pill %}
+                      <div class="top-bar__pill top-bar__pill--{{block.id}}" ></div>
+                      {% style %}
+                          .top-bar__content {
+                            margin-right: -0.5rem;
+                          }
+                          .top-bar__pill--{{block.id}} {
+                            border-radius: 100%;
+                            padding: .2rem;
+                            background-color: {{ block.settings.pill_bg }};
+                            margin: 0 .5rem;
+                            animation: pulse-pills 3s infinite;
+                            -webkit-transform: translate(-50%, -50%);
+                            transform: translate(-50%, -50%);
+                            transform: scale(1);
+                          }
+                        @keyframes pulse-pills {
+                          0% {
+                            transform: scale(0.95);
+                            box-shadow: 0 0 0 0 {{ block.settings.pill_bg | hex_to_rgba: 0.7 }};
+                          }
+                          
+                          70% {
+                            transform: scale(1);
+                            box-shadow: 0 0 0 10px {{ block.settings.pill_bg | hex_to_rgba: 0 }};
+                          }
+                          
+                          100% {
+                            transform: scale(0.95);
+                            box-shadow: 0 0 0 0 {{ block.settings.pill_bg | hex_to_rgba: 0 }};
+                          }
+                        }
+                      {% endstyle %}          
+                    {% endif %}
+                    <a
+                      class="top-bar__announcement--link top-bar__announcement--countdown"
+                      href="{{ block.settings[url] }}"
+                    >
+                      {{ block.settings.title | escape }} 
+                      {% render 'countdown' with
+                          date: block.settings.countdown_date,
+                          snippetStyle: 'top-bar__countdown'
+                          messageExpired: block.settings.message_expired,
+                        %}
+                    </a>
+                  </span>
+
+                {% else %}
+                  <span class="top-bar__announcement caption swiper-slide"
+                    js-announcement-messages="slide"
+                  >
+                    {{ text }}
+                  </span>
+                {% endif %}
+              {% when 'announce_text' %}
+                {% if url != blank %}
+                  <span
+                    class="top-bar__announcement caption swiper-slide"
+                    js-announcement-messages="slide"
+                  >
+                    {% if block.settings.enable_pill %}
+                      <div class="top-bar__pill top-bar__pill--{{block.id}}" ></div>
+                      {% style %}
+                          .top-bar__pill--{{block.id}} {
+                            border-radius: 100%;
+                            padding: $SPACING_2XS;
+                            background-color: $COLOR_SECONDARY;
+                            margin-right: $SPACING_XL;
+                            animation: pulse-pills 3s infinite;
+                            -webkit-transform: translate(-50%, -50%);
+                            transform: translate(-50%, -50%);
+                            transform: scale(1);
+                          }
+                        @keyframes pulse-pills {
+                          0% {
+                            transform: scale(0.95);
+                            box-shadow: 0 0 0 0 {{ section.settings.tooltip_background_color | hex_to_rgba: 0.7 }};
+                          }
+                          
+                          70% {
+                            transform: scale(1);
+                            box-shadow: 0 0 0 20px {{ section.settings.tooltip_background_color | hex_to_rgba: 0 }};
+                          }
+                          
+                          100% {
+                            transform: scale(0.95);
+                            box-shadow: 0 0 0 0 {{ section.settings.tooltip_background_color | hex_to_rgba: 0 }};
+                          }
+                        }
+                      {% endstyle %}          
+                    {% endif %}
+                    <a
+                      class="top-bar__announcement--link"
+                      href="{{ block.settings[url]}}"
+                    >
+                      {{ block.settings.title | escape }} 
+                    </a>
+                  </span>
+
+                {% else %}
+                  <span class="top-bar__announcement caption swiper-slide"
+                    js-announcement-messages="slide"
+                  >
+                    {{ text }}
+                  </span>
+                {% endif %}
+            {% endcase %}
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <ul class="top-bar__misc">
+      {% for link in linklists[section.settings.top_menu].links %}
+        <li class="top-bar__item">
+          <a
+            class="top-bar__link caption"
+            href="{{ link.url }}"
+            js-header="topLink"
+          >
+            {{ link.title }}
+          </a>
+        </li>
+      {% endfor %}
+
+      {% if shop.customer_accounts_enabled %}
+        <li class="top-bar__item">
+          <a
+            class="top-bar__link caption"
+            data-datalayer="step1"
+            href="{{ routes.account_url }}"
+            js-header="login"
+          >
+            {% if customer %}
+              {{ 'customer.account.welcome' | t: name: customer.first_name }}
+            {% else %}
+              {{ 'layout.customer.login' | t }}
+            {% endif %}
+          </a>
+        </li>
+      {% endif %}
+      {% if localization.available_languages.size > 1 %}
+        <li class="top-bar__item locations">
+          <localization-form>
+            {% form 'localization' %}
+              <div class="disclosure">
+                <button type="button" class="disclosure__button top-bar__link caption" aria-expanded="false" aria-controls="LanguageList">
+                  {{ localization.language.endonym_name | capitalize }}
+        
+                  <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-caret" viewBox="0 0 10 6">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M9.354.646a.5.5 0 00-.708 0L5 4.293 1.354.646a.5.5 0 00-.708.708l4 4a.5.5 0 00.708 0l4-4a.5.5 0 000-.708z" fill="currentColor">
+                  </svg>
+                </button>
+        
+                <ul id="LanguageList" role="list" class="disclosure__list caption" hidden>
+                  {% for language in localization.available_languages %}
+                    <li class="disclosure__item" tabindex="-1">
+                      <a href="#"{% if language.iso_code == localization.language.iso_code %} aria-current="true"{% endif %} hreflang="{{ language.iso_code }}" lang="{{ language.iso_code }}" data-value="{{ language.iso_code }}">
+                        {{ language.endonym_name | capitalize }}
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+        
+                <input type="hidden" name="language_code" value="{{ localization.language.iso_code }}">
+              </div>
+            {% endform %}
+          </localization-form>
+        </li>
+        <script>
+          class LocalizationForm extends HTMLElement {
+            constructor() {
+              super();
+              this.elements = {
+                input: this.querySelector('input[name="language_code"], input[name="country_code"]'),
+                button: this.querySelector('button'),
+                panel: this.querySelector('ul'),
+              };
+              this.elements.button.addEventListener('click', this.openSelector.bind(this));
+              this.elements.button.addEventListener('focusout', this.closeSelector.bind(this));
+              this.addEventListener('keyup', this.onContainerKeyUp.bind(this));
+          
+              this.querySelectorAll('a').forEach(item => item.addEventListener('click', this.onItemClick.bind(this)));
+            }
+          
+            hidePanel() {
+              this.elements.button.setAttribute('aria-expanded', 'false');
+              this.elements.panel.setAttribute('hidden', true);
+            }
+          
+            onContainerKeyUp(event) {
+              if (event.code.toUpperCase() !== 'ESCAPE') return;
+          
+              this.hidePanel();
+              this.elements.button.focus();
+            }
+          
+            onItemClick(event) {
+              event.preventDefault();
+              const form = this.querySelector('form');
+              this.elements.input.value = event.currentTarget.dataset.value;
+              if (form) form.submit();
+            }
+          
+            openSelector() {
+              this.elements.button.focus();
+              this.elements.panel.toggleAttribute('hidden');
+              this.elements.button.setAttribute('aria-expanded', (this.elements.button.getAttribute('aria-expanded') === 'false').toString());
+            }
+          
+            closeSelector(event) {
+              const shouldClose = event.relatedTarget && event.relatedTarget.nodeName === 'BUTTON';
+              if (event.relatedTarget === null || shouldClose) {
+                this.hidePanel();
+              }
+            }
+          }
+          
+          customElements.define('localization-form', LocalizationForm);
+          
+        </script>
+      {% endif %}
+      
+    </ul>
+  </div>
+</div>
+
+

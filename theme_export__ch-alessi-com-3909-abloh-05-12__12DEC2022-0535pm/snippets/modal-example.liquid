@@ -1,0 +1,41 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Example modal
+  - This provides an example modal to use as a base.
+------------------------------------------------------------------------------
+{% endcomment %}
+<div
+  id="Modal-1"
+  class="modal modal--light newsletter-modal"
+  role="dialog"
+  tabindex="-1"
+>
+  <div class="modal__card">
+    <div class="modal__header">
+      <h5 class="modal__title">Replace with non-hardcoded string</h5>
+
+      <button class="button" js-modal="closeModal">
+        <span class="visually-hidden">
+          {{ 'general.accessibility.close' | t }}
+        </span>
+
+        {% render 'icon-misc' with icon: 'close' %}
+      </button>
+    </div>
+
+    <div class="modal__body">
+      <div class="container">
+        <div class="row">
+          <div class="col xs12">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal__footer">
+      <a class="button button--primary button--dark" href="#">
+        {{ 'general.newsletter_form.confirmation' | t }}
+      </a>
+    </div>
+  </div>
+</div>

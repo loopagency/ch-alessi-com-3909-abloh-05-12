@@ -1,0 +1,226 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Card add-on
+  - Add a cart add-on product.
+------------------------------------------------------------------------------
+{% endcomment %}
+{% assign cart_add_on = all_products[settings.cart_addon_product] %}
+{% assign cart_add_on_is_active = false %}
+{% assign cart_has_add_on = is_active %}
+
+{% if cart_has_add_on %}
+  {% assign cart_add_on_is_active = true %}
+{% endif %}
+
+{% case type %}
+  {% when 'checkbox' %}
+    <div
+      class="cart-add-on"
+      data-active="{{ cart_add_on_is_active }}"
+      data-cy="cartAddOnContainer"
+      data-price="{{ cart_add_on.price }}"
+      data-variant-id="{{ cart_add_on.selected_or_first_available_variant.id }}"
+      js-cart-add-on="container"
+    >
+      <div class="cart-add-on__choice-box">
+        <div class="checkbox__container">
+          <input
+            id="cart-add-on"
+            class="checkbox__input cart-add-on__checkbox"
+            {% if cart_add_on_is_active %}
+              checked="true"
+            {% endif %}
+            type="checkbox"
+            data-cy="cartAddOnCheckbox"
+            js-cart-add-on="checkbox"
+          >
+
+          <label
+            class="cart-add-on__label checkbox__label body-2"
+            for="cart-add-on"
+            data-cy="cartAddOnLabel"
+            js-cart-add-on="label"
+          >
+            <span>
+              {{ 'cart.add_on.label' | t }}
+
+              <button
+                type="button"
+                js-cart-add-on="descShow"
+              >
+                {{ cart_add_on.title }}
+              </button> -
+
+              {% if cart_add_on.price <= 0 %}
+                <span class="color--brand cart-table__free">
+                  {{ 'cart.add_on.free' | t }}
+                </span>
+
+              {% else %}
+                <span
+                  data-price="{{ cart_add_on.price }}"
+                  js-currency="price"
+                >
+                  {{ cart_add_on.price | money_without_trailing_zeros }}
+                </span>
+              {% endif %}
+            </span>
+          </label>
+
+        </div>
+
+        {% if has_large_item %}
+          {% assign cart_count = cart.item_count %}
+
+          {% if cart_has_add_on %}
+            {% assign cart_count = cart.item_count | minus: 1 %}
+          {% endif %}
+
+          {% if large_item_count == cart_count %}
+            <p
+              class="cart-table__large-message caption color--brand"
+              data-all="true"
+              js-cart-add-on="largeMessage"
+            >
+              <span>{% render 'icon-misc' with icon: 'information' %}</span>
+              <span>{{ 'cart.add_on.large_item.warning_all_html' |  t }}</span>
+            </p>
+
+          {% else %}
+            <p
+              class="cart-table__large-message caption"
+              js-cart-add-on="largeMessage"
+            >
+              <span>{% render 'icon-misc' with icon: 'information' %}</span>
+              <span>{{ 'cart.add_on.large_item.warning_html' |  t }}</span>
+            </p>
+
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+
+  {% when 'line-item' %}
+    <div
+      class="row no-gutter no-margin cart-table__line-item is-hidden"
+      js-cart-add-on="line"
+    >
+      <div class="col xs5">
+        <span class="cart-table__label cart-table__label--product caption">
+          {{ cart_add_on.title }}
+        </span>
+      </div>
+
+      <div class="col xs7 text-right">
+        {% if cart_add_on.price <= 0 %}
+          <span class="cart-table__free body-2">
+            {{ 'cart.add_on.free' | t }}
+          </span>
+
+        {% else %}
+          <span
+            class="cart-table__meta body-2"
+            data-price="{{ cart_add_on.price }}"
+            js-currency="price"
+          >
+            {{ cart_add_on.price | money_without_trailing_zeros }}
+          </span>
+        {% endif %}
+      </div>
+    </div>
+
+  {% when 'message' %}
+    {% if settings.enable_cart_addon_message %}
+      <div
+        class="
+          cart-add-on__message
+          {% if cart_add_on_is_active %}
+            is-active
+          {% endif %}
+        "
+        data-cy="cartAddOnMessage"
+        js-cart-add-on="message"
+      >
+        <div class="cart-add-on__choice-box cart-add-on__choice-box--message">
+          <div class="checkbox__container">
+            <input
+              id="cart-add-on-message"
+              class="checkbox__input cart-add-on__checkbox"
+              type="checkbox"
+              js-cart-add-on="messageCheckbox"
+            >
+
+            <label
+              class="cart-add-on__label checkbox__label body-2"
+              for="cart-add-on-message"
+              js-cart-add-on="messageCheckboxLabel"
+            >
+              <span>{{ 'cart.add_on.message.include' | t }}</span>
+            </label>
+          </div>
+        </div>
+
+        <label class="visually-hidden" for="CartAddOnTextarea">
+          {{ 'cart.add_on.placeholder' | t }}
+        </label>
+
+        <p
+          class="cart-add-on__message-error caption color--brand"
+          js-cart-add-on="messageError"
+        >
+          {{ 'cart.add_on.message.error' | t }}
+        </p>
+
+        <div class="cart-add-on__message-wrapper is-disabled">
+          <textarea
+            id="CartAddOnTextarea"
+            class="cart-add-on__textarea"
+            disabled
+            maxlength="{{ settings.cart_addon_max }}"
+            placeholder="{{ 'cart.add_on.placeholder' | t }}"
+            data-cy="cartAddOnTextarea"
+            js-cart-add-on="textarea"
+          ></textarea>
+
+          <span class="cart-add-on__count caption" js-cart-add-on="maxChar">
+            {{ 'cart.add_on.message.max_char' | t: max: settings.cart_addon_max }}
+          </span>
+
+          <span class="cart-add-on__count caption" js-cart-add-on="countChar">
+            {{ 'cart.add_on.message.count_char' | t }}
+          </span>
+        </div>
+
+        <div class="cart-add-on__disclaimer">
+          <p class="caption">
+            {{ 'cart.add_on.disclaimer' | t }}
+          </p>
+        </div>
+
+        <div class="cart-add-on__buttons">
+          <button
+            class="
+              button
+              button--primary
+              button--small
+              cart-add-on__button-cancel
+            "
+            disabled
+            type="button"
+            js-cart-add-on="messageCancel"
+          >
+            {{ 'cart.add_on.message.cancel' | t }}
+          </button>
+
+          <button
+            class="button button--primary button--dark button--small"
+            disabled
+            type="button"
+            js-cart-add-on="messagePreview"
+          >
+            {{ 'cart.add_on.message.preview' | t }}
+          </button>
+        </div>
+      </div>
+    {% endif %}
+{% endcase %}

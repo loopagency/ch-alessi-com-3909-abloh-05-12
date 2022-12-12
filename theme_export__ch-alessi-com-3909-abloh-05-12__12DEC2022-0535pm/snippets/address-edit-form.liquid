@@ -1,0 +1,40 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Address new form
+  - New form to add address.
+----------------------------------------------------------------------------
+{% endcomment %}
+
+{% for address in customer.addresses %}
+  <div
+    id="EditAddress_{{ address.id }}"
+    class="address-new-form is-hidden"
+  >
+    {% form 'customer_address', address %}
+      <div class="address-new-form__back-button-wrapper">
+        <button
+          class="button button--primary button--dark button--large address-new-form__back-button"
+          type="button"
+          data-form-id="{{ form.id }}"
+          js-addresses="editAddress"
+        >
+          <span>{{ 'customer.addresses.return' | t }}</span>
+        </button>
+      </div>
+
+      <h2 class="h3 address-new-form__title">
+        {{ 'customer.addresses.edit_address' | t }}
+      </h2>
+
+      <div class="addresses-panel__fields">
+        {% render 'address-fields' with form: form, id: form.id %}
+
+        <input
+          class="button button--primary button--dark button--large"
+          type="submit"
+          value="{{ 'customer.addresses.update' | t }}"
+        >
+      </div>
+    {% endform %}
+  </div>
+{% endfor %}

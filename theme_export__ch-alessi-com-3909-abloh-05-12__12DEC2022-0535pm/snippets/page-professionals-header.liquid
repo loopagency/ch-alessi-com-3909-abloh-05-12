@@ -1,0 +1,115 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Professional header
+  - Header content on professionals page templates.
+----------------------------------------------------------------------------
+{% endcomment %}
+
+<header class="template-professionals__header">
+  <h1 class="template-professionals__title d3">
+    {{ 'professionals.title' | t }}
+  </h1>
+
+  <nav class="template-professionals__navigation" js-professionals-navigation>
+    {% for link in linklists[section.settings.menu].links %}
+      <a
+        class="
+          template-professionals__nav-item
+          subtitle-1
+          {%if link.active %}active{% endif %}
+        "
+        href="{{ link.url }}"
+      >
+        {{- link.title -}}
+      </a>
+    {% endfor %}
+  </nav>
+</header>
+
+<div class="template-professionals__banner post-listing-item">
+  <div class="post-listing-item__column post-listing-item__column--copy">
+    <div
+      class="
+        template-professionals__header-content
+        post-listing-item__content
+      "
+    >
+      <h2 class="post-listing-item__title d3">
+        {{ page.title }}
+      </h2>
+
+      <p class="post-listing-item__excerpt body-1">
+        {{ page.content | strip_html }}
+      </p>
+
+      <div class="template-professionals__contact-row">
+        <h3 class="subtitle-1">{{ 'professionals.contact' | t }}</h3>
+
+        <div class="template-professionals__contacts">
+          {% for block in section.blocks %}
+            <div class="template-professionals__contact-item">
+              <h4 class="template-professionals__contact-title subtitle-2">
+                {{ block.settings.title }}
+              </h4>
+
+              <p class="body-2">
+                {{ block.settings.address | newline_to_br }}
+              </p>
+
+              <p class="body-2">
+                {{ block.settings.phone }}
+
+                <a
+                  class="template-professionals__contact-email "
+                  href="mailto:{{ block.settings.email }}"
+                >
+                  {{ block.settings.email }}
+                </a>
+              </p>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="post-listing-item__column post-listing-item__column--image">
+    {% for i in (1..4) %}
+      {%- assign image_field_name = 'image_gallery_#' | replace: '#', i -%}
+      {%- assign image = section.settings[image_field_name] -%}
+
+        {% comment %}
+        -----------------------------------------------
+        Assign variable to use only the gallery and
+        add wrapper for gallery if it's the first slide
+        -----------------------------------------------
+        {% endcomment %}
+
+        {% if forloop.first %}
+          <div
+            id="ListItemCarousel-header"
+            class="post-listing-item__gallery swiper-container"
+            js-post-listing="carousel"
+          >
+            <div class="swiper-wrapper">
+        {% endif %}
+
+        {% if image %}
+              <div class="swiper-slide" js-carousel="cell" >
+                <div
+                  class="post-listing-item__image lazyload"
+                  data-bgset="{% render 'responsive-bg-image', image: image %}"
+                >
+                </div>
+              </div>
+        {% endif %}
+
+        {% if forloop.last %}
+            </div>
+
+            <div class="swiper-pagination"></div>
+          </div>
+        {% endif %}
+    {% endfor %}
+  </div>
+</div>

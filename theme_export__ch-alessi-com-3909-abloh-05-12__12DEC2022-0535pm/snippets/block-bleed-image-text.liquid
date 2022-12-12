@@ -1,0 +1,104 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Bleed image text Block
+  - This is an Example Page Builder Block
+------------------------------------------------------------------------------
+{% endcomment %}
+{%- assign block_id = block.id -%}
+{%- assign image = block.settings.image -%}
+{%- assign image_mobile = block.settings.image_mobile -%}
+{%- assign heading_text = block.settings.heading_text -%}
+{%- assign listing_text = block.settings.listing_text -%}
+{%- assign designer_text = block.settings.designer_text -%}
+{%- assign description = block.settings.description -%}
+{%- assign cta_text = block.settings.cta_text -%}
+{%- assign cta_link = block.settings.cta_link -%}
+{%- assign swap_order = block.settings.swap_order -%}
+
+{%- if block_settings -%}
+  {%- assign block_settings_array = block_settings | replace: ',"', '##split##' 
+    | replace: '{', '' 
+    | replace: '}', '' 
+    | replace: '"', '' 
+    | split: '##split##' 
+  -%}
+  {%- for block_setting in block_settings_array -%}
+    {%- if block_setting != blank -%}
+      {%- assign block_setting_name_value = block_setting | split: '=>' -%}
+      {%- assign block_setting_name = block_setting_name_value[0] | replace: ' ', '' -%}
+      {%- assign block_setting_value = block_setting_name_value[1] -%}
+      {%- assign block_setting_value_slice = block_setting_value | slice: 0, 5 -%}
+      {%- if block_setting_value_slice == 'files' -%}
+        {%- assign block_setting_value = block_setting_value | replace: 'files/' -%}
+        {%- assign block_setting_value = images[block_setting_value] -%}
+      {%- endif -%}
+      {%- case block_setting_name -%}
+        {%- when 'image' -%}
+          {%- assign image = block_setting_value -%}
+        {%- when 'image_mobile' -%}
+          {%- assign image_mobile = block_setting_value -%}
+        {%- when 'heading_text' -%}
+          {%- assign heading_text = block_setting_value -%}
+        {%- when 'listing_text' -%}
+          {%- assign listing_text = block_setting_value -%}
+        {%- when 'designer_text' -%}
+          {%- assign designer_text = block_setting_value -%}
+        {%- when 'description' -%}
+          {%- assign description = block_setting_value -%}
+        {%- when 'cta_text' -%}
+          {%- assign cta_text = block_setting_value -%}
+        {%- when 'cta_link' -%}
+          {%- assign cta_link = block_setting_value -%}
+        {%- when 'swap_order' -%}
+          {%- assign swap_order = block_setting_value -%}
+      {%- endcase -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+<section
+  id="Block-bleed-image-text-{{ block_id }}"
+  class="block-bleed-image-text{% if swap_order == 'true' or swap_order == true %} block-bleed-image-text--swap{% endif %}"
+  data-section-id="{{ block_id }}"
+  data-section-type="block-bleed-image-text"
+  data-size="fullScreen"
+>
+  <div class="block-bleed-image-text__container">
+    <div class="block-bleed-image-text__column">
+      <div class="block-bleed-image-text__image lazyload">
+        {% render 'art-direction-image' with
+          large_image: image,
+          small_image: image_mobile,
+        %}
+      </div>
+    </div>
+
+    <div class="block-bleed-image-text__column">
+      <div class="block-bleed-image-text__content">
+        {%- if heading_text -%}
+          <div class="block-bleed-image-text__header">{{ heading_text }}</div>
+        {%- endif -%}
+
+        {%- if listing_text -%}
+          <h2 class="block-bleed-image-text__listing">{{ listing_text }}</h2>
+        {%- endif -%}
+
+        {%- if designer_text -%}
+          <div class="block-bleed-image-text__author">{{ designer_text }}</div>
+        {%- endif -%}
+      
+        {%- if description -%}
+          <div class="block-bleed-image-text__description">{{ description }}</div>
+        {%- endif -%}
+
+        {%- if cta_text -%}
+          <a 
+            class="button button--primary button--dark block-bleed-image-text__cta"
+            href="{{ cta_link }}">
+            {{ cta_text }}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>

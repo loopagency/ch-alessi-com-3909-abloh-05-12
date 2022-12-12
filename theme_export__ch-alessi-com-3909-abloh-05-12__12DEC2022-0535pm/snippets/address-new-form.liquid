@@ -1,0 +1,37 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Address new form
+  - New form to add address.
+----------------------------------------------------------------------------
+{% endcomment %}
+
+<div
+  class="address-new-form form-group is-hidden"
+  js-addresses="newForm"
+>
+  {% form 'customer_address', customer.new_address %}
+    <div class="address-new-form__back-button-wrapper">
+      <button
+        class="button button--primary button--dark button--large address-new-form__back-button"
+        type="button"
+        js-addresses="newFormToggle"
+      >
+        <span>{{ 'customer.addresses.return' | t }}</span>
+      </button>
+    </div>
+
+    <h2 class="h3 address-new-form__title">
+      {{ 'customer.addresses.add_new' | t }}
+    </h2>
+
+    <div class="addresses-panel__fields">
+      {% render 'address-fields' with form: form, id: 'New' %}
+
+      <input
+        class="button button--primary button--dark button--large"
+        type="submit"
+        value="{{ 'customer.addresses.add_new' | t }}"
+      >
+    </div>
+  {% endform %}
+</div>

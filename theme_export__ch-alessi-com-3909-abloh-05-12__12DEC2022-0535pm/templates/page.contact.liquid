@@ -1,0 +1,208 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Template: Contact page
+  - Sends email to customer email defined in Shopify settings.
+----------------------------------------------------------------------------
+{% endcomment %}
+<div class="template-contact">
+  <header class="template-contact__header">
+    <div class="container">
+      <div class="row">
+        <div class="col xs12">
+          <h1 class="template-contact__title d3">
+            {{ page.title }}
+          </h1>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="template-contact__content container">
+    <div class="row">
+      <div class="col xs12">
+        <div class="rte">
+          {{ page.content }}
+        </div>
+
+        {% form 'contact' %}
+          {% if form.posted_successfully? %}
+            <p class="form-success">
+              {{ 'contact.form.post_success' | t }}
+            </p>
+          {% endif %}
+
+          {{ form.errors | default_errors }}
+
+          <div class="form-group row">
+            <div class="col xs12">
+              <label class="visually-hidden" for="ContactFormName">
+                {{ 'contact.form.name' | t }}
+              </label>
+
+              <input
+                id="ContactFormName"
+                name="contact[name]"
+                placeholder="{{ 'contact.form.name' | t }}"
+                type="text"
+              >
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col xs6">
+              <label class="visually-hidden" for="ContactFormEmail">
+                {{ 'contact.form.email' | t }}
+              </label>
+
+              <input
+                id="ContactFormEmail"
+                autocapitalize="off"
+                autocomplete="off"
+                name="contact[email]"
+                placeholder="{{ 'contact.form.email' | t }}"
+                spellcheck="false"
+                type="email"
+                required="required"
+              >
+            </div>
+
+          <div class="col xs6">
+            <label class="visually-hidden" for="ContactFormPhone">
+              {{ 'contact.form.phone' | t }}
+            </label>
+
+            <input
+              id="ContactFormPhone"
+              name="contact[phone]"
+              pattern="[0-9\-]*"
+              placeholder="{{ 'contact.form.phone' | t }}"
+              type="tel"
+            >
+          </div>
+        </div>
+
+          <div class="form-group row">
+            <div class="col xs12">
+              <label class="visually-hidden" for="ContactFormCountry">
+                {{ 'contact.country.title' | t }}
+              </label>
+
+              <select 
+                id="ContactFormCountry"
+                name="contact[country]"
+                required="required"
+              >
+                <option selected disabled>{{ 'contact.country.title' | t }}</option>
+                <option>{{ 'contact.country.1' | t }}</option>
+                <option>{{ 'contact.country.2' | t }}</option>
+                <option>{{ 'contact.country.3' | t }}</option>
+                <option>{{ 'contact.country.4' | t }}</option>
+                <option>{{ 'contact.country.5' | t }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col xs6">
+              <label class="visually-hidden" for="ContactFormWho">
+                {{ 'contact.whoAreYou.title' | t }}
+              </label>
+
+              <select 
+                id="ContactFormWho"
+                name="contact[type_client]"
+                required="required"
+              >
+                <option selected disabled>{{ 'contact.whoAreYou.title' | t }}</option>
+                <option>{{ 'contact.whoAreYou.1' | t }}</option>
+                <option>{{ 'contact.whoAreYou.2' | t }}</option>
+                <option>{{ 'contact.whoAreYou.3' | t }}</option>
+                <option>{{ 'contact.whoAreYou.4' | t }}</option>
+              </select>
+            </div>
+
+          <div class="col xs6">
+            <label class="visually-hidden" for="ContactFormMotivation">
+              {{ 'contact.motivation.title' | t }}
+            </label>
+
+            <select 
+              id="ContactFormMotivation"
+              name="contact[contact_motivation]"
+              required="required"
+            >
+              <option selected disabled>{{ 'contact.motivation.title' | t }}</option>
+              <option>{{ 'contact.motivation.1' | t }}</option>
+              <option>{{ 'contact.motivation.2' | t }}</option>
+              <option>{{ 'contact.motivation.3' | t }}</option>
+              <option>{{ 'contact.motivation.4' | t }}</option>
+              <option>{{ 'contact.motivation.5' | t }}</option>
+              <option>{{ 'contact.motivation.6' | t }}</option>
+              <option>{{ 'contact.motivation.7' | t }}</option>
+              <option>{{ 'contact.motivation.8' | t }}</option>
+              <option>{{ 'contact.motivation.9' | t }}</option>
+            </select>
+          </div>
+        </div>
+
+          <div class="form-group row">
+            <div class="col xs12">
+              <label class="visually-hidden" for="ContactFormMessage">
+                {{ 'contact.form.message' | t }}
+              </label>
+
+              <textarea
+                id="ContactFormMessage"
+                name="contact[body]"
+                placeholder="{{ 'contact.form.message' | t }}"
+                rows="10"
+                required="required"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col xs12">
+              <div class="checkbox__container">
+                <input
+                  id="acceptsPrivacy"
+                  class="checkbox__input"
+                  name="contact[accept_privacy]"
+                  required="required"
+                  type="checkbox"
+                  value="yes"
+                  aria-checked="false"
+                  js-newsletter-modal="consent"
+                >
+                <label
+                  for="acceptsPrivacy"
+                  class="checkbox__label"
+                >
+                  {{ 'contact.form.privacy_html' | t }}
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col xs12">
+              <input
+                type="submit"
+                class="
+                  contact-form__submit
+                  button
+                  button--primary
+                  button--dark
+                  button--large
+                "
+                value="{{ 'contact.form.send' | t }}"
+              >
+            </div>
+          </div>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+
+  {% section 'contacts-contacts' %}
+</div>
+

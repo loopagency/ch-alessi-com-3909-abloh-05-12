@@ -1,0 +1,41 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Addresses panel
+  - Addresses panel displayed on account pages.
+----------------------------------------------------------------------------
+{% endcomment %}
+
+<div class="addresses-panel">
+  <div
+    class="addresses-panel__header"
+    js-addresses="contentToggle"
+  >
+    <h2 class="h3 addresses-panel__title">
+      {{ 'customer.addresses.title' | t }}
+    </h2>
+
+    <button
+      class="button button--primary button--dark button--large"
+      type="button"
+      js-addresses="newFormToggle"
+    >
+      {{ 'customer.addresses.add_new' | t }}
+    </button>
+  </div>
+
+  <div>
+    {% render 'addresses-view' %}
+
+    {% render 'address-new-form' %}
+
+    {% render 'address-edit-form' %}
+  </div>
+
+  <div class="row">
+    <div class="col xs12">
+      {% if paginate.pages > 1 %}
+        {% render 'pagination' with paginate: paginate %}
+      {% endif %}
+    </div>
+  </div>
+</div>

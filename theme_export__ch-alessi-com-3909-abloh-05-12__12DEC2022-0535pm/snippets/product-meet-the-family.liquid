@@ -1,0 +1,105 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Component: Meet the family
+  - Pulling content from specified collection unto the product.liquid template
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{% assign has_family = false %}
+
+{% for tag in product.tags %}
+  {% assign tag_lowercase = tag | downcase %}
+  {% if tag_lowercase contains 'family:' or tag_lowercase contains 'title' %}
+    {% assign handle = tag | split: ':' | last | strip | downcase | handleize %}
+    {% unless handle == 'none' %}
+      {% assign family_collection = collections[handle]  %}
+
+      {% if family_collection.title != '' %}
+        {% assign has_family = true %}
+      {% endif %}
+
+      {% break %}
+    {% endunless %}
+  {% endif %}
+{% endfor %}
+
+{% assign excerpt = family_collection.description | strip_html %}
+
+{% if has_family %}
+  {% case snippet %}
+    {% when 'excerpt'%}
+      <div class="product-meet-family">
+        <div class="product-meet-family__excerpt container">
+          <p class="h1 product-meet-family__excerpt-content">
+            {{ excerpt }}
+          </p>
+        </div>
+      </div>
+
+    {% when 'collection-row' %}
+      <div class="product-meet-family">
+        <div class="product-meet-family__container">
+          <div class="product-meet-family__column product-meet-family__column--image">
+            <div class="product-meet-family__content">
+              {% if family_collection.image %}
+                <div
+                  class="product-meet-family__image lazyload"
+                  {% if product.metafields.accentuate.family_image != blank %}
+                    data-bgset="
+                      {% render 'responsive-bg-image-mf', image: product.metafields.accentuate.family_image[0] %}
+                    "
+                  {% else %}
+                    data-bgset="
+                      {% render 'responsive-bg-image', image: family_collection.image %}
+                    "
+                  {% endif %}
+                ></div>
+              {% else %}
+                <div
+                  class="product-meet-family__image lazyload"
+                  data-bgset="
+                    {% render
+                      'responsive-bg-image',
+                      image: family_collection.products.first.image
+                    %}
+                  "
+                ></div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="product-meet-family__column product-meet-family__column--carousel">
+            <div class="product-meet-family__title">
+              <h2 class="product-meet-family__title-copy d3">
+                {{ 'products.product.family.title' | t }}
+              </h2>
+            </div>
+
+            <div class="product-meet-family__cta product-meet-family__cta--desktop">
+              <a
+                class="button button--secondary button--dark"
+                href="{{ family_collection.url }}"
+              >
+                {{ 'products.product.family.cta' | t: family: family_collection.title }}
+              </a>
+            </div>
+
+            {% render 'feature-carousel' with
+              type: 'collection'
+              featured_collection: family_collection
+            %}
+          </div>
+        </div>
+
+        <div class="product-meet-family__cta product-meet-family__cta--mobile">
+          <a
+            class="button button--secondary button--dark"
+            href="{{ family_collection.url }}"
+          >
+            {{ 'products.product.family.cta' | t: family: family_collection.title }}
+          </a>
+        </div>
+
+      </div>
+  {% endcase %}
+{% endif %}

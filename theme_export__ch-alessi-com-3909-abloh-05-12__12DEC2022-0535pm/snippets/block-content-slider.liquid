@@ -1,0 +1,755 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Bleed image text Block
+  - This is an Example Page Builder Block
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- assign block_id = block.id -%}
+{%- assign slider_heading = block.settings.slider_heading -%}
+{%- assign card1_image = block.settings.card1_image -%}
+{%- assign card1_title = block.settings.card1_title -%}
+{%- assign card1_link = block.settings.card1_link -%}
+{%- assign card2_image = block.settings.card2_image -%}
+{%- assign card2_title = block.settings.card2_title -%}
+{%- assign card2_link = block.settings.card2_link -%}
+{%- assign card3_image = block.settings.card3_image -%}
+{%- assign card3_title = block.settings.card3_title -%}
+{%- assign card3_link = block.settings.card3_link -%}
+{%- assign card4_image = block.settings.card4_image -%}
+{%- assign card4_title = block.settings.card4_title -%}
+{%- assign card4_link = block.settings.card4_link -%}
+{%- assign card5_image = block.settings.card5_image -%}
+{%- assign card5_title = block.settings.card5_title -%}
+{%- assign card5_link = block.settings.card5_link -%}
+{%- assign card6_image = block.settings.card6_image -%}
+{%- assign card6_title = block.settings.card6_title -%}
+{%- assign card6_link = block.settings.card6_link -%}
+{%- assign card7_image = block.settings.card7_image -%}
+{%- assign card7_title = block.settings.card7_title -%}
+{%- assign card7_link = block.settings.card7_link -%}
+{%- assign card8_image = block.settings.card8_image -%}
+{%- assign card8_title = block.settings.card8_title -%}
+{%- assign card8_link = block.settings.card8_link -%}
+{%- assign card9_image = block.settings.card9_image -%}
+{%- assign card9_title = block.settings.card9_title -%}
+{%- assign card9_link = block.settings.card9_link -%}
+{%- assign card10_image = block.settings.card10_image -%}
+{%- assign card10_title = block.settings.card10_title -%}
+{%- assign card10_link = block.settings.card10_link -%}
+{%- assign card11_image = block.settings.card11_image -%}
+{%- assign card11_title = block.settings.card11_title -%}
+{%- assign card11_link = block.settings.card11_link -%}
+{%- assign card12_image = block.settings.card12_image -%}
+{%- assign card12_title = block.settings.card12_title -%}
+{%- assign card12_link = block.settings.card12_link -%}
+
+{%- if block_settings -%}
+  {%- assign block_settings_array = block_settings | replace: ',"', '##split##' 
+    | replace: '{', '' 
+    | replace: '}', '' 
+    | replace: '"', '' 
+    | split: '##split##' 
+  -%}
+  {%- for block_setting in block_settings_array -%}
+    {%- if block_setting != blank -%}
+      {%- assign block_setting_name_value = block_setting | split: '=>' -%}
+      {%- assign block_setting_name = block_setting_name_value[0] | replace: ' ', '' -%}
+      {%- assign block_setting_value = block_setting_name_value[1] -%}
+      {%- assign block_setting_value_slice = block_setting_value | slice: 0, 5 -%}
+      {%- if block_setting_value_slice == 'files' -%}
+        {%- assign block_setting_value = block_setting_value | replace: 'files/' -%}
+        {%- assign block_setting_value = images[block_setting_value] -%}
+      {%- endif -%}
+      {%- case block_setting_name -%}
+        {%- when 'slider_heading' -%}
+          {%- assign slider_heading = block_setting_value -%}
+        {%- when 'card1_image' -%}
+          {%- assign card1_image = block_setting_value -%}
+        {%- when 'card1_title' -%}
+          {%- assign card1_title = block_setting_value -%}
+        {%- when 'card1_link' -%}
+          {%- assign card1_link = block_setting_value -%}
+        {%- when 'card2_image' -%}
+          {%- assign card2_image = block_setting_value -%}
+        {%- when 'card2_title' -%}
+          {%- assign card2_title = block_setting_value -%}
+        {%- when 'card2_link' -%}
+          {%- assign card2_link = block_setting_value -%}
+        {%- when 'card3_image' -%}
+          {%- assign card3_image = block_setting_value -%}
+        {%- when 'card3_title' -%}
+          {%- assign card3_title = block_setting_value -%}
+        {%- when 'card3_link' -%}
+          {%- assign card3_link = block_setting_value -%}
+        {%- when 'card4_image' -%}
+          {%- assign card4_image = block_setting_value -%}
+        {%- when 'card4_title' -%}
+          {%- assign card4_title = block_setting_value -%}
+        {%- when 'card4_link' -%}
+          {%- assign card4_link = block_setting_value -%}
+        {%- when 'card5_image' -%}
+          {%- assign card5_image = block_setting_value -%}
+        {%- when 'card5_title' -%}
+          {%- assign card5_title = block_setting_value -%}
+        {%- when 'card5_link' -%}
+          {%- assign card5_link = block_setting_value -%}
+        {%- when 'card6_image' -%}
+          {%- assign card6_image = block_setting_value -%}
+        {%- when 'card6_title' -%}
+          {%- assign card6_title = block_setting_value -%}
+        {%- when 'card6_link' -%}
+          {%- assign card6_link = block_setting_value -%}
+        {%- when 'card7_image' -%}
+          {%- assign card7_image = block_setting_value -%}
+        {%- when 'card7_title' -%}
+          {%- assign card7_title = block_setting_value -%}
+        {%- when 'card7_link' -%}
+          {%- assign card7_link = block_setting_value -%}
+        {%- when 'card8_image' -%}
+          {%- assign card8_image = block_setting_value -%}
+        {%- when 'card8_title' -%}
+          {%- assign card8_title = block_setting_value -%}
+        {%- when 'card8_link' -%}
+          {%- assign card8_link = block_setting_value -%}
+        {%- when 'card9_image' -%}
+          {%- assign card9_image = block_setting_value -%}
+        {%- when 'card9_title' -%}
+          {%- assign card9_title = block_setting_value -%}
+        {%- when 'card9_link' -%}
+          {%- assign card9_link = block_setting_value -%}
+        {%- when 'card10_image' -%}
+          {%- assign card10_image = block_setting_value -%}
+        {%- when 'card10_title' -%}
+          {%- assign card10_title = block_setting_value -%}
+        {%- when 'card10_link' -%}
+          {%- assign card10_link = block_setting_value -%}
+        {%- when 'card11_image' -%}
+          {%- assign card11_image = block_setting_value -%}
+        {%- when 'card11_title' -%}
+          {%- assign card11_title = block_setting_value -%}
+        {%- when 'card11_link' -%}
+          {%- assign card11_link = block_setting_value -%}
+        {%- when 'card12_image' -%}
+          {%- assign card12_image = block_setting_value -%}
+        {%- when 'card12_title' -%}
+          {%- assign card12_title = block_setting_value -%}
+        {%- when 'card12_link' -%}
+          {%- assign card12_link = block_setting_value -%}
+      {%- endcase -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+<section
+  id="Block-content-slider-{{ block_id }}"
+  class="block-content-slider"
+  data-section-id="{{ block_id }}"
+  data-section-type="block-content-slider"
+  data-size="fullScreen"
+>
+  <div
+    class="block-content-slider__container container--right product-carousel {{ class }}"
+    >
+    {%- if slider_heading and template.name != 'collection' -%}
+      <div class="block-content-slider__heading">
+        {{ slider_heading }}
+      </div>
+    {%- endif -%}
+
+    <div
+      class="block-content-slider__wrapper"
+      data-datalayer="spareParts"
+      js-datalayer="featured_collection"
+      js-simplebar="container"
+      >
+        {% if template.name == 'collection' %}
+          {%- if card1_image and collection.url != card1_link -%}
+            <a 
+              class="
+                block-content-slider__card
+                product-carousel__item
+                animate
+                animate--opacity
+                {% if card1_link %}has-link{% endif %}
+              " 
+              href="{{ card1_link }}"
+              js-fade-in="item"
+            >
+              {% render 'art-direction-image' with
+                large_image: card1_image,
+                small_image: card1_image,
+                wrapper_class: 'block-content-slider__image',
+                alt: card1_title
+              %}
+              
+              <div class="block-content-slider__title">
+                <h4 class="h4">{{ card1_title }}</span>
+              </div>
+            </a>
+          {%- endif -%}
+          {%- if card2_image and collection.url != card2_link -%}
+            <a 
+              class="
+                block-content-slider__card
+                product-carousel__item
+                animate
+                animate--opacity
+                {% if card2_link %}has-link{% endif %}
+              " 
+              href="{{ card2_link }}"
+              js-fade-in="item"
+            >
+              {% render 'art-direction-image' with
+                large_image: card2_image,
+                small_image: card2_image,
+                wrapper_class: 'block-content-slider__image',
+                alt: card2_title
+              %}
+              
+              <div class="block-content-slider__title">
+                <h4 class="h4">{{ card2_title }}</h4>
+              </div>
+            </a>
+          {%- endif -%}
+          {%- if card3_image and collection.url != card3_link -%}
+            <a 
+              class="
+                block-content-slider__card
+                product-carousel__item
+                animate
+                animate--opacity
+                {% if card3_link %}has-link{% endif %}
+              " 
+              href="{{ card3_link }}"
+              js-fade-in="item"
+            >
+              {% render 'art-direction-image' with
+                large_image: card3_image,
+                small_image: card3_image,
+                wrapper_class: 'block-content-slider__image',
+                alt: card3_title 
+              %}
+              
+              <div class="block-content-slider__title">
+                <h4 class="h4">{{ card3_title }}</h4>
+              </div>
+            </a>
+          {%- endif -%}
+          {%- if card4_image and collection.url != card4_link -%}
+            <a 
+              class="
+                block-content-slider__card
+                product-carousel__item
+                animate
+                animate--opacity
+                {% if card4_link %}has-link{% endif %}
+              " 
+              href="{{ card4_link }}"
+              js-fade-in="item"
+            >
+              {% render 'art-direction-image' with
+                large_image: card4_image,
+                small_image: card4_image,
+                wrapper_class: 'block-content-slider__image',
+                alt: card4_title 
+              %}
+              
+              <div class="block-content-slider__title">
+                <h4 class="h4">{{ card4_title }}</h4>
+              </div>
+            </a>
+          {%- endif -%}
+          {%- if card5_image and collection.url != card5_link -%}
+            <a 
+              class="
+                block-content-slider__card
+                product-carousel__item
+                animate
+                animate--opacity
+                {% if card5_link %}has-link{% endif %}
+              " 
+              href="{{ card5_link }}"
+              js-fade-in="item"
+            >
+              {% render 'art-direction-image' with
+                large_image: card5_image,
+                small_image: card5_image,
+                wrapper_class: 'block-content-slider__image',
+                alt: card5_title
+              %}
+              
+              <div class="block-content-slider__title">
+                <h4 class="h4">{{ card5_title }}</h4>
+              </div>
+            </a>
+          {%- endif -%}
+          {%- if card6_image and collection.url != card6_link -%}
+            <a 
+              class="
+                block-content-slider__card
+                product-carousel__item
+                animate
+                animate--opacity
+                {% if card6_link %}has-link{% endif %}
+              " 
+              href="{{ card6_link }}"
+              js-fade-in="item"
+            >
+              {% render 'art-direction-image' with
+                large_image: card6_image,
+                small_image: card6_image,
+                wrapper_class: 'block-content-slider__image',
+                alt: card6_title
+              %}
+              
+              <div class="block-content-slider__title">
+                <h4 class="h4">{{ card6_title }}</h4>
+              </div>
+            </a>
+          {%- endif -%}
+          {%- if card7_image and collection.url != card7_link -%}
+            <a 
+              class="
+                block-content-slider__card
+                product-carousel__item
+                animate
+                animate--opacity
+                {% if card7_link %}has-link{% endif %}
+              " 
+              href="{{ card7_link }}"
+              js-fade-in="item"
+            >
+              {% render 'art-direction-image' with
+                large_image: card7_image,
+                small_image: card7_image,
+                wrapper_class: 'block-content-slider__image',
+                alt: card7_title
+              %}
+              
+              <div class="block-content-slider__title">
+                <h4 class="h4">{{ card7_title }}</h4>
+              </div>
+            </a>
+          {%- endif -%}
+          {%- if card8_image and collection.url != card8_link -%}
+            <a 
+              class="
+                block-content-slider__card
+                product-carousel__item
+                animate
+                animate--opacity
+                {% if card8_link %}has-link{% endif %}
+              " 
+              href="{{ card8_link }}"
+              js-fade-in="item"
+            >
+              {% render 'art-direction-image' with
+                large_image: card8_image,
+                small_image: card8_image,
+                wrapper_class: 'block-content-slider__image',
+                alt: card8_title
+              %}
+              
+              <div class="block-content-slider__title">
+                <h4 class="h4">{{ card8_title }}</h4>
+              </div>
+            </a>
+          {%- endif -%}
+    
+          {%- if card9_image and collection.url != card9_link -%}
+            <a 
+              class="
+                block-content-slider__card
+                product-carousel__item
+                animate
+                animate--opacity
+                {% if card9_link %}has-link{% endif %}
+              " 
+              href="{{ card9_link }}"
+              js-fade-in="item"
+            >
+              {% render 'art-direction-image' with
+                large_image: card9_image,
+                small_image: card9_image,
+                wrapper_class: 'block-content-slider__image',
+                alt: card9_title
+              %}
+              
+              <div class="block-content-slider__title">
+                <h4 class="h4">{{ card9_title }}</h4>
+              </div>
+            </a>
+          {%- endif -%}
+    
+          {%- if card10_image and collection.url != card10_link -%}
+            <a 
+              class="
+                block-content-slider__card
+                product-carousel__item
+                animate
+                animate--opacity
+                {% if card10_link %}has-link{% endif %}
+              " 
+              href="{{ card10_link }}"
+              js-fade-in="item"
+            >
+              {% render 'art-direction-image' with
+                large_image: card10_image,
+                small_image: card10_image,
+                wrapper_class: 'block-content-slider__image',
+                alt: card10_title
+              %}
+              
+              <div class="block-content-slider__title">
+                <h4 class="h4">{{ card10_title }}</h4>
+              </div>
+            </a>
+          {%- endif -%}
+    
+          {%- if card11_image and collection.url != card11_link -%}
+            <a 
+              class="
+                block-content-slider__card
+                product-carousel__item
+                animate
+                animate--opacity
+                {% if card11_link %}has-link{% endif %}
+              " 
+              href="{{ card11_link }}"
+              js-fade-in="item"
+            >
+              {% render 'art-direction-image' with
+                large_image: card11_image,
+                small_image: card11_image,
+                wrapper_class: 'block-content-slider__image',
+                alt: card11_title
+              %}
+              
+              <div class="block-content-slider__title">
+                <span>{{ card11_title }}</span>
+              </div>
+            </a>
+          {%- endif -%}
+    
+          {%- if card12_image and collection.url != card12_link -%}
+            <a 
+              class="
+                block-content-slider__card
+                product-carousel__item
+                animate
+                animate--opacity
+                {% if card12_link %}has-link{% endif %}
+              " 
+              href="{{ card12_link }}"
+              js-fade-in="item"
+            >
+              {% render 'art-direction-image' with
+                large_image: card12_image,
+                small_image: card12_image,
+                wrapper_class: 'block-content-slider__image',
+                alt: card12_title
+              %}
+              
+              <div class="block-content-slider__title">
+                <h4 class="h4">{{ card12_title }}</h4>
+              </div>
+            </a>
+          {%- endif -%}
+        {% else %}
+        {%- if card1_image -%}
+          <a 
+            class="
+              block-content-slider__card
+              product-carousel__item
+              animate
+              animate--opacity
+              {% if card1_link %}has-link{% endif %}
+            " 
+            href="{{ card1_link }}"
+            js-fade-in="item"
+          >
+            {% render 'art-direction-image' with
+              large_image: card1_image,
+              small_image: card1_image,
+              wrapper_class: 'block-content-slider__image',
+              alt: card1_title
+            %}
+            
+            <div class="block-content-slider__title">
+              <h4 class="h4">{{ card1_title }}</span>
+            </div>
+          </a>
+        {%- endif -%}
+        {%- if card2_image -%}
+          <a 
+            class="
+              block-content-slider__card
+              product-carousel__item
+              animate
+              animate--opacity
+              {% if card2_link %}has-link{% endif %}
+            " 
+            href="{{ card2_link }}"
+            js-fade-in="item"
+          >
+            {% render 'art-direction-image' with
+              large_image: card2_image,
+              small_image: card2_image,
+              wrapper_class: 'block-content-slider__image',
+              alt: card2_title
+            %}
+            
+            <div class="block-content-slider__title">
+              <h4 class="h4">{{ card2_title }}</h4>
+            </div>
+          </a>
+        {%- endif -%}
+        {%- if card3_image -%}
+          <a 
+            class="
+              block-content-slider__card
+              product-carousel__item
+              animate
+              animate--opacity
+              {% if card3_link %}has-link{% endif %}
+            " 
+            href="{{ card3_link }}"
+            js-fade-in="item"
+          >
+            {% render 'art-direction-image' with
+              large_image: card3_image,
+              small_image: card3_image,
+              wrapper_class: 'block-content-slider__image',
+              alt: card3_title 
+            %}
+            
+            <div class="block-content-slider__title">
+              <h4 class="h4">{{ card3_title }}</h4>
+            </div>
+          </a>
+        {%- endif -%}
+        {%- if card4_image -%}
+          <a 
+            class="
+              block-content-slider__card
+              product-carousel__item
+              animate
+              animate--opacity
+              {% if card4_link %}has-link{% endif %}
+            " 
+            href="{{ card4_link }}"
+            js-fade-in="item"
+          >
+            {% render 'art-direction-image' with
+              large_image: card4_image,
+              small_image: card4_image,
+              wrapper_class: 'block-content-slider__image',
+              alt: card4_title 
+            %}
+            
+            <div class="block-content-slider__title">
+              <h4 class="h4">{{ card4_title }}</h4>
+            </div>
+          </a>
+        {%- endif -%}
+        {%- if card5_image -%}
+          <a 
+            class="
+              block-content-slider__card
+              product-carousel__item
+              animate
+              animate--opacity
+              {% if card5_link %}has-link{% endif %}
+            " 
+            href="{{ card5_link }}"
+            js-fade-in="item"
+          >
+            {% render 'art-direction-image' with
+              large_image: card5_image,
+              small_image: card5_image,
+              wrapper_class: 'block-content-slider__image',
+              alt: card5_title
+            %}
+            
+            <div class="block-content-slider__title">
+              <h4 class="h4">{{ card5_title }}</h4>
+            </div>
+          </a>
+        {%- endif -%}
+        {%- if card6_image -%}
+          <a 
+            class="
+              block-content-slider__card
+              product-carousel__item
+              animate
+              animate--opacity
+              {% if card6_link %}has-link{% endif %}
+            " 
+            href="{{ card6_link }}"
+            js-fade-in="item"
+          >
+            {% render 'art-direction-image' with
+              large_image: card6_image,
+              small_image: card6_image,
+              wrapper_class: 'block-content-slider__image',
+              alt: card6_title
+            %}
+            
+            <div class="block-content-slider__title">
+              <h4 class="h4">{{ card6_title }}</h4>
+            </div>
+          </a>
+        {%- endif -%}
+        {%- if card7_image -%}
+          <a 
+            class="
+              block-content-slider__card
+              product-carousel__item
+              animate
+              animate--opacity
+              {% if card7_link %}has-link{% endif %}
+            " 
+            href="{{ card7_link }}"
+            js-fade-in="item"
+          >
+            {% render 'art-direction-image' with
+              large_image: card7_image,
+              small_image: card7_image,
+              wrapper_class: 'block-content-slider__image',
+              alt: card7_title
+            %}
+            
+            <div class="block-content-slider__title">
+              <h4 class="h4">{{ card7_title }}</h4>
+            </div>
+          </a>
+        {%- endif -%}
+        {%- if card8_image -%}
+          <a 
+            class="
+              block-content-slider__card
+              product-carousel__item
+              animate
+              animate--opacity
+              {% if card8_link %}has-link{% endif %}
+            " 
+            href="{{ card8_link }}"
+            js-fade-in="item"
+          >
+            {% render 'art-direction-image' with
+              large_image: card8_image,
+              small_image: card8_image,
+              wrapper_class: 'block-content-slider__image',
+              alt: card8_title
+            %}
+            
+            <div class="block-content-slider__title">
+              <h4 class="h4">{{ card8_title }}</h4>
+            </div>
+          </a>
+        {%- endif -%}
+  
+        {%- if card9_image -%}
+          <a 
+            class="
+              block-content-slider__card
+              product-carousel__item
+              animate
+              animate--opacity
+              {% if card9_link %}has-link{% endif %}
+            " 
+            href="{{ card9_link }}"
+            js-fade-in="item"
+          >
+            {% render 'art-direction-image' with
+              large_image: card9_image,
+              small_image: card9_image,
+              wrapper_class: 'block-content-slider__image',
+              alt: card9_title
+            %}
+            
+            <div class="block-content-slider__title">
+              <h4 class="h4">{{ card9_title }}</h4>
+            </div>
+          </a>
+        {%- endif -%}
+  
+        {%- if card10_image -%}
+          <a 
+            class="
+              block-content-slider__card
+              product-carousel__item
+              animate
+              animate--opacity
+              {% if card10_link %}has-link{% endif %}
+            " 
+            href="{{ card10_link }}"
+            js-fade-in="item"
+          >
+            {% render 'art-direction-image' with
+              large_image: card10_image,
+              small_image: card10_image,
+              wrapper_class: 'block-content-slider__image',
+              alt: card10_title
+            %}
+            
+            <div class="block-content-slider__title">
+              <h4 class="h4">{{ card10_title }}</h4>
+            </div>
+          </a>
+        {%- endif -%}
+  
+        {%- if card11_image -%}
+          <a 
+            class="
+              block-content-slider__card
+              product-carousel__item
+              animate
+              animate--opacity
+              {% if card11_link %}has-link{% endif %}
+            " 
+            href="{{ card11_link }}"
+            js-fade-in="item"
+          >
+            {% render 'art-direction-image' with
+              large_image: card11_image,
+              small_image: card11_image,
+              wrapper_class: 'block-content-slider__image',
+              alt: card11_title
+            %}
+            
+            <div class="block-content-slider__title">
+              <span>{{ card11_title }}</span>
+            </div>
+          </a>
+        {%- endif -%}
+  
+        {%- if card12_image -%}
+          <a 
+            class="
+              block-content-slider__card
+              product-carousel__item
+              animate
+              animate--opacity
+              {% if card12_link %}has-link{% endif %}
+            " 
+            href="{{ card12_link }}"
+            js-fade-in="item"
+          >
+            {% render 'art-direction-image' with
+              large_image: card12_image,
+              small_image: card12_image,
+              wrapper_class: 'block-content-slider__image',
+              alt: card12_title
+            %}
+            
+            <div class="block-content-slider__title">
+              <h4 class="h4">{{ card12_title }}</h4>
+            </div>
+          </a>
+        {%- endif -%}
+        {% endif %}
+      
+    </div>
+  </div>
+</section>

@@ -1,0 +1,92 @@
+<script>
+  window.redirectModalStrings = {
+    {% for block in section.blocks %}
+      {{ block.settings.language }}: {
+        title: {{ block.settings.title | json }},
+        description: {{ block.settings.description | json }},
+        stay_on_site: {{ block.settings.stay_on_site | json }},
+        update_preferences: {{ block.settings.update_preferences | json }},
+        country_selector_label: {{ block.settings.country_selector_label | json }},
+        language_selector_label: {{ block.settings.language_selector_label | json }},
+      },
+    {% endfor %}
+  }
+</script>
+
+{% schema %}
+  {
+    "name": "Redirect Translations",
+    "blocks": [
+      {
+        "type": "language_strings",
+        "name": "Language",
+        "settings": [
+          {
+            "type": "select",
+            "id": "language",
+            "label": "Language",
+            "options": [
+              {
+                "value": "it",
+                "label": "Italian"
+              },
+              {
+                "value": "en",
+                "label": "English"
+              },
+              {
+                "value": "es",
+                "label": "Spanish"
+              },
+              {
+                "value": "fr",
+                "label": "French"
+              },
+              {
+                "value": "de",
+                "label": "German"
+              }
+            ],
+            "default": "en"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Hey! We think you're browsing from %redirect_store_name%"
+          },
+          {
+            "type": "text",
+            "id": "description",
+            "label": "Description",
+            "default": "You will not be able to checkout in your local currency on this store.\nWould you like to visit our %redirect_store_name% store instead?"
+          },
+          {
+            "type": "text",
+            "id": "stay_on_site",
+            "label": "Stay on site CTA",
+            "default": "Stay on current site"
+          },
+          {
+            "type": "text",
+            "id": "update_preferences",
+            "label": "Update preferences CTA",
+            "default": "Update store preferences"
+          },
+          {
+            "type": "text",
+            "id": "country_selector_label",
+            "label": "Country selector label",
+            "default": "Country"
+          },
+          {
+            "type": "text",
+            "id": "language_selector_label",
+            "label": "language selector label",
+            "default": "Language"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

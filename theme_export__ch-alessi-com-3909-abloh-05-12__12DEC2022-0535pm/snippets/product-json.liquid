@@ -1,0 +1,73 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Product JSON
+  - Product data for current product including variant options and inventory.
+------------------------------------------------------------------------------
+{% endcomment %}
+<script
+  id="product-json"
+  type="application/json"
+  js-product-json
+>
+  {
+    "id": {{ product.id }},
+    "title": {{ product.title | json }},
+    "handle": "{{ product.handle }}",
+    "description": {{ product.description | json}},
+    "published_at": "{{ product.published_at }}",
+    "created_at": "{{ product.created_at }}",
+    "vendor": "{{ product.vendor }}",
+    "type": "{{ product.type }}",
+    "tags": [
+      {% for tag in product.tags %}
+        {{ tag | json }}{%- unless forloop.last -%},{%- endunless -%}
+      {% endfor %}
+    ],
+    "price": {{ product.price }},
+    "price_min": {{ product.price_min }},
+    "price_max": {{ product.price_max }},
+    "available": "{{ product.available }}",
+    "price_varies": "{{ product.price_varies }}",
+    "compare_at_price": {{ product.compare_at_price | json}},
+    "compare_at_price_min": {{ product.compare_at_price_min }},
+    "compare_at_price_max": {{ product.compare_at_price_max }},
+    "compare_at_price_varies": {{ product.compare_at_price_varies }},
+    "variants" : [
+      {% for variant in product.variants %}
+        {
+        "id": {{ variant.id }},
+        "available": {{ variant.available | json }},
+        "title": {{ variant.title | json }},
+        "option1": {{ variant.option1 | json}},
+        "option2": {{ variant.option2 | json}},
+        "option3": {{ variant.option3 | json}},
+        "sku": "{{ variant.sku }}",
+        "requires_shipping": {{ variant.requires_shipping }},
+        "taxable": {{ variant.taxable }},
+        "featured_image": "{{ variant.featured_image }}",
+        "name": "{{ variant.name }}",
+        "public_title": "{{ variant.public_title }}",
+        "options":[
+          {% for option in variant.options %}
+            {{ option | json }}{%- unless forloop.last -%},{%- endunless -%}
+          {% endfor %}
+        ],
+        "price": {{ variant.price }},
+        "weight": {{ variant.weight }},
+        {%- if variant.compare_at_price -%}"compare_at_price": {{ variant.compare_at_price }},{%- endif -%}
+        "inventory_management": "{{ variant.inventory_management }}",
+        "barcode":" {{ variant.barcode }}",
+        "inventory_quantity": {{ variant.inventory_quantity | json }}
+        }{%- unless forloop.last -%},{%- endunless -%}
+      {% endfor %}
+    ],
+    "images": {{ product.images | json }},
+    "featured_image": {{ product.featured_image | json }},
+    "options": [
+      {% for option in product.options %}
+        {{ option | json }}{%- unless forloop.last -%},{%- endunless -%}
+      {% endfor %}
+    ],
+    "content": {{ product.content | json }}
+  }
+</script>

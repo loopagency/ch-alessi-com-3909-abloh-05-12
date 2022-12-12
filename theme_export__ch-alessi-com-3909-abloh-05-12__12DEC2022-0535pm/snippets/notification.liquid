@@ -1,0 +1,41 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Notification
+  - Options:
+  -- notification_id: {String} Unique identifier.
+  -- notification_theme: {String} Modifier to apply.
+  -- notification_text: {String} Text.
+------------------------------------------------------------------------------
+{% endcomment %}
+{% if notification_id %}
+  {% capture notification_id_modifier %}
+    id="{{ notification_id }}"
+  {% endcapture %}
+{% endif %}
+
+{% if notification_theme %}
+  {% assign notification_theme_modifier = notification_theme | downcase | prepend: 'notification--' %}
+{% endif %}
+
+<div
+  {{ notification_id_modifier }}
+  class="notification {{ notification_theme_modifier }}"
+  role="alert"
+>
+  <div class="notification__text-wrapper">
+    {% if notification_title %}
+      <p class="notification__title">
+        {{ notification_title | escape }}
+      </p>
+    {% endif %}
+
+    <p class="notification__text" js-notification="body">
+      {{ notification_text | escape }}
+    </p>
+  </div>
+
+  <button class="notification__close" js-notification="close">
+    <span class="visually-hidden">{{ 'general.accessibility.close' | t }}</span>
+    {% render 'icon-misc' with icon: 'close' %}
+  </button>
+</div>

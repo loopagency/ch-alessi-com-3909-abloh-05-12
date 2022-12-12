@@ -1,0 +1,51 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: For Professionals blocks
+  - Blocks content on professionals page templates.
+----------------------------------------------------------------------------
+{% endcomment %}
+
+{% case block.type %}
+  {% when 'feature-row' %}
+    {% assign index = forloop.index | plus: 1 %}
+
+    <div class="template-professionals__feature-row container">
+      {% render 'post-listing-item'
+        with post: block,
+        post_type: 'page_block',
+        gallery: true,
+        index: index
+      %}
+    </div>
+
+  {% when 'collection' %}
+    {% assign featured_collection = collections[block.settings.collection] %}
+
+    <div class="template-professionals__collection-row">
+      <div
+        class="container animate animate--opacity"
+        js-fade-in="item"
+      >
+        <div class="row">
+          <div class="col xs12">
+            <h3 class="template-professionals__collection-title">
+              {% if block.settings.heading == '' %}
+                {{ featured_collection.title }}
+              {% else %}
+                {{ block.settings.heading }}
+              {% endif %}
+            </h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="template-professionals__carousel">
+        {% render 'feature-carousel' with
+          type: 'collection'
+          featured_collection: featured_collection
+          class: 'full-width'
+        %}
+      </div>
+    </div>
+
+{% endcase %}

@@ -1,0 +1,82 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Card slider
+  - Draggable
+  - Simple scrollbar
+------------------------------------------------------------------------------
+{% endcomment %}
+<div class="card-slider" js-fade-in="container">
+  <div class="container">
+    <div class="row">
+      <div class="col xs12">
+        {% if section.settings.slider_main_title != blank %}
+          <h3 class="card-slider__title">{{ section.settings.slider_main_title }}</h2>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="container container--right"
+    js-draggable="container"
+  >
+      <div class="card-slider__container product-carousel {{ class }}" js-simplebar="container">
+        {% for block in section.blocks %}
+          <div class="card-slider__item product-carousel__item animate animate--opacity" js-fade-in="item">
+            <a href="{{ block.settings.card_url }}" class="card-slider__link">
+              <div class="lifestyle-main__featured-image lazyload" data-bgset="{% render 'responsive-bg-image', image: block.settings.card_image %}"></div>
+              <p class="card-slider__card-title subtitle-1">{{ block.settings.card_title }}</p>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Card slider",
+    "class": "custom-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Title"
+      },
+      {
+        "type": "text",
+        "id": "slider_main_title",
+        "label": "Main title",
+        "default": "Lorem ipsum"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "card-slider",
+        "name": "Image Slide",
+        "settings": [
+          {
+            "type": "header",
+            "content": "Card content",
+            "info": "Select one image and title per card."
+          },
+          {
+            "type": "image_picker",
+            "id": "card_image",
+            "label": "Card image"
+          },
+          {
+            "type": "text",
+            "id": "card_title",
+            "label": "Card title",
+            "default": "Lorem ipsum"
+          },
+          {
+            "type": "url",
+            "id": "card_url",
+            "label": "Select link destination"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

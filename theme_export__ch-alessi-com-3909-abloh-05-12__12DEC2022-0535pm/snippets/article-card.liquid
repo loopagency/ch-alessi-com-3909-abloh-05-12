@@ -1,0 +1,54 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Article card
+------------------------------------------------------------------------------
+{% endcomment %}
+<a class="article-card card" href="{{ article.url }}">
+  {% if article.image %}
+    <div class="article-card__thumbnail responsive-card-image">
+      <div class="responsive-card-image__wrapper">
+        {% assign image_s = article.image | img_url: '240x160', crop: 'center' %}
+        {% assign image_m = article.image | img_url: '320x213', crop: 'center' %}
+        {% assign image_l = article.image | img_url: '480x320', crop: 'center' %}
+
+        <img
+          class="responsive-card-image__image lazyload blur-up"
+          alt="{{ article.image.alt | escape }}"
+          src="{{ article.image | img_url: '5x' }}"
+          tabindex="-1"
+          data-sizes="auto"
+          data-src="{{ image_m }}"
+          data-srcset="
+            {{ image_s }} 300w,
+            {{ image_m }} 600w,
+            {{ image_l }} 900w
+          "
+        >
+
+        <noscript>
+          <img alt="{{ image.alt | escape }}" src="{{ image_l }}" >
+        </noscript>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="article-card__body">
+    <h4 class="article-card__title">
+      {{ article.title }}
+    </h4>
+
+    <div class="caption article-card__meta">
+      <span>
+        {{ article.published_at | time_tag: format: 'day_month_year' }}
+      </span>
+    </div>
+
+    <p class="article-card__description">
+      {% if article.excerpt.size > 0 %}
+        {{ article.excerpt | strip_html | truncate: 140 }}
+      {% else %}
+        {{ article.content | strip_html | truncate: 140 }}
+      {% endif %}
+    </p>
+  </div>
+</a>

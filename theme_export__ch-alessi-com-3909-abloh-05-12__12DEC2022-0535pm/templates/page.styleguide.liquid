@@ -1,0 +1,52 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Template: Styleguide page
+  - A template system to help define and visualise basic design elements
+    and patterns.
+  - A library of reusable components with an overview of available classes.
+  - This entire layout is rendered by Vue.js in styleguide.js
+------------------------------------------------------------------------------
+{% endcomment %}
+{% layout 'styleguide' %}
+
+<div
+  id="app"
+  role="region"
+  aria-label="app container"
+>
+  <div class="wrapper">
+    <side-nav>
+      <template slot="header">
+        <a href="{{ shop.url }}">
+          <div class="sg-side-nav__logo">
+            {% render 'site-logo' %}
+          </div>
+        </a>
+      </template>
+
+      <template slot="toggle">
+        {% render 'icon-misc' with icon: 'hamburger' %}
+      </template>
+    </side-nav>
+
+    <content-section name="Getting started">
+      {% render 'styleguide-getting-started' %}
+    </content-section>
+
+    <content-section name="Styles">
+      {% render 'styleguide-styles' %}
+    </content-section>
+
+    <content-section name="Components">
+      {% render 'styleguide-components' %}
+    </content-section>
+
+    <content-section name="Sections">
+      {% render 'styleguide-sections' %}
+    </content-section>
+
+    <content-section name="Global">
+      {% render 'styleguide-global' %}
+    </content-section>
+  </div>
+</div>

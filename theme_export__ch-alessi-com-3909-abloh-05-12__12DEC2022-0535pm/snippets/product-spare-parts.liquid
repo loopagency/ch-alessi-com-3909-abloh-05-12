@@ -1,0 +1,90 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Component: Product spare parts
+  - Pulling content from product tags unto the product.liquid template
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{% assign has_parts = false %}
+
+{% assign collection_handle = 'spare-parts-for-' | append: product.id %}
+{% assign spare_parts_collection = collections[collection_handle] %}
+
+{% if spare_parts_collection.products.size > 0 %}
+  {% assign has_parts = true %}
+{% endif %}
+
+{% if has_parts %}
+  {% case snippet %}
+    {% when 'link' %}
+      <span
+        class="{{ class }} text-link"
+        js-smooth-scroll="spare-parts-section"
+      >
+        {{ 'products.product.spare_parts.title' | t }}
+        {% render 'icon-misc' with icon: 'plus' %}
+      </span>
+
+    {% else %}
+      <div id="spare-parts-section" class="product-spare-parts  background--medium">
+        <div class="product-spare-parts__container container container--right">
+          <div
+            class="
+              product-spare-parts__column
+              product-spare-parts__column--callout
+              container
+            "
+          >
+            <div class="product-spare-parts__content product-meet-family__title">
+              <h2 class="d3">
+                {{ 'products.product.spare_parts.title' | t }}
+              </h2>
+
+              <p class="h6">
+                {{ 'products.product.sustainability' | t }}
+              </p>
+
+              {% comment %} <p>
+                <a
+                  class="
+                    button
+                    button--secondary
+                    button--dark
+                    product-spare-parts__cta
+                    product-spare-parts__cta--desktop
+                  "
+                  href="#"
+                >
+                  {{ 'products.product.spare_parts.cta' | t }}
+                </a>
+              </p> {% endcomment %}
+            </div>
+          </div>
+
+          <div class="product-spare-parts__column container container--right">
+            {% render 'feature-carousel' with
+              type: 'collection'
+              featured_collection: spare_parts_collection
+              class: 'spare-part'
+            %}
+          </div>
+        {% comment %}
+          <p>
+            <a
+              class="
+                button
+                button--secondary
+                button--dark
+                product-spare-parts__cta
+                product-spare-parts__cta--mobile
+              "
+              href="#"
+            >
+              {{ 'products.product.spare_parts.cta' | t }}
+            </a>
+          </p>
+          {% endcomment %}
+        </div>
+      </div>
+  {% endcase %}
+{% endif %}

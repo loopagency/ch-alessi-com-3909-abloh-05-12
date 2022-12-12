@@ -1,0 +1,579 @@
+{% render 'section-padding' %}
+{% render 'utility' %}
+<style>
+  :root {
+    --f12: 100%;
+    --f6: calc(50% - var(--spacing-xs));
+    --f4: calc(33.333333% - var(--spacing-xs));
+    --f3: calc(25% - var(--spacing-xs)); 
+  }
+</style>
+{% style %}
+  .banner-grid img {
+    height: auto;
+  }
+  .banner-grid:not(.section-boxed) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .banner-grid__container.slider {
+    width: calc(100% + var({{ section.settings.gutter_size }}));
+  }
+  @media (max-width: 1024px) {
+    .slider .banner-grid__container {
+      -webkit-overflow-scrolling: touch;
+      -ms-overflow-style: -ms-autohiding-scrollbar;
+      width: calc(100% + var(--spacing-s));
+      overflow-x: scroll;
+    }
+    .slider .banner-grid__container .grid__item {
+      width: 80%;
+      flex: 0 0 auto;
+    }
+
+    .slider .banner-grid__container::-webkit-scrollbar-track {
+      background-color: #edede8;
+      border-radius: 10px;
+    }
+
+    .slider .banner-grid__container::-webkit-scrollbar {
+      height: 2px;
+      margin-right: var(--spacing-2xs);
+      margin-left: var(--spacing-2xs);
+    }
+
+    .slider .banner-grid__container::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      box-shadow: 0;
+      background-color: #ed1c24;
+    }
+  }
+
+    {% if section.settings.allow_gutter %}
+      .section-{{ section.id }} .banner-grid__container{
+        gap: var({{ section.settings.gutter_size }}) var({{ section.settings.gutter_size }});
+      }
+    {% endif %}
+  .grid__item .media video {
+    width: 100%;
+    height: auto;
+
+  }
+  .media.media--fixed {
+    height: 80vh;
+    position: relative;
+  }
+  @media (min-width: 769px) {
+    .media.media--fixed {
+    height: 90vh;
+    position: relative;
+    }
+  }
+
+  .media.media--fixed video {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+  video::-webkit-media-controls-fullscreen-button {
+    display: none;
+}
+{% endstyle %}
+
+<div class="banner-grid  section-{{ section.id }} section-{{ section.id }}{% if section.settings.allow_padding %}-padding{% endif %}{% if section.settings.section_boxed %} section-boxed{% endif %} {% if section.settings.enable_slider_mobile %} slider{% endif %}">
+  <div class="banner-grid__container d--f {% if section.settings.enable_slider_mobile %} fw--n {% else %} fw--w{% endif %} {{ section.settings.justify_content }}">
+    {%- liquid
+      assign highest_ratio = 0
+      for block in section.blocks
+        if block.settings.image.aspect_ratio > highest_ratio
+          assign highest_ratio = block.settings.image.aspect_ratio
+        endif
+      endfor
+    -%}
+    {%- for block in section.blocks -%}
+      <div class="banner-grid grid__item {{ block.settings.col_size_mobile}} {{ block.settings.col_size }}" {{ block.shopify_attributes }}>
+        <div class="media media--transparent media--{{ section.settings.image_ratio }}">
+          {%- capture sizes -%}(min-width: 990px) {% if section.blocks.size <= 2 %}710px{% else %}550px{% endif %}, (min-width: 750px) {% if section.blocks.size == 1 %}710px{% else %}550px{% endif %}, calc(100vw - 30px){%- endcapture -%}
+          {% case block.type %}
+            {% when 'image' %}
+              {%- if block.settings.image -%}
+                {{ block.settings.image | image_url: width: 1420 | image_tag:
+                    loading: 'lazy',
+                    sizes: sizes,
+                    widths: '275, 550, 710, 1420',
+                    class: 'banner-grid__image'
+                }}
+              {%- endif -%}
+            {% when 'video' %}
+              {{ block.settings.video | video_tag: 
+                  image_size: '1200x',
+                  autoplay: block.settings.allow_autoplay, 
+                  loop: block.settings.allow_loop, 
+                  muted: block.settings.muted,
+                  controls: block.settings.controls
+                | replace: '"playsinline"', '"playsinline" disablepictureinpicture controlslist="nodownload noplaybackrate"'
+              }}
+          {% endcase%}
+        </div>
+        <div class="banner-grid__info {{ section.settings.text_aligment }} row">
+          <div class="col xs12">
+            {%- if block.settings.caption != blank -%}
+              <span class="caption">
+                {{ block.settings.caption }}
+              </span>
+            {%- endif -%}
+            {%- if block.settings.title != blank -%}
+              <h3 class="{{ section.settings.heading_size }}{% if section.settings.allow_upcase %} uppercase{% endif %}">
+                {{ block.settings.title }}
+              </h3>
+            {%- endif -%}
+            {%- if block.settings.text != blank -%}
+              {{ block.settings.text }}
+            {%- endif -%}
+            {%- if block.settings.link != blank -%}
+              <a href="{{ block.settings.link }}" class="button {{ section.settings.btn_style }} button--dark">
+                {{ block.settings.link_label }}
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+<script> 
+
+  document.querySelector("video").addEventListener("contextmenu", (event) => {
+    event.preventDefault();
+  });
+</script>
+
+{% schema %}
+{
+  "name": "BETA - Banner Grid",
+  "class": "beta-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Settings Typography"
+    },
+    {
+      "type": "select",
+      "id": "text_aligment",
+      "label": "Text Alignment",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "Text Left"
+        },
+        {
+          "value": "text-center",
+          "label": "Text Center"
+        },
+        {
+          "value": "text-right",
+          "label": "Text Right"
+        }
+      ],
+      "default": "text-left"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading Size",
+      "options": [
+        {
+          "value": "d1",
+          "label": "Heading 1"
+        },
+        {
+          "value": "d2",
+          "label": "Heading 2"
+        },
+        {
+          "value": "d3",
+          "label": "Heading 3"
+        },
+        {
+          "value": "d4",
+          "label": "Heading 4"
+        },
+        {
+          "value": "d5",
+          "label": "Heading 5"
+        },
+        {
+          "value": "d6",
+          "label": "Heading 6"
+        }
+      ],
+      "default": "d3"
+    },
+    {
+      "type": "checkbox",
+      "id": "allow_upcase",
+      "label": "Title in uppercase",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "btn_style",
+      "label": "Button style",
+      "options": [
+        {
+          "value": "button--primary",
+          "label": "Primary Button"
+        },
+        {
+          "value": "button--secondary",
+          "label": "Secondary Button"
+        }
+      ],
+      "default": "button--primary"
+    },
+    {
+      "type": "header",
+      "content": "Settings Media"
+    },
+    {
+      "type": "select",
+      "id": "justify_content",
+      "label": "Text Alignment",
+      "options": [
+        {
+          "value": "jc--fs",
+          "label": "Justify Left"
+        },
+        {
+          "value": "jc--c",
+          "label": "Justify Center"
+        },
+        {
+          "value": "jc--fe",
+          "label": "Justify Right"
+        }
+      ],
+      "default": "jc--c"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt on media"
+        },
+        {
+          "value": "fixed",
+          "label": "Branding height"
+        }
+      ],
+      "default": "adapt",
+      "label": "Branding height"
+    },
+    {
+      "type": "checkbox",
+      "id": "allow_gutter",
+      "label": "Allow gutter beetwen column",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "gutter_size",
+      "options": [
+        {
+          "value": "--spacing-3xs",
+          "label": "Extra Small"
+        },
+        {
+          "value": "--spacing-xs",
+          "label": "Small"
+        },
+        {
+          "value": "--spacing-m",
+          "label": "Medium"
+        },
+        {
+          "value": "--spacing-l",
+          "label": "Large"
+        }
+      ],
+      "default": "--spacing-xs",
+      "label": "Dimension Gutter"
+    },
+    { 
+      "type": "checkbox",
+      "id": "enable_slider_mobile",
+      "label": "Enable Slider on mobile",
+      "default": true
+    },
+      {
+        "type": "header",
+        "content": "Padding Section"
+      },
+      {
+        "type": "checkbox",
+        "id": "section_boxed",
+        "label": "Use margin left/right for box the section",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "allow_padding",
+        "label": "Show Padding on top and bottom",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding top",
+        "default": 12
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding bottom",
+        "default": 12
+      }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "select",
+          "id": "col_size",
+          "options": [
+            {
+              "value": "l--12",
+              "label": "Full width"
+            },
+            {
+              "value": "l--6",
+              "label": "2 Columns"
+            },
+            {
+              "value": "l--4",
+              "label": "3 Columns"
+            },
+            {
+              "value": "l--3",
+              "label": "4 Columns"
+            }
+          ],
+          "default": "l--4",
+          "label": "Select product column size",
+          "info": "Desktop Columns"
+        },
+        {
+          "type": "select",
+          "id": "col_size_mobile",
+          "options": [
+            {
+              "value": "xs--12",
+              "label": "Full width"
+            },
+            {
+              "value": "xs--6",
+              "label": "2 Columns"
+            },
+            {
+              "value": "xs--4",
+              "label": "3 Columns"
+            },
+            {
+              "value": "xs--3",
+              "label": "4 Columns"
+            }
+          ],
+          "default": "xs--6",
+          "label": "Select column size",
+          "info": "Mobile Columns"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Pick the image"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "default": "Caption",
+          "label": "Text small"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Column",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+          "label": "Paragraph"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link title"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+        "type": "video",
+        "name": "Custom Video (CDN)",
+        "settings": [
+          {
+            "type": "select",
+            "id": "col_size",
+            "options": [
+              {
+                "value": "l--12",
+                "label": "Full width"
+              },
+              {
+                "value": "l--6",
+                "label": "2 Columns"
+              },
+              {
+                "value": "l--4",
+                "label": "3 Columns"
+              },
+              {
+                "value": "l--3",
+                "label": "4 Columns"
+              }
+            ],
+            "default": "l--4",
+            "label": "Select column size",
+            "info": "Desktop Columns"
+          },
+          {
+            "type": "select",
+            "id": "col_size_mobile",
+            "options": [
+              {
+                "value": "xs--12",
+                "label": "Full width"
+              },
+              {
+                "value": "xs--6",
+                "label": "2 Columns"
+              },
+              {
+                "value": "xs--4",
+                "label": "3 Columns"
+              },
+              {
+                "value": "xs--3",
+                "label": "4 Columns"
+              }
+            ],
+            "default": "xs--6",
+            "label": "Select column size",
+            "info": "Mobile Columns"
+          },
+          {
+            "type": "video",
+            "id": "video",
+            "label": "Pick the video"
+          },
+          {
+            "type": "header",
+            "content": "Settings player"
+          },
+          {
+            "type": "checkbox",
+            "id": "allow_autoplay",
+            "label": "Video Autoplay",
+            "default": true
+          },
+          {
+            "type": "checkbox",
+            "id": "allow_loop",
+            "label": "Allow Loop",
+            "default": true
+          },
+          {
+            "type": "checkbox",
+            "id": "muted",
+            "label": "Muted Video",
+            "default": true
+          },
+          {
+            "type": "checkbox",
+            "id": "controls",
+            "label": "Show Controls",
+            "default": true
+          },
+          {
+            "type": "header",
+            "content": "Text"
+          },
+          {
+            "type": "text",
+            "id": "caption",
+            "default": "Caption",
+            "label": "Text small"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "default": "Column",
+            "label": "Title"
+          },
+          {
+            "type": "richtext",
+            "id": "text",
+            "default": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "label": "Paragraph"
+          },
+          {
+            "type": "text",
+            "id": "link_label",
+            "label": "Link Title"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "Link"
+          }
+        ]
+      }
+  ],
+  "presets": [
+    {
+      "name": "BETA - Banner Grid",
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "video"
+        },
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

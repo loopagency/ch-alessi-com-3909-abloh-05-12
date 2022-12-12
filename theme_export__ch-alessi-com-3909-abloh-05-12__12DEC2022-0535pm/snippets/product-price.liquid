@@ -1,0 +1,136 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Product price
+  - Used on the product card and in the product form.
+----------------------------------------------------------------------------
+{% endcomment %}
+{% assign minimum_price = 9999999 %}
+{% assign maximum_price = 0 %}
+{% assign price_varies = false %}
+{% assign sale = false %}
+
+{% comment %}
+--------------------------------------------------------------------------------
+Check if the product has only one variant, set the max and min price and if the
+product is on sale
+--------------------------------------------------------------------------------
+{% endcomment %}
+{% if product.has_only_default_variant %}
+  {% assign maximum_price = product.compare_at_price %}
+  {% assign minimum_price = product.price %}
+
+  {% if maximum_price > minimum_price %}
+    {% assign sale = true %}
+  {% else %}
+    {% assign maximum_price = minimum_price %}
+  {% endif%}
+{% else %}
+{% comment %}
+--------------------------------------------------------------------------------
+Check if there are multiple variants, set the max and min price and only if all
+the variants are on sale set the sale variable true
+--------------------------------------------------------------------------------
+{% endcomment %}
+  {% for variant in product.variants %}
+    {% if variant.compare_at_price > variant.price %}
+      {% assign sale = true %}
+    {% else %}
+      {% assign sale = false %}
+    {% endif %}
+
+    {% if variant.price < minimum_price and variant.price != 0 %}
+      {% assign minimum_price = variant.price %}
+    {% endif %}
+
+    {% if variant.price > maximum_price %}
+      {% assign maximum_price = variant.price %}
+    {% endif %}
+  {% endfor %}
+
+  {% if maximum_price > minimum_price %}
+    {% assign price_varies = true %}
+  {% endif %}
+{% endif %}
+
+<div class="product-price" js-recommended-products="productPrices">
+  {% if request.page_type == 'product' %}
+    <span
+      data-price="{{ current_variant.price }}"
+      js-currency="price"
+      js-product-form="price"
+    >
+      {{ current_variant.price | money }}
+    </span>
+
+    {% if product.compare_at_price_max > product.price %}
+      {% if current_variant.compare_at_price > current_variant.price %}
+        <span class="visually-hidden">
+          {{ 'products.product.regular_price' | t }}
+        </span>
+
+        <s
+          data-price="{{ current_variant.compare_at_price }}"
+          js-currency="price"
+          js-product-form="comparePrice"
+        >
+          {{ current_variant.compare_at_price | money }}
+        </s>
+      {% endif %}
+    {% endif %}
+
+  {% else %}
+    {% if maximum_price > minimum_price and sale == true %}
+      {% if price_varies %}
+        <span class="color--brand">
+          {{ 'products.product.on_sale_from_html' | t }}
+        </span>
+
+        <span
+          class="color--brand"
+          data-price="{{ minimum_price }}"
+          js-currency="price"
+          js-product-form="price"
+        >
+          {{ minimum_price | money }}
+        </span>
+      {% else %}
+        <span class="visually-hidden">
+          {{ 'products.product.regular_price' | t }}
+        </span>
+
+        <s data-price="{{ maximum_price }}" js-currency="price">
+          {{ maximum_price | money }}
+        </s>
+
+        <span
+          class="color--brand"
+          data-price="{{ minimum_price }}"
+          js-currency="price"
+          js-product-form="price"
+        >
+          {{ minimum_price | money }}
+        </span>
+      {% endif %}
+    {% else %}
+      {% if price_varies %}
+        {{ 'products.product.from_text_html' | t }}
+        <span
+          js-product-form="price"
+          js-currency="price"
+          data-price="{{ minimum_price }}"
+        >
+          {{ minimum_price | money }}
+        </span>
+
+      {% else %}
+        <span
+          js-product-form="price"
+          js-currency="price"
+          data-price="{{ maximum_price }}"
+        >
+          {{ maximum_price | money }}
+        </span>
+      {% endif %}
+    {% endif %}
+  {% endif %}
+</div>

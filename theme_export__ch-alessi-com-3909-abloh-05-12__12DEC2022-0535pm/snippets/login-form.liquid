@@ -1,0 +1,87 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Login form
+----------------------------------------------------------------------------
+{% endcomment %}
+
+<div class="login-form" js-password-form="customerLoginForm">
+  <div class="login-form__header">
+    <h2 class="h1 login-form__title">
+      {{ 'customer.login.title' | t }}
+    </h2>
+  </div>
+
+  {% form 'customer_login' %}
+    <div class="login-form__body">
+      <div class="login-form__body-container">
+
+        {{ form.errors | default_errors }}
+
+        <div class="form-group">
+          <div class="login-form__field-group">
+            <div class="form-group__field">
+              <label class="visually-hidden" for="CustomerEmail">
+                {{ 'customer.login.email' | t }}
+              </label>
+
+              <input
+                id="CustomerEmail"
+                class="{% if form.errors contains 'email' %}input-error{% endif %}"
+                autocapitalize="off"
+                autocomplete="off"
+                autofocus
+                name="customer[email]"
+                placeholder="{{ 'customer.login.email_placeholder' | t }}"
+                required
+                spellcheck="false"
+                type="email"
+              >
+            </div>
+
+            {% if form.password_needed %}
+              <div class="form-group__field">
+                <label class="visually-hidden" for="CustomerPassword">
+                  {{ 'customer.login.password' | t }}
+                </label>
+
+                <input
+                  id="CustomerPassword"
+                  class="{% if form.errors contains 'password' %}input-error{% endif %}"
+                  name="customer[password]"
+                  placeholder="{{ 'customer.login.password_placeholder' | t }}"
+                  required
+                  type="password"
+                >
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="form-group__footer">
+            <input
+              class="button button--primary button--dark button--large"
+              type="submit"
+              value="{{ 'customer.login.login' | t }}"
+            >
+
+            {% if form.password_needed %}
+              <div class="login-form__reset-password">
+                <span class="body-2">
+                  {{ 'customer.login.forgot_password' | t }}
+                </span>
+
+                <a
+                  class="body-2"
+                  href="#recover"
+                  js-password-form="forgotPasswordLink"
+                >
+                  {{ 'customer.login.reset_now' | t }}
+                </a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  {% endform %}
+</div>

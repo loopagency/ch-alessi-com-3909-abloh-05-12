@@ -1,0 +1,380 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Styleguide - components
+------------------------------------------------------------------------------
+{% endcomment %}
+{% assign current_collection = collections['all'] %}
+
+<content-block status="WIP" name="Accordion">
+  <p slot="description">Accordion enables users to expand and collapse sections of content.</p>
+
+  <content-example>
+    <div slot="demo" id="ProductAccordion" class="accordion" js-accordion="container">
+      <div class="accordion__item is-active" js-accordion="item">
+        <h2 class="accordion__title">
+          <button
+            id="Accordion1"
+            class="accordion__control"
+            aria-controls="content-1"
+            aria-expanded="true"
+            js-accordion="control"
+          >
+            Apples {% render 'icon-direction' with icon: 'chevron-down' %}
+          </button>
+        </h2>
+
+        <div
+          id="content-1"
+          class="accordion__content"
+          role="region"
+          aria-labelledby="Accordion1"
+          js-accordion="content"
+        >
+          <p>Apples are a fine fruit often associated with good health, and fewer doctor's appointments.</p>
+          <p>Example. An apple a day keeps the doctor away.</p>
+        </div>
+      </div>
+
+      <div class="accordion__item" js-accordion="item">
+        <h2 class="accordion__title">
+          <button
+            id="Accordion2"
+            class="accordion__control"
+            aria-controls="content-2"
+            aria-expanded="false"
+            js-accordion="control"
+          >
+            Lemons {% render 'icon-direction' with icon: 'chevron-down' %}
+          </button>
+        </h2>
+
+        <div
+          id="content-2"
+          class="accordion__content"
+          role="region"
+          aria-labelledby="Accordion2"
+          js-accordion="content"
+        >
+          <p>Apples are a fine fruit often associated with good health, and fewer doctor's appointments.</p>
+          <p>Example. An apple a day keeps the doctor away.</p>
+        </div>
+      </div>
+
+      <div class="accordion__item" js-accordion="item">
+        <h2 class="accordion__title">
+          <button
+            id="Accordion3"
+            class="accordion__control"
+            aria-controls="content-3"
+            aria-expanded="false"
+            js-accordion="control"
+          >
+            Kiwis {% render 'icon-direction' with icon: 'chevron-down' %}
+          </button>
+        </h2>
+
+        <div
+          id="content-3"
+          class="accordion__content"
+          role="region"
+          aria-labelledby="Accordion3"
+          js-accordion="content"
+        >
+          <p>Kiwis are a fun, under-appreciated fruit.</p>
+        </div>
+      </div>
+    </div>
+  </content-example>
+</content-block>
+
+<content-block status="WIP" name="Badge">
+  <p slot="description">A component that can wrap any type of content to highlight information for a user or to just draw attention to a specific element.</p>
+
+  <content-example>
+    <div class="badge-listing" slot="demo">
+      <div class="badge"><span>Default</span></div>
+      <div class="badge badge--primary"><span>Sale</span></div>
+      <div class="badge badge--secondary"><span>New in</span></div>
+    </div>
+  </content-example>
+</content-block>
+
+<content-block status="WIP" name="Breadcrumb" is-synced>
+  <p slot="description">Indicate the current page’s location within a navigational hierarchy that automatically adds separators via CSS.</p>
+
+  <content-example>
+    <div slot="demo">
+      {% render 'breadcrumb' %}
+    </div>
+  </content-example>
+</content-block>
+
+<content-block status="WIP" name="Modal">
+  <p slot="description">Add dialogs to your site for lightboxes, user notifications, or completely custom content.</p>
+
+  <content-example>
+    <div slot="demo">
+      <div id="Modal-1" tabindex="-1" role="dialog" class="modal is-active is-static">
+        <div class="modal__card">
+          <div class="modal__header">
+            <h5 class="modal__title">Modal title</h5>
+            <button class="modal__close button" js-modal="closeModal">
+              {% render 'icon-misc' with icon: 'close' %}
+            </button>
+          </div>
+
+          <div class="modal__body">
+            <h1>Hello World</h1>
+
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla accumsan, metus ultrices eleifend gravida, nulla nunc varius lectus, nec rutrum justo nibh eu lectus. Ut vulputate semper dui. Fusce erat odio, sollicitudin vel erat vel, interdum mattis neque.</p>
+
+            <ul>
+              <li>In fermentum leo eu lectus mollis, quis dictum mi aliquet.</li>
+              <li>Morbi eu nulla lobortis, lobortis est in, fringilla felis.</li>
+              <li>Aliquam nec felis in sapien venenatis viverra fermentum nec lectus.</li>
+              <li>Ut non enim metus.</li>
+            </ul>
+          </div>
+
+          <div class="modal__footer">
+            <a href="#" class="button button--primary button--dark">Sign up</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </content-example>
+</content-block>
+
+<content-block status="WIP" name="Notification" is-synced>
+  <p slot="description">Notifications are messages that communicate information to the user.</p>
+
+  <content-example>
+    <div slot="demo">
+      {% render 'notification' with
+        notification_id: 'sg-notification-1',
+        notification_title: 'Notification title',
+        notification_text: 'Notification text goes here.',
+      %}
+
+      {% render 'notification' with
+        notification_id: 'sg-notification-1',
+        notification_title: 'Notification title',
+        notification_text: 'Notification text goes here.',
+        notification_theme: 'primary',
+      %}
+    </div>
+  </content-example>
+</content-block>
+
+<content-block status="WIP" name="Pagination">
+  <p slot="description">A component that is used to concatenate long sets of data for a user to consume information easier.</p>
+
+  <content-example>
+    <div slot="demo">
+      <div class="pagination">
+        <span class="pagination__item">Previous</span>
+          <span class="pagination__item is-active">1</span>
+          <a href="#" class="pagination__item pagination__link">2</a>
+          <a href="#" class="pagination__item pagination__link">3</a>
+          <a class="pagination__item pagination__link" href="#">
+          <span>Next</span>
+        </a>
+      </div>
+    </div>
+  </content-example>
+</content-block>
+
+<content-block status="WIP" name="Payment icons" is-synced>
+  <p slot="description">The appearance of payment icons help reinforce the feeling of security on the website. These are the currently enabled payment options defined in the store settings.</p>
+
+  <content-example>
+    <div slot="demo">
+      {% render 'payment-icons' %}
+    </div>
+  </content-example>
+</content-block>
+
+<content-block status="WIP" name="Product card" is-synced>
+  <p slot="description">Product cards are a medium-sized component that contains key product information such as a featured thumbnail, title and price. These products cards are shared across the theme and are one of the most re-usable components available.</p>
+
+  <content-example>
+    <div slot="demo">
+      {% for product in current_collection.products limit: 1 %}
+        {% render 'product-card' with product: product %}
+      {% endfor %}
+    </div>
+  </content-example>
+</content-block>
+
+
+<content-block status="WIP" name="Product form" is-synced>
+  <p slot="description">The product form is one of the most important components of any e-commerce interface. It is the UI in which users are selecting and clicking around to customise options of the product they will ultimately be adding to their cart.</p>
+
+  <content-example>
+    <div slot="demo">
+      {% for product in current_collection.products limit: 1 %}
+        {% render 'product-form' with product: product %}
+      {% endfor %}
+    </div>
+  </content-example>
+</content-block>
+
+<content-block status="WIP" name="Quantity selector" is-synced>
+  <p slot="description">Form field to decrement or increment a number input using attached buttons. Each quantity selector has a unique identifier to avoid conflicts.</p>
+
+  <content-example>
+    <div slot="demo">
+      {% render 'quantity-selector' with id: 8 %}
+    </div>
+  </content-example>
+</content-block>
+
+<content-block status="WIP" name="Swatch">
+  <p slot="description">A highly stylised radio input with the appearance of a selected choice card. There are active, inactive, disabled and empty states for each swatch. Can be used as labels or with filled backgrounds.</p>
+
+  <content-example>
+    <div slot="demo">
+      <ul class="swatch-grid">
+        <li class="swatch-grid__item swatch">
+          <input
+            id="sg-size-swatch-1"
+            name="size"
+            class="swatch__input visually-hidden"
+            type="radio"
+            value="xs"
+            data-index="size-option-1"
+            checked="checked"
+          >
+          <label class="swatch__label" for="sg-size-swatch-1">
+            <div class="swatch__button">
+              <span>XS</span>
+            </div>
+          </label>
+        </li>
+
+        <li class="swatch-grid__item swatch">
+          <input
+            id="sg-size-swatch-2"
+            name="size"
+            class="swatch__input visually-hidden"
+            type="radio"
+            value="s"
+            data-index="option-1"
+          >
+
+          <label class="swatch__label" for="sg-size-swatch-2">
+            <div class="swatch__button">
+              <span>S</span>
+            </div>
+          </label>
+        </li>
+
+        <li class="swatch-grid__item swatch">
+          <input
+            id="sg-size-swatch-3"
+            name="size"
+            class="swatch__input visually-hidden"
+            type="radio"
+            value="xxl"
+            data-index="option-1"
+          >
+          <label class="swatch__label" for="sg-size-swatch-3">
+            <div class="swatch__button" disabled>
+              <span>M</span>
+            </div>
+          </label>
+        </li>
+
+        <li class="swatch-grid__item swatch">
+          <input
+            id="sg-size-swatch-4"
+            name="size"
+            class="swatch__input visually-hidden"
+            type="radio"
+            value="xxl"
+            data-index="option-1"
+            disabled
+          >
+          <label class="swatch__label" for="sg-size-swatch-4">
+            <div class="swatch__button">
+              <span>XXL</span>
+            </div>
+          </label>
+        </li>
+      </ul>
+    </div>
+  </content-example>
+
+  <content-example>
+    <div slot="demo">
+      <ul class="swatch-grid">
+        <li class="swatch swatch-grid__item swatch--empty">
+          <input
+            id="sg-swatch-1"
+            name="color"
+            class="swatch__input visually-hidden"
+            type="radio"
+            value="purple"
+            data-index="option-1"
+            checked="checked"
+          >
+          <label class="swatch__label" for="sg-swatch-1">
+            <div class="swatch__button" style="background-color: rebeccapurple">
+              <span>Rebecca Purple</span>
+            </div>
+          </label>
+        </li>
+
+        <li class="swatch swatch-grid__item swatch--empty">
+          <input
+            id="sg-swatch-2"
+            name="color"
+            class="swatch__input visually-hidden"
+            type="radio"
+            value="RosyBrown"
+            data-index="option-1"
+          >
+
+          <label class="swatch__label" for="sg-swatch-2">
+            <div class="swatch__button" style="background-color: RosyBrown">
+              <span>Rosy Brown</span>
+            </div>
+          </label>
+        </li>
+
+        <li class="swatch swatch-grid__item swatch--empty">
+          <input
+            id="sg-swatch-3"
+            name="color"
+            class="swatch__input visually-hidden"
+            type="radio"
+            value="LightSeaGreen"
+            data-index="option-1"
+          >
+          <label class="swatch__label" for="sg-swatch-3">
+            <div class="swatch__button" style="background-color: LightSeaGreen" disabled>
+              <span>Light Sea Green</span>
+            </div>
+          </label>
+        </li>
+
+        <li class="swatch swatch-grid__item swatch--empty">
+          <input
+            id="sg-swatch-4"
+            name="color"
+            class="swatch__input visually-hidden"
+            type="radio"
+            value="DeepPink"
+            data-index="option-1"
+            disabled
+          >
+          <label class="swatch__label" for="sg-swatch-4">
+            <div class="swatch__button" style="background-color: DeepPink">
+              <span>Deep Pink</span>
+            </div>
+          </label>
+        </li>
+      </ul>
+    </div>
+  </content-example>
+</content-block>

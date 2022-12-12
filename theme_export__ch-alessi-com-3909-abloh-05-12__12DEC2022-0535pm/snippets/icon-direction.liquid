@@ -1,0 +1,87 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Icons - direction
+  - Directional icons to provide context on the state of a UI.
+------------------------------------------------------------------------------
+{% endcomment %}
+{% case icon %}
+  {% when 'arrow-down' %}
+    <svg class="icon icon__arrow icon__arrow--down" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#000" d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/>
+    </svg>
+
+  {% when 'arrow-left' %}
+    <svg class="icon icon__arrow icon__arrow--left" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+    </svg>
+
+  {% when 'arrow-right' %}
+    <svg class="icon icon__arrow icon__arrow--right" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#000" d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z"/>
+    </svg>
+
+  {% when 'arrow-right-long' %}
+    <svg class="icon icon__arrow icon__arrow--right-long" viewBox="0 0 48 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M48,12l-8.51,8.59-1.13-1.14,6.58-6.64H0V11.19H44.94L38.36,4.55l1.13-1.14Z" />
+    </svg>
+
+  {% when 'arrow-down-long' %}
+    <svg class="icon icon__arrow icon__arrow--down-long" viewBox="0 0 24 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M11.7269 41.6565L6 35.9872L6.34703 35.6436L11.8285 41.07L11.8285 6H12.3193L12.3193 41.07L17.8007 35.6436L18.1478 35.9872L12.4209 41.6565L12.0739 42L11.7269 41.6565Z" />
+    </svg>
+
+  {% when 'arrow-up' %}
+    <svg class="icon icon__arrow icon__arrow--up" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/>
+    </svg>
+
+  {% when 'caret-down' %}
+    <svg class="icon icon__caret icon__caret--down" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M7 10l5 5 5-5H7z"/>
+    </svg>
+
+  {% when 'caret-left' %}
+    <svg class="icon icon__caret icon__caret--left" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M14 7l-5 5 5 5V7z"/>
+    </svg>
+
+  {% when 'caret-right' %}
+    <svg class="icon icon__caret icon__caret--right" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 17l5-5-5-5v10z"/>
+    </svg>
+
+  {% when 'caret-up' %}
+    <svg class="icon icon__caret icon__caret--up" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M7 14l5-5 5 5H7z"/>
+    </svg>
+
+  {% when 'chevron-down' %}
+    <svg class="icon icon__chevron icon__chevron--down" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z"/>
+    </svg>
+
+  {% when 'chevron-left' %}
+    <svg class="icon icon__chevron icon__chevron--left" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z"/>
+    </svg>
+
+  {% when 'chevron-right' %}
+    <svg class="icon icon__chevron icon__chevron--right" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10.0001 6l-1.41 1.41L13.17 12l-4.58 4.59L10 18l6-6-6-6z"/>
+    </svg>
+
+  {% when 'chevron-up' %}
+    <svg class="icon icon__chevron icon__chevron--up" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14l-6-6z"/>
+    </svg>
+  
+  {% when 'navigation-down' %}
+    <svg class="icon__navigation" width="24" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g clip-path="url(#clip0)">
+      <path d="M11.727 41.657L6 35.986l.347-.343 5.481 5.426V6h.491v35.07l5.482-5.426.347.343-5.727 5.67-.347.343-.347-.343z" fill="#000" stroke="#000"/></g>
+      <defs><clipPath id="clip0"><path d="M0 0v48h24V0H0z" fill="#fff"/></clipPath></defs>
+    </svg>
+
+  {% else %}
+    <span>No icon found!</span>
+{% endcase %}

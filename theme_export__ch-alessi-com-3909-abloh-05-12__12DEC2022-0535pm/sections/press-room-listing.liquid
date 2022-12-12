@@ -1,0 +1,119 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Component: Press Room
+  - Pulling content from blocks unto the post-listing-item.liquid template
+------------------------------------------------------------------------------
+{% endcomment %}
+
+<header class="template-press-page__header">
+  <div class="container">
+    <div class="row">
+      <div class="col xs12">
+        <h1 class="template-press-page__title d3">
+          {{ page.title }}
+        </h1>
+          <a
+            class="button button--primary button--dark"
+            href="{{ section.settings.press_login_link }}"
+          >
+            {{ section.settings.press_login_text }}
+          </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="template-press-page__listing">
+  {% for block in section.blocks %}
+    {% if forloop.index == 2 %}
+      <div class="container">
+    {% endif %}
+
+    {% render 'post-listing-item'
+      with post: block,
+      post_type: 'page_block',
+      index: forloop.index
+    %}
+  {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Press Room",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Press Login"
+      },
+      {
+        "type": "text",
+        "id": "press_login_text",
+        "label": "Press Login button text",
+        "default": "Press Sign In"
+      },
+      {
+        "type": "url",
+        "id": "press_login_link",
+        "label": "Press Login button link"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "press_release",
+        "name": "Press Release",
+        "settings": [
+          {
+            "type": "text",
+            "id": "published_at",
+            "label": "Date",
+            "default": "08/04/2020"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Press release title"
+          },
+          {
+            "type": "textarea",
+            "id": "excerpt",
+            "label": "Description",
+            "default": "Press release description with longer copy and a more than a sentence.\nPress release description with longer copy and a more than a sentence."
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "header",
+            "content": "CTAs"
+          },
+          {
+            "type": "text",
+            "id": "cta_01_text",
+            "label": "CTA 1 Text",
+            "default": "Download Kit"
+          },
+          {
+            "type": "url",
+            "id": "cta_01_link",
+            "label": "CTA 1 Link"
+          },
+          {
+            "type": "text",
+            "id": "cta_02_text",
+            "label": "CTA 1 Text",
+            "default": "View press release"
+          },
+          {
+            "type": "url",
+            "id": "cta_02_link",
+            "label": "CTA 1 Link"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

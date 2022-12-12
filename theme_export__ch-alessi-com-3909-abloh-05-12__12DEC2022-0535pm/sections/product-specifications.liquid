@@ -1,0 +1,322 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Component: Product specifications
+  - Pulling content from product tags unto the product.liquid template
+------------------------------------------------------------------------------
+{% endcomment %}
+
+<ul class="product-specifications">
+  {% assign icon_list = '' %}
+  {% assign icon_list_true = '' %}
+  {% assign instructions_link = '' %}
+  {% assign icon_title = '' %}
+  {% assign icon_title_array = '' %}
+
+  {% if shop.domain == 'us.alessi.com'
+    or shop.domain == 'uk.alessi.com'
+  %}
+    {% assign unit_pound = true %}
+  {% else %}
+    {% assign unit_pound = false %}
+  {% endif %}
+
+
+  {% for block in section.blocks %}
+    {% assign block_tag = block.settings.tag %}
+    {% assign block_image = block.settings.image | img_url: '100x' %}
+
+    {% assign icon_list = icon_list
+      | append: block_tag
+      | append: '**'
+      | append: block_image
+      | append: ','
+    %}
+
+    {% assign icon_title = icon_title | append: block_tag | append: ',' | downcase %}
+  {% endfor %}
+
+  {% assign icon_array = icon_list | split: ',' %}
+  {% assign icon_title_array = icon_title | split: ',' | uniq %}
+
+  {% assign specs_list = '' %}
+
+  {% for tag in product.tags %}
+    {% assign spec_title = tag | split: ':' | first | downcase %}
+    {% assign spec_value = tag | split: ':' | last | strip %}
+
+    {% unless spec_title == 'cups' %}
+      {% if spec_value == '0' %}
+        {% assign spec_value = 'false' %}
+      {% endif %}
+
+      {% if spec_value == '1' %}
+        {% assign spec_value = 'true' %}
+      {% endif %}
+    {% endunless %}
+
+    {% for icon in icon_array %}
+      {% assign item_tag = icon | split: '**' | first | downcase %}
+      {% assign icon_image = icon | split: '**' | last %}
+
+      {% if item_tag == spec_title and spec_value != 'false' %}
+        {% assign icon_list_true = icon_list_true
+          | append: item_tag
+          | append: '**'
+          | append: icon_image
+          | append: ','
+        %}
+      {% endif %}
+    {% endfor %}
+
+    {% if spec_title contains 'instructions' %}
+      {% assign instructions_link = tag | split: ':' | last | strip %}
+    {% endif %}
+
+    {% unless
+      spec_value == 'None' or
+      spec_value == spec_title or
+      icon_title_array contains spec_title or
+      spec_value == 'false'
+    %}
+      {% case spec_title %}
+        {% when 'code' %}
+          <li class="product-specifications__item">
+            <span class="product-specifications__title">
+              {{ 'products.product.specifications.code' | t }}:
+            </span>
+            <span class="product-specifications__value">{{ spec_value }}</span>
+          </li>
+
+        {% when 'cups' %}
+          {% if spec_value != 'None' %}
+            <li class="product-specifications__item">
+              <span class="product-specifications__title">
+                {{ 'products.product.specifications.cups' | t }}:
+              </span>
+              <span class="product-specifications__value">{{ spec_value }}</span>
+            </li>
+          {% endif %}
+
+        {% when 'capacity_cl' %}
+          {% if unit_pound == false %}
+            {% assign specs_list = specs_list
+              | append: tag
+              | append: ', '
+            %}
+          {% endif %}
+
+        {% when 'capacity_qt' %}
+          {% if unit_pound %}
+            {% assign specs_list = specs_list
+              | append: tag
+              | append: ', '
+            %}
+          {% endif %}
+
+        {% when 'diameter_cm' %}
+          {% if unit_pound == false %}
+            {% assign specs_list = specs_list
+              | append: tag
+              | append: ', '
+            %}
+          {% endif %}
+
+        {% when 'diameter_inch' %}
+          {% if unit_pound %}
+            {% assign specs_list = specs_list
+              | append: tag
+              | append: ', '
+            %}
+          {% endif %}
+
+        {% when 'height_cm' %}
+          {% if unit_pound == false %}
+            {% assign specs_list = specs_list
+              | append: tag
+              | append: ', '
+            %}
+          {% endif %}
+
+        {% when 'height_inch' %}
+          {% if unit_pound %}
+            {% assign specs_list = specs_list
+              | append: tag
+              | append: ', '
+            %}
+          {% endif %}
+
+        {% when 'length_cm' %}
+          {% if unit_pound == false %}
+            {% assign specs_list = specs_list
+              | append: tag
+              | append: ', '
+            %}
+          {% endif %}
+
+        {% when 'length_inch' %}
+          {% if unit_pound %}
+            {% assign specs_list = specs_list
+              | append: tag
+              | append: ', '
+            %}
+          {% endif %}
+
+        {% when 'width_cm' %}
+          {% if unit_pound == false %}
+            {% assign specs_list = specs_list
+              | append: tag
+              | append: ', '
+            %}
+          {% endif %}
+
+        {% when 'width_inch' %}
+          {% if unit_pound %}
+            {% assign specs_list = specs_list
+              | append: tag
+              | append: ', '
+            %}
+          {% endif %}
+
+        {% when 'dishwasher' %}
+          <li class="product-specifications__item">
+            <span class="product-specifications__title">
+              {{ 'products.product.specifications.dishwasher' | t }}:
+            </span>
+            <span class="product-specifications__value">{{ spec_value }}</span>
+          </li>
+
+        {% when 'fineserie' %}
+          <li class="product-specifications__item">
+            <span class="product-specifications__value">
+              {{ 'products.product.specifications.fineserie' | t }}:
+            </span>
+          </li>
+
+        {% when 'inductionhob' %}
+          <li class="product-specifications__item">
+            <span class="product-specifications__title">
+              {{ 'products.product.specifications.inductionhob' | t }}:
+            </span>
+            <span class="product-specifications__value">{{ spec_value }}</span>
+          </li>
+
+        {% when 'microwaveoven' %}
+          <li class="product-specifications__item">
+            <span class="product-specifications__title">
+              {{ 'products.product.specifications.microwaveoven' | t }}:
+            </span>
+            <span class="product-specifications__value">{{ spec_value }}</span>
+          </li>
+
+        {% when 'standardoven' %}
+          <li class="product-specifications__item">
+            <span class="product-specifications__title">
+              {{ 'products.product.specifications.standardoven' | t }}:
+            </span>
+            <span class="product-specifications__value">{{ spec_value }}</span>
+          </li>
+      {% endcase %}
+    {% endunless %}
+  {% endfor %}
+
+  {% comment %}
+  ------------------------------------------------------------------------------
+    Specification measures
+  ------------------------------------------------------------------------------
+  {% endcomment %}
+  {% assign specs_array = specs_list | split: ',' %}
+  {% for spec in specs_array %}
+    {% assign spec_title = spec | split: ':' | first | downcase | strip %}
+    {% assign spec_value = spec | split: ':' | last | strip %}
+    {% if spec_title != blank %}
+      {% capture translation %}products.product.specifications.{{spec_title}}{% endcapture %}
+
+      <li class="product-specifications__item">
+        <span class="product-specifications__title">
+          {{ translation | t }}:
+        </span>
+        <span class="product-specifications__value">{{ spec_value }}</span>
+      </li>
+    {% endif %}
+  {% endfor %}
+</ul>
+
+
+{% assign icon_list_array = icon_list_true | split: ',' | uniq %}
+
+<div class="product-specifications__bottom">
+  {% comment %}
+  ------------------------------------------------------------------------------
+    Specification icons
+  ------------------------------------------------------------------------------
+  {% endcomment %}
+
+  {% unless icon_list_array == blank %}
+    <ul class="product-specifications__icon-list">
+      {% for icon in icon_list_array %}
+        {% assign icon_tag = icon | split: '**' | first %}
+        {% assign text = 'products.product.specifications.' | append: icon_tag %}
+
+        {% assign image = icon | split: '**' | last %}
+        {% assign title  = text | t %}
+
+        <li class="product-specifications__icon-item">
+          <div class="product-specifications__icon-container">
+            <img class="product-specifications__icon-image" src="{{ image }}"/>
+          </div>
+
+          <span class="product-specifications__icon-title label">{{ title }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endunless %}
+
+  {% comment %}
+  ------------------------------------------------------------------------------
+    Download Instructions
+  ------------------------------------------------------------------------------
+  {% endcomment %}
+
+  {% if instructions_link != '' %}
+    <h2 class="subtitle-1">
+      {{ 'products.product.specifications.download_header' | t }}
+    </h2>
+    <a
+      class="product-specifications__download body-2"
+      href="{{ instructions_link }}"
+      target="_blank"
+    >
+      <span class="product-specifications__download_span">
+        {% render 'icon-misc' with icon: 'download' %}
+        {{ 'products.product.specifications.download_title' | t }}
+      </span>
+    </a>
+  {% endif %}
+</div>
+
+{% schema %}
+  {
+    "name": "Product Specifications",
+    "settings": [],
+    "blocks": [
+      {
+        "type": "icon",
+        "name": "Specification icon",
+        "settings": [
+          {
+            "type": "text",
+            "id": "tag",
+            "label": "Tag",
+            "info": "e.g. inductionHob"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Icon",
+            "info": "Recommended min dimensions: 100px (.png)"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

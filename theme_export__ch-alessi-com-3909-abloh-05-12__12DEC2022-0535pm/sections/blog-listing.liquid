@@ -1,0 +1,142 @@
+
+{% assign blog_articles = '' | split: '' %}
+
+{% if blog.handle == 'all' %}
+  {% for link in linklists[section.settings.menu].links %}
+    {% assign site_blog = link.object %}
+
+    {% assign blog_articles = blog_articles
+      | concat: site_blog.articles
+      | sort: "created_at"
+    %}
+  {% endfor %}
+{% endif %}
+
+<header class="template-blog__header">
+  <div class="container">
+    <div class="row">
+      <div class="col xs12">
+        <h1 class="template-blog__title d3">
+          {{ section.settings.title }}
+        </h1>
+
+        <nav class="template-blog__navigation">
+          {% for link in linklists[section.settings.menu].links %}
+            <a
+              class="template-blog__nav-item subtitle-1{%if link.active %} active{% endif %}"
+              href="{{ link.url }}"
+            >
+              {{- link.title -}}
+            </a>
+          {% endfor %}
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+{% comment %}
+------------------------------------------------------------------------------
+  Article previews
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{% if blog.handle == 'all' %}
+  {% for article in blog_articles %}
+    {% render 'post-listing-item'
+      with post: article,
+      post_type: 'article',
+      index: forloop.index,
+      paginate: paginate
+    %}
+
+    {% if forloop.index == 1 %}
+      <div class="container">
+    {% endif %}
+  {% endfor %}
+
+  </div>
+{% else %}
+  {% paginate blog.articles by 5 %}
+    {% for article in blog.articles %}
+      {% if forloop.index == 1 and paginate.current_page > 1 %}
+        <div class="container">
+      {% endif %}
+
+      {% render 'post-listing-item'
+        with post: article,
+        post_type: 'article',
+        index: forloop.index,
+        paginate: paginate
+      %}
+
+      {% if forloop.index == 1 and paginate.current_page == 1 %}
+        <div class="container">
+      {% endif %}
+    {% endfor %}
+    </div>
+
+    <div class="container">
+    {% if paginate.pages > 1 %}
+      <div class="row">
+        <div class="template-blog__pagination">
+          {% if paginate.prev %}
+            <a
+              class="template-blog__pagination-link"
+              href="{{ paginate.prev.url }}"
+            >
+              {% render 'icon-direction' with icon: 'chevron-left' %}
+
+              <div class="visually-hidden">
+                {{ 'blogs.pagination.prev' | t }}
+              </div>
+            </a>
+          {% else %}
+            {% render 'icon-direction' with icon: 'chevron-left' %}
+          {% endif %}
+
+          {{ paginate | default_pagination: next: '', previous: '' }}
+
+          {% if paginate.next %}
+            <a
+              class="template-blog__pagination-link"
+              href="{{ paginate.next.url }}"
+            >
+              {% render 'icon-direction' with icon: 'chevron-right' %}
+
+              <div class="visually-hidden">
+                {{ 'blogs.pagination.next' | t }}
+              </div>
+            </a>
+          {% else %}
+            {% render 'icon-direction' with icon: 'chevron-right' %}
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+    </div>
+  {% endpaginate %}
+{% endif %}
+
+{% schema %}
+  {
+    "name": "Blog Content",
+    "class": "blog-listing",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Page Title"
+      },
+      {
+        "type": "header",
+        "content": "Navigation"
+      },
+      {
+        "type": "link_list",
+        "id": "menu",
+        "label": "Menu"
+      }
+    ]
+  }
+{% endschema %}

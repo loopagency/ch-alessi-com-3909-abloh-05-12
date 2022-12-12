@@ -1,0 +1,93 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Bleed image text
+  - This section requires a block-bleed-image-text template.
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- render 'block-bleed-image-text' with block: section -%}
+
+{% schema %}
+  {
+    "name": "Bleed Image Text",
+    "class": "index-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Layout"
+      },
+      {
+        "type": "checkbox",
+        "id": "swap_order",
+        "label": "Swap Block Order",
+        "default": false,
+        "info": "Swap image and text order"
+      },
+      {
+        "type": "header",
+        "content": "Image"
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Left side image",
+        "info": "Recommended size 720 x 653"
+      },
+      {
+        "type": "image_picker",
+        "id": "image_mobile",
+        "label": "Left side image in mobile",
+        "info": "Recommended size 360 x 432"
+      },
+      {
+        "type": "header",
+        "content": "Text content"
+      },
+      {
+        "type": "text",
+        "id": "heading_text",
+        "label": "Subtitle",
+        "default": "Alessi"
+      },
+      {
+        "type": "text",
+        "id": "listing_text",
+        "label": "Listing text",
+        "default": "Lorem"
+      },
+      {
+        "type": "text",
+        "id": "designer_text",
+        "label": "Designer Text",
+        "default": "Alessi"
+      },
+      {
+        "type": "richtext",
+        "id": "description",
+        "label": "Description",
+        "default": "<p>Lorem</p>"
+      },
+      {
+        "type": "header",
+        "content": "CTA"
+      },
+      {
+        "type": "text",
+        "id": "cta_text",
+        "label": "CTA Label",
+        "default": "Discover"
+      },
+      {
+        "type": "url",
+        "id": "cta_link",
+        "label": "CTA Target link"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Bleed Image Text",
+        "category": "Custom Content Blocks"
+      }
+    ]
+  }
+{% endschema %}

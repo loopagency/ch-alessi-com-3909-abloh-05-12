@@ -1,0 +1,204 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Full bleed image video
+  - Can choose between using an image only or a video.
+  - The image will be used as a cover.
+  - Used to display a .mp4 or .mov file using HTML5 video.
+  - Reccommended to upload video in Shopify file CDN and use in video url field.
+------------------------------------------------------------------------------
+{% endcomment %}
+<div
+  id="FullBleedImageVideo-{{ section.id }}"
+  class="fullbleed-image-video"
+  data-section-id="{{ section.id }}"
+  data-section-type="fullbleed-image-video"
+  data-size="fullScreen"
+  js-fade-in="container"
+>
+
+  {% capture video_id %}video-{{ section.id }}{% endcapture %}
+
+  {% render 'image-video' with
+    vimeo_id: section.settings.video_vimeo_ID,
+    video_id: video_id,
+    video_hidden_mobile: section.settings.video_hide_mobile,
+    large_image: section.settings.large_image,
+    small_image: section.settings.small_image
+  %}
+
+  {% if section.settings.gradient == true %}
+    <div class="fullbleed-image-video__gradient"></div>
+  {% endif %}
+
+  {% if section.settings.link_box %}
+    <a
+      class="fullbleed-image-video__container"
+      href="{{ section.settings.call_to_action_link }}"
+      js-datalayer-promo="cta"
+    >
+  {% else %}
+    <div class="fullbleed-image-video__container">
+  {% endif %}
+
+    <div class="container fullbleed-image-video__content">
+      <div class="row">
+        <div class="col xs12 m6">
+          <h2
+            class="fullbleed-image-video__title d2"
+            style="color: {{ section.settings.text_color }}"
+            js-datalayer-promo="name"
+          >
+            {{ section.settings.title }}
+          </h2>
+
+          {% if section.settings.show_cta %}
+            {% if section.settings.link_box %}
+              <span
+                class="
+                  fullbleed-image-video__button button button--large
+                  {{ section.settings.call_to_action_theme }}
+                "
+                href="#"
+                js-datalayer-promo="cta"
+              >
+                {{ section.settings.button_text }}
+              </span>
+            {% else %}
+              <a
+                class="
+                  fullbleed-image-video__button button button--large
+                  {{ section.settings.call_to_action_theme }}
+                "
+                href="{{ section.settings.call_to_action_link }}"
+                js-datalayer-promo="cta"
+              >
+                {{ section.settings.button_text }}
+              </a>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+  {% if section.settings.link_box %}
+    </a>
+  {% else %}
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+  {
+    "name": "Full bleed Image/Video",
+    "class": "index-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Image",
+        "info": "Both images are required."
+      },
+      {
+        "type": "image_picker",
+        "id": "small_image",
+        "label": "Mobile image",
+        "info": "Recommended min dimensions: 340x270px (.jpg)"
+      },
+      {
+        "type": "image_picker",
+        "id": "large_image",
+        "label": "Desktop image",
+        "label": "Mobile image",
+        "info": "Recommended min dimensions: 2000x1280px (.jpg)"
+      },
+      {
+        "type": "checkbox",
+        "id": "gradient",
+        "label": "Show gradient",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Video",
+        "info": "Video will be autoplayed in the background on loop."
+      },
+      {
+        "type": "checkbox",
+        "id": "video_hide_mobile",
+        "label": "Hide video on mobile",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "video_vimeo_ID",
+        "label": "Vimeo video ID"
+      },
+      {
+        "type": "header",
+        "content": "Content",
+        "info": "Leave fields empty to hide."
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title",
+        "default": "Value proposition statement"
+      },
+      {
+        "type": "url",
+        "id": "call_to_action_link",
+        "label": "Link"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_cta",
+        "label": "Show CTA button",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "link_box",
+        "label": "Make whole box clickable",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "button_text",
+        "label": "Button text",
+        "default": "Learn more"
+      },
+      {
+        "type": "header",
+        "content": "Options",
+        "info": "Options to define styling of the content."
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text colour",
+        "default": "#000000"
+      },
+      {
+        "type": "select",
+        "id": "call_to_action_theme",
+        "label": "Button colour",
+        "options": [
+          {
+            "value": "button--primary button--dark",
+            "label": "Dark"
+          },
+          {
+            "value": "button--primary button--light",
+            "label": "Light"
+          }
+        ],
+        "default": "button--primary button--dark"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Full bleed Image/Video",
+        "category": "Image"
+      }
+    ]
+  }
+{% endschema %}

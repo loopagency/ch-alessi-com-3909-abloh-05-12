@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width,initial-scale=1" name="viewport">
+    <meta content="{{ settings.application_color }}" name="theme-color">
+
+    {% if settings.favicon != blank %}
+      {% render 'site-favicon' %}
+    {% endif %}
+
+    <meta content="noindex, nofollow" name="robots">
+
+    <title>{{ shop.name }} - Styleguide</title>
+
+    {% if page_description %}
+      <meta content="{{ page_description | escape }}" name="description">
+    {% endif %}
+
+    {% render 'theme-fonts' %}
+
+    {% render 'theme-scripts' %}
+    {% render 'theme-strings' %}
+
+    {{ content_for_header }}
+  </head>
+
+  <body id="Styleguide" class="template-styleguide">
+    <main id="MainContent">
+      {{ content_for_layout }}
+    </main>
+
+    {% if settings.enable_developer_mode %}
+      {% render 'frame-developer-mode' %}
+    {% endif %}
+
+    {% if settings.enable_redirect_modal or settings.enable_store_selector %}
+      {{ 'multi-store.config.js' | asset_url | script_tag }}
+    {% endif %}
+
+    {% if settings.enable_currency_converter %}
+      {{ 'multi-currency.config.js' | asset_url | script_tag }}
+    {% endif %}
+
+    {% render 'style-tags' with layout: 'styleguide' %}
+    {% render 'script-tags' with layout: 'styleguide' %}
+    {{ 'https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/css/flag-icon.min.css' | stylesheet_tag }}
+  </body>
+</html>

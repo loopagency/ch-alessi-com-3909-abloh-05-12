@@ -1,0 +1,16 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Favicon
+  - Generate supported favicon sizes.
+  - Will also set the application colour and name.
+------------------------------------------------------------------------------
+{% endcomment %}
+<link href="{{ settings.favicon | img_url: '72x' }}-72x72.png" rel="apple-touch-icon" sizes="72x72">
+<link href="{{ settings.favicon | img_url: '144x' }}-144x144.png" rel="apple-touch-icon" sizes="144x144">
+<link href="{{ settings.favicon | img_url: '196x' }}" sizes="196x196" rel="icon" type="image/png">
+<link href="{{ settings.favicon | img_url: '96x' }}" sizes="96x96" rel="icon" type="image/png">
+<link href="{{ settings.favicon | img_url: '32x' }}" sizes="32x32" rel="icon" type="image/png">
+<link href="{{ settings.favicon | img_url: '16x' }}" sizes="16x16" rel="icon" type="image/png">
+<meta content="{{ shop.name }}" name="application-name">
+<meta content="{{ settings.application_color }}" name="msapplication-TileColor">
+<meta content="{{ settings.favicon | img_url '144x' }}" name="msapplication-TileImage">

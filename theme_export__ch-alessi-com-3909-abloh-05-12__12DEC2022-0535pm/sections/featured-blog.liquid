@@ -1,0 +1,118 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Featured blog
+  - This section requires a blog object.
+------------------------------------------------------------------------------
+{% endcomment %}
+<section
+  class="featured-blog"
+  data-section-id="{{ section.id }}"
+  data-section-type="featured-blog"
+>
+  {% if section.settings.enable_section_container %}
+    <div class="container">
+      <div class="row">
+  {% endif %}
+
+  {% if section.settings.title != blank %}
+    <header class="featured-blog__header">
+      <h3 class="featured-blog__title">{{ section.settings.title | escape }}</h3>
+    </header>
+  {% endif %}
+
+  {% assign blog = blogs[section.settings.blog] %}
+
+  <div class="featured-blog__grid">
+    {% for article in blog.articles limit: section.settings.post_limit %}
+      <div class="featured-blog__item">
+        {% render 'article-card' with article: article %}
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if section.settings.show_view_all %}
+    <div class="text-center">
+      <a class="button button--primary button--dark" href="{{ blog.url }}">
+        {{ section.settings.call_to_action_text }}
+      </a>
+    </div>
+  {% endif %}
+
+  {% if section.settings.enable_section_container %}
+      </div>
+    </div>
+  {% endif %}
+</section>
+
+{% schema %}
+  {
+    "name": "Featured blog",
+    "class": "index-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Content"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title",
+        "default": "Featured blog"
+      },
+      {
+        "id": "blog",
+        "type": "blog",
+        "label": "Blog"
+      },
+      {
+        "type": "header",
+        "content": "Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_section_container",
+        "label": "Enable section container",
+        "info": "Wrap section inside a container.",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "post_limit",
+        "label": "Posts",
+        "default": "4",
+        "options": [
+          {
+            "value": "4",
+            "label": "4"
+          },
+          {
+            "value": "6",
+            "label": "6"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "show_view_all",
+        "label": "Show 'View all' button",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "call_to_action_text",
+        "label": "'View all' text",
+        "default": "View all"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Featured blog",
+        "category": "Blog",
+        "settings": {
+          "blog": "News",
+          "post_limit": "4"
+        }
+      }
+    ]
+  }
+{% endschema %}

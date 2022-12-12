@@ -1,0 +1,1147 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Custom Page Builder
+  - This is a required section for the Custom Page Builder tool.
+  - Add custom page builder block snippets to case statement Ln 20.
+  - Add custom page builder block schema to the scetion schema.
+  - Be sure to add the private app credentials to the schema.
+------------------------------------------------------------------------------
+{% endcomment %}
+{%- if request.design_mode -%}
+  {%- assign design_mode = true -%}
+{%- endif -%}
+
+{%- for block in section.blocks -%}
+  {%- case block.type -%}
+    {%- when 'example-block' -%}
+      {%- render 'example-block' with block: block -%}
+    {%- when 'image-video-hero' -%}
+      {%- render 'block-image-video-hero' with block: block -%}
+    {%- when 'text-callout' -%}
+      {%- render 'block-text-callout' with block: block -%}
+    {%- when '50-50' -%}
+      {%- render 'block-50-50' with block: block -%}
+    {%- when 'content-grid' -%}
+      {%- render 'block-content-grid' with block: block -%}
+    {%- when 'spacer' -%}
+      {%- render 'block-spacer' with block: block -%}
+    {%- when 'double-image' -%}
+      {%- render 'block-double-image' with block: block -%}
+    {%- when 'bleed-image-text' -%}
+      {%- render 'block-bleed-image-text' with block: block -%}
+    {%- when 'content-slider' -%}
+      {%- render 'block-content-slider' with block: block -%}
+
+  {%- endcase -%}
+{%- endfor -%}
+
+{%- assign all_block_settings_rte_string = '' -%}
+{%- for block in section.blocks -%}  
+  {%- capture block_settings -%}
+    {{ block.settings }}
+  {%- endcapture -%}
+
+  {%- assign block_settings_array = block_settings | replace: ' ', '' | replace: ',"', '##split##' | replace: '{', '' | replace: '}', '' | replace: '"', '' | split: '##split##' -%}
+  {%- assign block_settings_rte_string = "{" -%}
+
+  {%- for block_setting in block_settings_array -%}
+    {%- if block_setting != blank -%}
+      {%- assign block_setting_name = block_setting | split: '=>' | first | replace: ' ', '' | strip_newlines -%}
+      {%- assign block_setting_value = block.settings[block_setting_name] | replace: '"', "'" -%}
+      {%- assign block_settings_rte_string = block_settings_rte_string  | append: '"' | append: block_setting_name | append: '"=>"' | append: block_setting_value | append: '",' -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- assign size = block_settings_rte_string | size | minus: 1 -%}
+  {%- assign block_settings_rte_string = block_settings_rte_string | slice: 0, size | append: "}" -%}
+  {%- assign all_block_settings_rte_string = all_block_settings_rte_string | append: block.type | append: '==>' | append: block_settings_rte_string | append: '||' -%} 
+{%- endfor -%}
+
+{%- assign size = all_block_settings_rte_string | size | minus: 2 -%}
+{%- assign all_block_settings_rte_string = all_block_settings_rte_string | slice: 0, size | prepend: "<!--[[" | append: "]]-->" -%}
+
+{%- if design_mode == true -%}
+  <form js-design-mode-form="api_credentials">
+    <input type="hidden" name="api_credentials" js-design-mode-input="api_credentials" value="{{ section.settings.api_key }}:{{ section.settings.api_secret }}">
+    <textarea js-design-mode-form="schema" style="display: none;">{{ all_block_settings_rte_string }}</textarea>
+  </form>
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "Custom Page Builder",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Private App Credentials"
+      },
+      {
+        "type": "text",
+        "id": "api_key",
+        "label": "API Key"
+      },
+      {
+        "type": "text",
+        "id": "api_secret",
+        "label": "API Secret"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "image-video-hero",
+        "name": "Image/Video hero",
+        "settings": [
+          {
+            "type": "header",
+            "content": "Image",
+            "info": "Both images are required."
+          },
+          {
+            "type": "image_picker",
+            "id": "small_image",
+            "label": "Mobile image",
+            "info": "Recommended min dimensions: 340x270px (.jpg)"
+          },
+          {
+            "type": "image_picker",
+            "id": "large_image",
+            "label": "Desktop image",
+            "info": "Recommended min dimensions: 2000x1280px (.jpg)"
+          },
+          {
+            "type": "header",
+            "content": "Video",
+            "info": "Video will be autoplayed in the background on loop."
+          },
+          {
+            "type": "checkbox",
+            "id": "video_hide_mobile",
+            "label": "Hide video on mobile",
+            "default": false
+          },
+          {
+            "type": "text",
+            "id": "video_vimeo_ID",
+            "label": "Vimeo video ID"
+          },
+          {
+            "type": "header",
+            "content": "Content",
+            "info": "Leave fields empty to hide."
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Title"
+          },
+          {
+            "type": "text",
+            "id": "copy",
+            "label": "copy",
+            "default": "Subtitle"
+          },
+          {
+            "type": "header",
+            "content": "Options",
+            "info": "Options to define styling of the content."
+          },
+          {
+            "type": "select",
+            "id": "content_alignment",
+            "label": "Content alignment",
+            "default": "is-middle is-center",
+            "options": [
+              {
+                "label": "Top left",
+                "value": "is-top is-left"
+              },
+              {
+                "label": "Top center",
+                "value": "is-top is-center"
+              },
+              {
+                "label": "Top right",
+                "value": "is-top is-right"
+              },
+              {
+                "label": "Middle left",
+                "value": "is-middle is-left"
+              },
+              {
+                "label": "Middle center",
+                "value": "is-middle is-center"
+              },
+              {
+                "label": "Middle right",
+                "value": "is-middle is-right"
+              },
+              {
+                "label": "Bottom left",
+                "value": "is-bottom is-left"
+              },
+              {
+                "label": "Bottom center",
+                "value": "is-bottom is-center"
+              },
+              {
+                "label": "Bottom right",
+                "value": "is-center"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "text_alignment",
+            "label": "Text alignment",
+            "default": "is-center",
+            "options": [
+              {
+                "label": "Left",
+                "value": "is-left"
+              },
+              {
+                "label": "Center",
+                "value": "is-center"
+              },
+              {
+                "label": "Right",
+                "value": "is-right"
+              }
+            ]
+          },
+          {
+            "type": "color",
+            "id": "text_color",
+            "label": "Text colour",
+            "default": "#000000"
+          }
+        ]
+      },
+      {
+        "type":"text-callout",
+        "name": "Text Callout",
+        "settings": [
+          {
+            "type": "text",
+            "id": "text",
+            "label": "Text Callout",
+            "default": "Alessi has been descibed as The Dream Factory; our products are designed to provide people with the art and poetry that they seek"
+          },
+          {
+            "type": "text",
+            "id": "call_to_action_text",
+            "label": "CTA text",
+            "default": "Go to link"
+          },
+          {
+            "type": "url",
+            "id": "call_to_action_link",
+            "label": "CTA Link"
+          }
+        ]
+      },
+      {
+        "type":"50-50",
+        "name": "50-50 Box",
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "full_width",
+            "label": "Full Width Section",
+            "default": false
+          },
+          {
+            "type": "select",
+            "id": "content_align",
+            "label": "Content Position",
+            "options": [
+              {
+                "value": "left",
+                "label": "Left"
+              },
+              {
+                "value": "right",
+                "label": "Right"
+              }
+            ],
+            "default": "right"
+          },
+          {
+            "type": "header",
+            "content": "Image",
+            "info": "Both images are required."
+          },
+          {
+            "type": "image_picker",
+            "id": "small_image",
+            "label": "Mobile image",
+            "info": "Recommended min dimensions: 320x240px (.jpg)"
+          },
+          {
+            "type": "image_picker",
+            "id": "large_image",
+            "label": "Desktop image",
+            "info": "Recommended min dimensions: 2000x1280px (.jpg)"
+          },
+          {
+            "type": "header",
+            "content": "Video",
+            "info": "Video will be autoplayed in the background on loop."
+          },
+          {
+            "type": "checkbox",
+            "id": "video_hide_mobile",
+            "label": "Hide video on mobile",
+            "default": false
+          },
+          {
+            "type": "text",
+            "id": "video_vimeo_ID",
+            "label": "Vimeo video ID"
+          },
+          {
+            "type": "text",
+            "id": "video_youtube",
+            "label": "Youtube video ID"
+          },
+          {
+            "type": "select",
+            "id": "video_link",
+            "label": "Video Source",
+            "options": [
+              {
+                "value": "vimeo",
+                "label": "Vimeo"
+              },
+              {
+                "value": "youtube",
+                "label": "Youtube"
+              }
+            ],
+            "default": "vimeo"
+          },
+          {
+            "type": "text",
+            "id": "custom_width",
+            "label": "Custom Width",
+            "info": "Enter percentage with % symbol"
+          },
+          {
+            "type": "text",
+            "id": "custom_height",
+            "label": "Custom Height",
+            "info": "Enter percentage with % symbol"
+          },
+          {
+            "type": "text",
+            "id": "header",
+            "label": "Header",
+            "default": "Header"
+          },
+          {
+            "type": "richtext",
+            "id": "copy",
+            "label": "Copy",
+            "default": "<p>Alessi has been descibed as The Dream Factory; our products are designed to provide people with the art and poetry that they seek</p>"
+          },
+          {
+            "type": "url",
+            "id": "call_to_action_link",
+            "label": "Link"
+          },
+          {
+            "type": "select",
+            "id": "call_to_action_type",
+            "label": "Button Type",
+            "options": [
+              {
+                "value": "button--primary",
+                "label": "Primary"
+              },
+              {
+                "value": "button--secondary",
+                "label": "Secondary"
+              }
+            ],
+            "default": "button--primary"
+          },
+          {
+            "type": "select",
+            "id": "call_to_action_theme",
+            "label": "Button colour",
+            "options": [
+              {
+                "value": "button--dark",
+                "label": "Dark"
+              },
+              {
+                "value": "button--light",
+                "label": "Light"
+              }
+            ],
+            "default": "button--dark"
+          },
+          {
+            "type": "select",
+            "id": "button_size",
+            "label": "Button size",
+            "default": "button--large",
+            "options": [
+              {
+                "label": "Small",
+                "value": "button--small"
+              },
+              {
+                "label": "Medium",
+                "value": ""
+              },
+              {
+                "label": "Large",
+                "value": "button--large"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "id": "button_text",
+            "label": "Button text",
+            "default": "Learn more"
+          }
+        ]
+      },
+      {
+        "type": "content-grid",
+        "name": "Content Grid",
+        "settings": [
+          {
+            "type": "header",
+            "content": "Content"
+          },
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading",
+            "default": "Heading"
+          },
+          {
+            "type": "richtext",
+            "id": "copy",
+            "label": "Copy",
+            "default": "<p>Ogni mese verrà svelato un valore. Proin vulputate odio faucibus, dapibus nulla vel, consequat leo.</p><p>Vestibulum pellentesque pellentesque tellus fermentum pretium.</p>"
+          },
+          {
+            "type": "header",
+            "content": "Grid item 1"
+          },
+          {
+            "type": "image_picker",
+            "id": "grid_item_1",
+            "label": "Grid Image",
+            "info": "Recommended min dimensions: 340x270px (.jpg)"
+          },
+          {
+            "type": "text",
+            "id": "grid_item_1_title",
+            "label": "Image 1 Title",
+            "default": "title"
+          },
+          {
+            "type": "url",
+            "id": "grid_item_1_link",
+            "label": "Link to"
+          },
+          {
+            "type": "header",
+            "content": "Grid item 2"
+          },
+          {
+            "type": "image_picker",
+            "id": "grid_item_2",
+            "label": "Grid Image",
+            "info": "Recommended min dimensions: 340x270px (.jpg)"
+          },
+          {
+            "type": "text",
+            "id": "grid_item_2_title",
+            "label": "Image 2 Title",
+            "default": "title"
+          },
+          {
+            "type": "url",
+            "id": "grid_item_2_link",
+            "label": "Link to"
+          },
+          {
+            "type": "header",
+            "content": "Grid item 3"
+          },
+          {
+            "type": "image_picker",
+            "id": "grid_item_3",
+            "label": "Grid Image",
+            "info": "Recommended min dimensions: 340x270px (.jpg)"
+          },
+          {
+            "type": "text",
+            "id": "grid_item_3_title",
+            "label": "Image 3 Title",
+            "default": "title"
+          },
+          {
+            "type": "url",
+            "id": "grid_item_3_link",
+            "label": "Link to"
+          },
+          {
+            "type": "header",
+            "content": "Grid item 4"
+          },
+          {
+            "type": "image_picker",
+            "id": "grid_item_4",
+            "label": "Grid Image",
+            "info": "Recommended min dimensions: 340x270px (.jpg)"
+          },
+          {
+            "type": "text",
+            "id": "grid_item_4_title",
+            "label": "Image 4 Title",
+            "default": "title"
+          },
+          {
+            "type": "url",
+            "id": "grid_item_4_link",
+            "label": "Link to"
+          },
+          {
+            "type": "header",
+            "content": "Grid item 5"
+          },
+          {
+            "type": "image_picker",
+            "id": "grid_item_5",
+            "label": "Grid Image",
+            "info": "Recommended min dimensions: 340x270px (.jpg)"
+          },
+          {
+            "type": "text",
+            "id": "grid_item_5_title",
+            "label": "Image 5 Title",
+            "default": "title"
+          },
+          {
+            "type": "url",
+            "id": "grid_item_5_link",
+            "label": "Link to"
+          },
+          {
+            "type": "header",
+            "content": "Grid item 6"
+          },
+          {
+            "type": "image_picker",
+            "id": "grid_item_6",
+            "label": "Grid Image",
+            "info": "Recommended min dimensions: 340x270px (.jpg)"
+          },
+          {
+            "type": "text",
+            "id": "grid_item_6_title",
+            "label": "Image 6 Title",
+            "default": "title"
+          },
+          {
+            "type": "url",
+            "id": "grid_item_6_link",
+            "label": "Link to"
+          },
+          {
+            "type": "header",
+            "content": "Grid item 7"
+          },
+          {
+            "type": "image_picker",
+            "id": "grid_item_7",
+            "label": "Grid Image",
+            "info": "Recommended min dimensions: 340x270px (.jpg)"
+          },
+          {
+            "type": "text",
+            "id": "grid_item_7_title",
+            "label": "Image 7 Title",
+            "default": "title"
+          },
+          {
+            "type": "url",
+            "id": "grid_item_7_link",
+            "label": "Link to"
+          },
+          {
+            "type": "header",
+            "content": "Grid item 8"
+          },
+          {
+            "type": "image_picker",
+            "id": "grid_item_8",
+            "label": "Grid Image",
+            "info": "Recommended min dimensions: 340x270px (.jpg)"
+          },
+          {
+            "type": "text",
+            "id": "grid_item_8_title",
+            "label": "Image 8 Title",
+            "default": "title"
+          },
+          {
+            "type": "url",
+            "id": "grid_item_8_link",
+            "label": "Link to"
+          },
+          {
+            "type": "header",
+            "content": "Grid item 9"
+          },
+          {
+            "type": "image_picker",
+            "id": "grid_item_9",
+            "label": "Grid Image",
+            "info": "Recommended min dimensions: 340x270px (.jpg)"
+          },
+          {
+            "type": "text",
+            "id": "grid_item_9_title",
+            "label": "Image 9 Title",
+            "default": "title"
+          },
+          {
+            "type": "url",
+            "id": "grid_item_9_link",
+            "label": "Link to"
+          },
+          {
+            "type": "header",
+            "content": "Grid item 10"
+          },
+          {
+            "type": "image_picker",
+            "id": "grid_item_10",
+            "label": "Grid Image",
+            "info": "Recommended min dimensions: 340x270px (.jpg)"
+          },
+          {
+            "type": "text",
+            "id": "grid_item_10_title",
+            "label": "Image 10 Title",
+            "default": "title"
+          },
+          {
+            "type": "url",
+            "id": "grid_item_10_link",
+            "label": "Link to"
+          },
+          {
+            "type": "header",
+            "content": "Grid item 11"
+          },
+          {
+            "type": "image_picker",
+            "id": "grid_item_11",
+            "label": "Grid Image",
+            "info": "Recommended min dimensions: 340x270px (.jpg)"
+          },
+          {
+            "type": "text",
+            "id": "grid_item_11_title",
+            "label": "Image 11 Title",
+            "default": "title"
+          },
+          {
+            "type": "url",
+            "id": "grid_item_11_link",
+            "label": "Link to"
+          },
+          {
+            "type": "header",
+            "content": "Grid item 12"
+          },
+          {
+            "type": "image_picker",
+            "id": "grid_item_12",
+            "label": "Grid Image",
+            "info": "Recommended min dimensions: 340x270px (.jpg)"
+          },
+          {
+            "type": "text",
+            "id": "grid_item_12_title",
+            "label": "Image 12 Title",
+            "default": "title"
+          },
+          {
+            "type": "url",
+            "id": "grid_item_12_link",
+            "label": "Link to"
+          }
+        ]
+      },
+      {
+        "type": "spacer",
+        "name": "Spacer",
+        "settings": [
+          {
+            "type": "header",
+            "content": "Content"
+          },
+          {
+            "type": "range",
+            "id": "spacing_pixel",
+            "min": 0,
+            "max": 300,
+            "step": 4,
+            "unit": "px",
+            "label": "Spacing pixel",
+            "default": 0
+          },
+          {
+            "type": "range",
+            "id": "mobile_spacing_pixel",
+            "min": 0,
+            "max": 300,
+            "step": 4,
+            "unit": "px",
+            "label": "Spacing pixel in mobile",
+            "default": 0
+          }
+        ]
+      },
+      {
+        "type": "double-image",
+        "name": "Double Image",
+        "settings": [
+          {
+            "type": "header",
+            "content": "First Image Block"
+          },
+          {
+            "type": "image_picker",
+            "id": "image1",
+            "label": "First image",
+            "info": "Recommended size 720 x 653"
+          },
+          {
+            "type": "image_picker",
+            "id": "image1_mobile",
+            "label": "First image in mobile",
+            "info": "Recommended size 360 x 432"
+          },
+          {
+            "type": "text",
+            "id": "image1_subtitle",
+            "label": "Subtitle",
+            "default": "Alessi"
+          },
+          {
+            "type": "richtext",
+            "id": "image1_description",
+            "label": "Description",
+            "default": "<p>Lorem</p>"
+          },
+          {
+            "type": "header",
+            "content": "Second Image Block"
+          },
+          {
+            "type": "image_picker",
+            "id": "image2",
+            "label": "Second side image",
+            "info": "Recommended size 720 x 653"
+          },
+          {
+            "type": "image_picker",
+            "id": "image2_mobile",
+            "label": "Second image in mobile",
+            "info": "Recommended size 360 x 432"
+          },
+          {
+            "type": "text",
+            "id": "image2_subtitle",
+            "label": "Subtitle",
+            "default": "Alessi"
+          },
+          {
+            "type": "richtext",
+            "id": "image2_description",
+            "label": "Description",
+            "default": "<p>Lorem</p>"
+          }
+        ]
+      },
+      {
+        "type": "bleed-image-text",
+        "name": "Bleed Image Text",
+        "settings": [
+          {
+            "type": "header",
+            "content": "Layout"
+          },
+          {
+            "type": "checkbox",
+            "id": "swap_order",
+            "label": "Swap Block Order",
+            "default": false,
+            "info": "Swap image and text order"
+          },
+          {
+            "type": "header",
+            "content": "Image"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Left side image",
+            "info": "Recommended size 720 x 653"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_mobile",
+            "label": "Left side image in mobile",
+            "info": "Recommended size 360 x 432"
+          },
+          {
+            "type": "header",
+            "content": "Text content"
+          },
+          {
+            "type": "text",
+            "id": "heading_text",
+            "label": "Subtitle",
+            "default": "Alessi"
+          },
+          {
+            "type": "text",
+            "id": "listing_text",
+            "label": "Listing text",
+            "default": "Lorem"
+          },
+          {
+            "type": "text",
+            "id": "designer_text",
+            "label": "Designer Text",
+            "default": "Alessi"
+          },
+          {
+            "type": "richtext",
+            "id": "description",
+            "label": "Description",
+            "default": "<p>Lorem</p>"
+          },
+          {
+            "type": "header",
+            "content": "CTA"
+          },
+          {
+            "type": "text",
+            "id": "cta_text",
+            "label": "CTA Label",
+            "default": "Discover"
+          },
+          {
+            "type": "url",
+            "id": "cta_link",
+            "label": "CTA Target link"
+          }
+        ]
+      },
+      {
+        "type": "content-slider",
+        "name": "Content Slider",
+        "settings": [
+          {
+            "type": "header",
+            "content": "Header"
+          },
+          {
+            "type": "text",
+            "id": "slider_heading",
+            "label": "Slider Heading",
+            "default": "Lorem"
+          },
+          {
+            "type": "header",
+            "content": "Card 1"
+          },
+          {
+            "type": "image_picker",
+            "id": "card1_image",
+            "label": "Card 1 - Image",
+            "info": "Recommended size 320 x 400"
+          },
+          {
+            "type": "text",
+            "id": "card1_title",
+            "label": "Card 1 - Title",
+            "default": "Alessi"
+          },
+          {
+            "type": "url",
+            "id": "card1_link",
+            "label": "Card 1 - Link destination"
+          },
+          {
+            "type": "header",
+            "content": "Card 2"
+          },
+          {
+            "type": "image_picker",
+            "id": "card2_image",
+            "label": "Card 2 - Image",
+            "info": "Recommended size 320 x 400"
+          },
+          {
+            "type": "text",
+            "id": "card2_title",
+            "label": "Card 2 - Title",
+            "default": "Alessi"
+          },
+          {
+            "type": "url",
+            "id": "card2_link",
+            "label": "Card 2 - Link destination"
+          },
+          {
+            "type": "header",
+            "content": "Card 3"
+          },
+          {
+            "type": "image_picker",
+            "id": "card3_image",
+            "label": "Card 3 - Image",
+            "info": "Recommended size 320 x 400"
+          },
+          {
+            "type": "text",
+            "id": "card3_title",
+            "label": "Card 3 - Title",
+            "default": "Alessi"
+          },
+          {
+            "type": "url",
+            "id": "card3_link",
+            "label": "Card 3 - Link destination"
+          },
+          {
+            "type": "header",
+            "content": "Card 4"
+          },
+          {
+            "type": "image_picker",
+            "id": "card4_image",
+            "label": "Card 4 - Image",
+            "info": "Recommended size 320 x 400"
+          },
+          {
+            "type": "text",
+            "id": "card4_title",
+            "label": "Card 4 - Title",
+            "default": "Alessi"
+          },
+          {
+            "type": "url",
+            "id": "card4_link",
+            "label": "Card 4 - Link destination"
+          },
+          {
+            "type": "header",
+            "content": "Card 5"
+          },
+          {
+            "type": "image_picker",
+            "id": "card5_image",
+            "label": "Card 5 - Image",
+            "info": "Recommended size 320 x 400"
+          },
+          {
+            "type": "text",
+            "id": "card5_title",
+            "label": "Card 5 - Title",
+            "default": "Alessi"
+          },
+          {
+            "type": "url",
+            "id": "card5_link",
+            "label": "Card 5 - Link destination"
+          },
+          {
+            "type": "header",
+            "content": "Card 6"
+          },
+          {
+            "type": "image_picker",
+            "id": "card6_image",
+            "label": "Card 6 - Image",
+            "info": "Recommended size 320 x 400"
+          },
+          {
+            "type": "text",
+            "id": "card6_title",
+            "label": "Card 6 - Title",
+            "default": "Alessi"
+          },
+          {
+            "type": "url",
+            "id": "card6_link",
+            "label": "Card 6 - Link destination"
+          },
+          {
+            "type": "header",
+            "content": "Card 7"
+          },
+          {
+            "type": "image_picker",
+            "id": "card7_image",
+            "label": "Card 7 - Image",
+            "info": "Recommended size 320 x 400"
+          },
+          {
+            "type": "text",
+            "id": "card7_title",
+            "label": "Card 7 - Title",
+            "default": "Alessi"
+          },
+          {
+            "type": "url",
+            "id": "card7_link",
+            "label": "Card 7 - Link destination"
+          },
+          {
+            "type": "header",
+            "content": "Card 8"
+          },
+          {
+            "type": "image_picker",
+            "id": "card8_image",
+            "label": "Card 8 - Image",
+            "info": "Recommended size 320 x 400"
+          },
+          {
+            "type": "text",
+            "id": "card8_title",
+            "label": "Card 8 - Title",
+            "default": "Alessi"
+          },
+          {
+            "type": "url",
+            "id": "card8_link",
+            "label": "Card 8 - Link destination"
+          },
+          {
+            "type": "header",
+            "content": "Card 9"
+          },
+          {
+            "type": "image_picker",
+            "id": "card9_image",
+            "label": "Card 9 - Image",
+            "info": "Recommended size 320 x 400"
+          },
+          {
+            "type": "text",
+            "id": "card9_title",
+            "label": "Card 9 - Title",
+            "default": "Alessi"
+          },
+          {
+            "type": "url",
+            "id": "card9_link",
+            "label": "Card 9 - Link destination"
+          },
+          {
+            "type": "header",
+            "content": "Card 10"
+          },
+          {
+            "type": "image_picker",
+            "id": "card10_image",
+            "label": "Card 10 - Image",
+            "info": "Recommended size 320 x 400"
+          },
+          {
+            "type": "text",
+            "id": "card10_title",
+            "label": "Card 10 - Title",
+            "default": "Alessi"
+          },
+          {
+            "type": "url",
+            "id": "card10_link",
+            "label": "Card 10 - Link destination"
+          },
+          {
+            "type": "header",
+            "content": "Card 11"
+          },
+          {
+            "type": "image_picker",
+            "id": "card11_image",
+            "label": "Card 11 - Image",
+            "info": "Recommended size 320 x 400"
+          },
+          {
+            "type": "text",
+            "id": "card11_title",
+            "label": "Card 11 - Title",
+            "default": "Alessi"
+          },
+          {
+            "type": "url",
+            "id": "card11_link",
+            "label": "Card 11 - Link destination"
+          },
+          {
+            "type": "header",
+            "content": "Card 12"
+          },
+          {
+            "type": "image_picker",
+            "id": "card12_image",
+            "label": "Card 12 - Image",
+            "info": "Recommended size 320 x 400"
+          },
+          {
+            "type": "text",
+            "id": "card12_title",
+            "label": "Card 12 - Title",
+            "default": "Alessi"
+          },
+          {
+            "type": "url",
+            "id": "card12_link",
+            "label": "Card 12 - Link destination"
+          }
+        ]
+      },
+      {
+        "type": "example-block",
+        "name": "Example",
+        "settings": [
+          {
+            "type": "header",
+            "content": "Content"
+          },
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading",
+            "default": "Heading"
+          },
+          {
+            "type": "text",
+            "id": "paragraph",
+            "label": "Paragraph",
+            "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. "
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

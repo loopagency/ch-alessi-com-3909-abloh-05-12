@@ -1,0 +1,150 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Account order list
+  - Order list displayed on account pages.
+----------------------------------------------------------------------------
+{% endcomment %}
+<div class="panel panel--order-list order-table">
+  <h2 class="h3 order-table__heading">
+    {{ 'customer.orders.title' | t }}
+  </h2>
+
+  {% paginate customer.orders by 20 %}
+    {% if customer.orders.size != 0 %}
+      <div class="order-table__header">
+        <div class="row">
+          <div class="col xs2">
+            <div class="caption">
+              {{ 'customer.orders.order_number' | t }}
+            </div>
+          </div>
+
+          <div class="col xs2">
+            <div class="caption">
+              {{ 'customer.orders.date' | t }}
+            </div>
+          </div>
+
+          <div class="col xs2">
+            <div class="caption">
+              {{ 'customer.orders.total' | t }}
+            </div>
+          </div>
+
+          <div class="col xs2">
+            <div class="caption">
+              {{ 'customer.orders.payment_status' | t }}
+            </div>
+          </div>
+
+          <div class="col xs2">
+            <div class="caption">
+              {{ 'customer.orders.fulfillment_status' | t }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% for order in customer.orders %}
+        <div class="order-table__row">
+          <div class="row">
+            <div
+              class="order-table__col col xs6 m2"
+              data-label="{{ 'customer.orders.order_number' | t }}"
+            >
+              <div class="order-table__wrapper">
+                <div class="order-table__label caption">
+                  {{ 'customer.orders.order_number' | t }}
+                </div>
+
+                <span class="body-2">
+                  {{ order.name | link_to: order.customer_url }}
+                </span>
+              </div>
+            </div>
+
+            <div
+              class="order-table__col col xs6 m2"
+              data-label="{{ 'customer.orders.date' | t }}"
+            >
+              <div class="order-table__wrapper">
+                <div class="order-table__label caption">
+                  {{ 'customer.orders.order_number' | t }}
+                </div>
+
+                <span class="body-2">
+                  {{ order.created_at | date: format: 'month_day_year' }}
+                </span>
+              </div>
+            </div>
+
+            <div
+              class="order-table__col col xs6 m2"
+              data-label="{{ 'customer.orders.total' | t }}"
+            >
+              <div class="order-table__wrapper">
+                <div class="order-table__label caption">
+                  {{ 'customer.orders.total' | t }}
+                </div>
+
+                <span class="body-2">
+                  {{ order.total_price | money | remove: '.00' }}
+                </span>
+              </div>
+            </div>
+
+            <div
+              class="order-table__col col xs6 m2"
+              data-label="{{ 'customer.orders.payment_status' | t }}"
+            >
+              <div class="order-table__wrapper">
+                <div class="order-table__label caption">
+                  {{ 'customer.orders.payment_status' | t }}
+                </div>
+
+                <span class="body-2">
+                  {{ order.financial_status_label }}
+                </span>
+              </div>
+            </div>
+
+            <div
+              class="order-table__col col xs6 m2"
+              data-label="{{ 'customer.orders.fulfillment_status' | t }}"
+            >
+              <div class="order-table__wrapper">
+                <div class="order-table__label caption">
+                  {{ 'customer.orders.fulfillment_status' | t }}
+                </div>
+
+                <span class="body-2">
+                  {{ order.fulfillment_status_label }}
+                </span>
+              </div>
+            </div>
+
+            <div class="order-table__col col xs6 m2 text-right">
+              <div class="order-table__wrapper">
+                <a
+                  href="{{ order.customer_url }}"
+                  class="panel__link"
+                >
+                  {{ 'customer.orders.view_order' | t }}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+
+    {% else %}
+      <p class="color--primary">
+        {{ 'customer.orders.none' | t }}
+      </p>
+    {% endif %}
+
+    {% if paginate.pages > 1 %}
+      {% render 'pagination' with paginate: paginate %}
+    {% endif %}
+  {% endpaginate %}
+</div>

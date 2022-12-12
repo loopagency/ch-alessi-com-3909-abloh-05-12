@@ -1,0 +1,63 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Suggested auto-redirect modal
+------------------------------------------------------------------------------
+{% endcomment %}
+<div
+  class="modal__card redirect-modal__card"
+  tabindex="0"
+  js-modal="card"
+  js-redirect-modal="choiceContainer"
+>
+  <div class="redirect-modal__header">
+    <div class="container">
+      <h3 class="redirect-modal__title h4">
+        {{ 'redirect.modal.choice.title' | t }}
+      </h3>
+
+      <p class="redirect-modal__lead body-2">
+        {{ 'redirect.modal.choice.text' | t | newline_to_br }}
+      </p>
+
+      <button class="redirect-modal__close button" js-redirect-modal="close">
+        {% render 'icon-misc' with icon: 'close' %}
+      </button>
+    </div>
+  </div>
+
+  <div class="redirect-modal__body">
+    <div class="container">
+      <div class="row no-margin">
+        <div class="col xs12">
+          <a
+            class="redirect-modal__country-button button button--primary button--dark"
+            href="%redirect_store_url%"
+            rel="nofollow"
+            data-current-store-code="{{ settings.store_code | downcase }}"
+            data-redirect-store-code="%redirect_store_code%"
+            js-redirect-modal="redirectLink"
+          >
+            {{ 'redirect.modal.choice.redirect' | t }}
+          </a>
+
+          <button
+            class="redirect-modal__country-button button button--primary button--dark"
+            data-micromodal-close
+            js-redirect-modal="choiceContinue"
+          >
+            {{ 'redirect.modal.choice.continue' | t }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="redirect-modal__footer background--medium">
+    <button
+      class="button button--secondary button--dark button--block"
+      js-redirect-modal="settingsButton"
+    >
+        {{ 'redirect.modal.settings.label' | t }}
+    </button>
+  </div>
+</div>

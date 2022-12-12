@@ -1,0 +1,136 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Newsletter callout
+
+  It is available under Site Footer section settings.
+
+  Theme Store required settings
+  - Heading: title of the newsletter section
+  - subtitle: description of the newsletter section
+------------------------------------------------------------------------------
+{% endcomment %}
+<div class="newsletter-callout">
+  {% if
+    section.settings.esp_title != blank or
+    section.settings.esp_subtitle != blank
+  %}
+    <div class="newsletter-callout__header">
+      {% if section.settings.esp_title != blank %}
+        <h2 class="newsletter-callout__title h4" for="Email">
+          {{ section.settings.esp_title | escape }}
+        </h2>
+      {% endif %}
+
+      {% if section.settings.esp_subtitle != blank %}
+        <p class="newsletter-callout__subtitle">
+          {{ section.settings.esp_subtitle }}
+        </p>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <div class="newsletter-callout__form">
+
+    <form
+      id="NewsletterCallout"
+      class="klaviyo_gdpr_embed_{{ settings.esp_form_list_id }}"
+      action="//manage.kmail-lists.com/subscriptions/subscribe"
+      data-ajax-submit="//manage.kmail-lists.com/ajax/subscriptions/subscribe"
+      method="GET"
+      target="_blank"
+      novalidate="novalidate"
+    >
+      <div
+      class="
+        newsletter-callout__input-group
+        input-group
+        klaviyo_form_actions"
+      >
+        <input type="hidden" name="g" value="{{ settings.esp_form_list_id }}">
+        <input type="hidden" name="$fields" value="$consent">
+        <input type="hidden" name="$list_fields" value="$consent">
+
+        <div class="newsletter-callout__field input-group__control">
+          <input
+            id="k_id_email"
+            class="newsletter-callout__input"
+            autocapitalize="off"
+            autocorrect="off"
+            name="email"
+            placeholder="{{ 'general.newsletter_form.label' | t }}"
+            type="email"
+            value="
+              {% if customer.email != blank %}
+                {{ customer.email }}
+              {% endif %}
+            "
+          />
+
+          <label
+            class="newsletter-callout__label caption"
+            for="k_id_email"
+          >
+            {{ 'general.newsletter_form.label' | t }}
+          </label>
+        </div>
+
+        <div class="input-group__addon">
+          <button
+            class="newsletter-callout__submit button button--dark button--secondary"
+            disabled="true"
+            type="submit"
+            js-newsletter-callout="submit"
+          >
+            <span class="visually-hidden">
+              {{ 'general.newsletter_form.submit' | t }}
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <div class="newsletter-modal__checkbox checkbox__container klaviyo_form_actions">
+        <input
+          id="acceptsMarketing"
+          class="checkbox__input"
+          name="acceptsMarketing"
+          required
+          type="checkbox"
+          value="new"
+          aria-checked="false"
+          js-newsletter-callout="consent"
+        >
+        <label
+          for="acceptsMarketing"
+          class="caption checkbox__label newsletter-callout__checkbox-label"
+        >
+          {{ 'general.newsletter_form.accepts_marketing_html' | t }}
+        </label>
+      </div>
+
+      <div class="klaviyo_messages">
+        <div
+          class="success_message newsletter-modal__confirmation"
+          style="display:none;"
+        ></div>
+        <div class="error_message" style="display:none;"></div>
+      </div>
+    </form>
+
+    <script type="text/javascript" src="//www.klaviyo.com/media/js/public/klaviyo_subscribe.js"></script>
+    <script type="text/javascript">
+      KlaviyoSubscribe.attachToForms('#NewsletterCallout', {
+        hide_form_on_success: true,
+        success_message: '{{ 'general.newsletter_form.confirmation' | t }}',
+        success: function() {
+          dataLayer.push({
+            'event': 'GAevent',
+            'eventID': '05',
+            'eventCategory': 'newsletter',
+            'eventAction': 'newsletter_subscribe',
+            'eventLabel': 'footer'
+          });
+        }
+      });
+    </script>
+  </div>
+</div>

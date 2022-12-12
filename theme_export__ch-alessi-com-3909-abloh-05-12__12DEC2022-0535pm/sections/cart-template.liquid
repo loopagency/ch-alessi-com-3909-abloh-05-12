@@ -1,0 +1,319 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Cart template
+
+  Fatures: information tooltip settings.
+------------------------------------------------------------------------------
+{% endcomment %}
+{% if settings.enable_cart_addon and settings.cart_addon_product != '' %}
+  {% assign cart_has_add_on = false %}
+  {% assign has_large_item = false %}
+  {% assign large_item_count = 0 %}
+  {% assign cart_item_counter = 0 %}
+
+  {% for item in cart.items %}
+    {% assign product_type = item.product.type | handleize %}
+
+    {% if product_type == 'add-on'  %}
+      {% assign cart_has_add_on = true %}
+    {% endif %}
+
+    {% if item.properties._large_item == 'true' %}
+      {% assign has_large_item = true %}
+      {% assign large_item_count = large_item_count | plus: 1 %}
+    {% endif %}
+
+    {% unless item.product.type == 'add-on' %}
+      {% assign cart_item_counter = cart_item_counter | plus: item.quantity %}
+    {% endunless %}
+  {% endfor %}
+{% endif %}
+
+<div class="template-cart__body">
+  <div class="template-cart__container" js-cart="container">
+    {% if cart.item_count > 0 %}
+      <form
+        action="/checkout"
+        method="post"
+        novalidate
+        data-cy="cartForm"
+      >
+        <div class="container container--right">
+          <div class="template-cart__row row">
+            <div class="template-cart__form-content col xs12 l7">
+              <div class="template-cart__panel">
+                <h1 class="template-cart__title">
+                  {{ 'cart.general.title' | t }}
+
+                  <span class="ajax-cart__count subtitle-1">
+                    &#40;
+                    <span js-ajax-cart="cartCounter">
+                      {{ cart_item_counter }}
+                    </span>
+                    &#41;
+                  </span>
+                </h1>
+
+                {% render 'cart-table' %}
+
+                <a
+                  class="template-cart__shop button button--secondary button--dark"
+                  href="{{ section.settings.continue_shopping_url }}"
+                >
+                  {{ 'cart.general.continue_shopping' | t }}
+                </a>
+              </div>
+            </div>
+
+            <div class="template-cart__form-footer col xs12 l5">
+              <div class="template-cart__panel" js-cart="panel">
+                <div class="row no-gutter">
+                  <div class="col xs12">
+                    <h2 class="template-cart__subtitle h1">
+                      {{ 'cart.general.total' | t }}
+                    </h2>
+                  </div>
+                </div>
+
+                {% if settings.enable_cart_addon and settings.cart_addon_product != blank %}
+                  <div class="row no-gutter no-margin">
+                    <div class="col xs12">
+                      <div class="cart-table__add-on">
+                        {% render 'cart-add-on' with
+                          is_active: cart_has_add_on,
+                          type: 'checkbox'
+                          cart: cart,
+                          large_item_count: large_item_count,
+                          has_large_item: has_large_item,
+
+                        %}
+
+                        {% if settings.enable_free_gift %}
+                          {% render 'cart-gift-item' %}
+                        {% endif %}
+
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+
+                <div class="row no-gutter no-margin cart-table__line-item">
+                  <div class="col xs5">
+                    <span class="cart-table__label body-2">
+                      {{ 'cart.general.subtotal' | t | append: ':' }}
+                    </span>
+                  </div>
+
+                  <div class="col xs7 text-right">
+                    <span
+                      class="cart-table__meta body-2"
+                      data-price="{{ cart.total_price }}"
+                      js-cart-table="subtotal"
+                      js-currency="price"
+                    >
+                      {{ cart.total_price | money }}
+                    </span>
+                  </div>
+                </div>
+
+                {% render 'cart-add-on' with
+                  is_active: cart_has_add_on,
+                  type: 'line-item'
+                %}
+
+                <div
+                  class="
+                    row
+                    no-gutter
+                    {% if settings.enable_cart_addon_message %}
+                      no-margin
+                    {% endif %}
+                  "
+                >
+                  <div class="col xs12">
+                    <span class="cart-table__shipping caption">
+                      {{ 'cart.general.shipping_at_checkout' | t }}
+                    </span>
+                  </div>
+                </div>
+
+                {% render 'cart-add-on' with
+                  is_active: cart_has_add_on,
+                  type: 'message'
+                %}
+
+                <div class="row no-gutter">
+                  <div class="col xs12">
+                    <div class="cart-table__overview-footer">
+                      <div class="cart-table__total">
+                        <span class="subtitle-1">
+                          {{ 'cart.general.total' | t | append: ':' }}
+                        </span>
+
+                        <span
+                          class="color--brand subtitle-1"
+                          data-price="{{ cart.total_price }}"
+                          js-cart-table="total"
+                          js-currency="price"
+                        >
+                          {{ cart.total_price | money }}
+                        </span>
+                      </div>
+
+                      <div class="cart-table__checkout-button">
+                        <button
+                          class="button button--primary button--dark button--block button--large"
+                          name="checkout"
+                          type="submit"
+                          value="{{ 'cart.general.checkout' | t }}"
+                          data-cy="cartCheckout"
+                          js-cart-table="submit"
+                        >
+                        {{ 'cart.general.checkout' | t }}
+                        </button>
+                      </div>
+                      {% if settings.klarna_show_cart == true %}
+                        {% render 'klarna-message' %}
+                      {% endif %}
+
+                      {% if settings.enable_free_shipping_notification-cart %}
+                        {% render 'free-shipping-notification' with class: 'cart-table' %}
+                      {% endif %}
+
+                      <div class="cart-table__footnote">
+                        <button
+                          class="cart-table__footnote-button caption"
+                          type="button"
+                          data-trigger="delivery"
+                          js-cart-table="footnote"
+                        >
+                          {% render 'icon-misc' with icon: 'delivery' %}
+
+                          <span>{{ 'cart.label.delivery' | t }}</span>
+                        </button>
+
+                        <button
+                          class="cart-table__footnote-button caption"
+                          type="button"
+                          data-trigger="help"
+                          js-cart-table="footnote"
+                        >
+                          {% render 'icon-misc' with icon: 'information' %}
+                          <span>{{ 'cart.label.help' | t }}</span>
+                        </button>
+                      </div>
+
+                      <div class="cart-table__tooltip" js-cart-table="tooltip">
+                        <button
+                          class="cart-table__tooltip-close"
+                          type="button"
+                          js-cart-table="tooltipClose"
+                        >
+                          {% render 'icon-misc' with icon: 'close' %}
+
+                          <span class="visually-hidden">
+                            {{ 'general.accessibility.close' | t }}
+                          </span>
+                        </button>
+
+                        <div
+                          class="cart-table__tooltip-content"
+                          data-content="delivery"
+                          js-cart-table="footnoteContent"
+                        >
+                          <h3 class="subtitle-2">
+                            {{ 'cart.label.delivery' | t }}
+                          </h3>
+
+                          {{ section.settings.delivery_info
+                            | replace: '<p', '<p class="caption"'
+                          }}
+                        </div>
+
+                        <div
+                          class="cart-table__tooltip-content"
+                          data-content="help"
+                          js-cart-table="footnoteContent"
+                        >
+                          <h3 class="subtitle-2">
+                            {{ 'cart.label.help' | t }}
+                          </h3>
+
+                          {{ section.settings.help_info
+                            | replace: '<p', '<p class="caption"'
+                          }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+    {% comment %}
+    ----------------------------------------------------------------------------
+      Empty cart
+    ----------------------------------------------------------------------------
+    {% endcomment %}
+    {% else %}
+      <div class="container">
+        <div class="row">
+          <div class="col xs12 m6 offset-m3 text-center">
+            <h1 class="template-cart__empty-title">
+              {{ 'cart.general.title' | t }}
+            </h1>
+
+            <p class="template-cart__empty-text">
+              {{ 'cart.general.empty' | t }}
+            </p>
+
+            <a
+              class="
+                template-cart__empty-button
+                button
+                button--primary button--dark
+                button--large
+              "
+              href="{{ section.settings.continue_shopping_url }}"
+            >
+              {{ 'cart.general.continue_browsing' | t }}
+            </a>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% render 'cart-add-on-modal' %}
+
+{% schema %}
+  {
+    "name": "Cart template",
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "delivery_info",
+        "label": "Delivery information",
+        "default": "<p>If you are not satisfied you have 60 days from the date of receipt of the order to make the return</p>",
+        "info": "Displayed as a footenote tooltip on the cart template"
+      },
+      {
+        "type": "richtext",
+        "id": "help_info",
+        "label": "Help information",
+        "default": "<p>Our customer support team is active by phone from 9:00 to 13:00 and from 14:00 to 18:00 from Monday to Friday</p>",
+        "info": "Displayed as a footenote tooltip on the cart template"
+      },
+      {
+        "type": "url",
+        "id": "continue_shopping_url",
+        "label": "Continue Shopping URL",
+        "info": "Link to add to the \"Continue Shopping\" CTA"
+      }
+    ]
+  }
+{% endschema %}

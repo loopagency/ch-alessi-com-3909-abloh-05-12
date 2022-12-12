@@ -1,0 +1,20 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Cookie Banner
+------------------------------------------------------------------------------
+{% endcomment %}
+<div
+  class="cookie-banner cookie-banner--primary critical-hide"
+  js-cookie-banner="container"
+>
+  <div class="container cookie-banner__container">
+    <p class="cookie-banner__text subtitle-2">
+      {{ 'layout.cookie_banner.message_html' | t }}
+    </p>
+
+    <button class="cookie-banner__close" js-cookie-banner="close">
+      <span class="visually-hidden">{{ 'general.accessibility.close' | t }}</span>
+      {% render 'icon-misc' with icon: 'close' %}
+    </button>
+  </div>
+</div>

@@ -1,0 +1,406 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Video hero
+  - Used to display a .mp4 or .mov file using HTML5 video.
+  - Reccommended to upload video in Shopify file CDN and use in video url field.
+------------------------------------------------------------------------------
+{% endcomment %}
+<div
+  id="VideoHero-{{ section.id }}"
+  class="video-hero"
+  data-section-id="{{ section.id }}"
+  data-section-type="video-hero"
+>
+  <div class="video-hero__player">
+    <video
+      class="video-hero__video"
+      autoplay="1"
+      loop="1"
+      muted="1"
+      playsinline="1"
+      poster="{{ section.settings.video_poster | img_url: '1920x' }}"
+      preload="1"
+      js-video-hero="video"
+    >
+      <source src="{{ section.settings.video_url }}" type="video/mp4">
+
+      <track
+        default
+        kind="captions"
+        label="{{ section.settings.caption_label }} caption"
+        src="{{ section.settings.caption_url }}"
+        srclang="{{ section.settings.caption_src_language }}"
+      >
+
+      <track
+        default
+        kind="descriptions"
+        label="{{ section.settings.description_label }} description"
+        src="{{ section.settings.caption_url }}"
+        srclang="{{ section.settings.description_src_language }}"
+      >
+    </video>
+  </div>
+
+  <div class="video-hero__container {{ section.settings.content_alignment }}">
+    <div class="video-hero__content {{ section.settings.text_alignment }}">
+      <h2
+        class="video-hero__title d1"
+        style="color: {{ section.settings.text_color }}"
+      >
+        {{ section.settings.title }}
+      </h2>
+
+      {% if section.settings.call_to_action_link %}
+        <a
+          class="
+            video-hero__button button
+            {{ section.settings.call_to_action_theme }}
+            {{ section.settings.button_size }}
+          "
+          href="#"
+        >
+          {{ section.settings.button_text }}
+        </a>
+      {% endif %}
+    </div>
+
+    {% if section.settings.enable_video_controls %}
+      <div class="video-hero__controls" js-video-hero="controls">
+        <button
+          class="video-hero__control is-hidden"
+          aria-label="Play video"
+          tabindex="-1"
+          js-video-hero="play"
+        >
+          {% render 'icon-media' with icon: 'play' %}
+        </button>
+
+        <button
+          class="video-hero__control"
+          aria-label="Pause video"
+          tabindex="0"
+          js-video-hero="pause"
+        >
+          {% render 'icon-media' with icon: 'pause' %}
+        </button>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Video hero",
+    "class": "index-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Video",
+        "info": "Video will be autoplayed in the background on loop."
+      },
+      {
+        "type": "text",
+        "id": "video_url",
+        "label": "URL",
+        "default": "#",
+        "info": "Required: CDN to .mov or .mp4"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_video_controls",
+        "label": "Show video controls",
+        "info": "Show media buttons for AA support.",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Caption",
+        "info": "Video captions and descriptions are required for WCAG AA standards."
+      },
+      {
+        "type": "text",
+        "id": "caption_url",
+        "label": "URL",
+        "default": "#",
+        "info": "Required: CDN to .vtt"
+      },
+      {
+        "type": "select",
+        "id": "caption_label",
+        "label": "Caption language",
+        "default": "English",
+        "options": [
+          {
+            "label": "Arabic",
+            "value": "Arabic"
+          },
+          {
+            "label": "English",
+            "value": "English"
+          },
+          {
+            "label": "Chinese",
+            "value": "Chinese"
+          },
+          {
+            "label": "French",
+            "value": "French"
+          },
+          {
+            "label": "German",
+            "value": "German"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "caption_src_language",
+        "label": "Caption src language",
+        "default": "en",
+        "options": [
+          {
+            "label": "Arabic",
+            "value": "ar"
+          },
+          {
+            "label": "English",
+            "value": "en"
+          },
+          {
+            "label": "Chinese",
+            "value": "ch"
+          },
+          {
+            "label": "French",
+            "value": "fr"
+          },
+          {
+            "label": "German",
+            "value": "de"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "audio_description_url",
+        "label": "URL",
+        "default": "#",
+        "info": "Required: CDN to .vtt"
+      },
+      {
+        "type": "select",
+        "id": "description_label",
+        "label": "Description language",
+        "default": "English",
+        "options": [
+          {
+            "label": "Arabic",
+            "value": "Arabic"
+          },
+          {
+            "label": "English",
+            "value": "English"
+          },
+          {
+            "label": "Chinese",
+            "value": "Chinese"
+          },
+          {
+            "label": "French",
+            "value": "French"
+          },
+          {
+            "label": "German",
+            "value": "German"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "description_src_language",
+        "label": "Description src language",
+        "default": "en",
+        "options": [
+          {
+            "label": "Arabic",
+            "value": "ar"
+          },
+          {
+            "label": "English",
+            "value": "en"
+          },
+          {
+            "label": "Chinese",
+            "value": "ch"
+          },
+          {
+            "label": "French",
+            "value": "fr"
+          },
+          {
+            "label": "German",
+            "value": "de"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Content"
+      },
+      {
+        "type": "image_picker",
+        "id": "video_poster",
+        "label": "Poster",
+        "info": "Fallback image when video is not supported."
+      },
+      {
+        "type": "header",
+        "content": "Content",
+        "info": "Leave fields empty to hide."
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title",
+        "default": "Value proposition statement"
+      },
+      {
+        "type": "url",
+        "id": "call_to_action_link",
+        "label": "Link"
+      },
+      {
+        "type": "text",
+        "id": "button_text",
+        "label": "Button text",
+        "default": "Learn more"
+      },
+      {
+        "type": "header",
+        "content": "Options",
+        "info": "Options to define styling of the content."
+      },
+      {
+        "type": "select",
+        "id": "content_alignment",
+        "label": "Content alignment",
+        "default": "is-middle is-center",
+        "options": [
+          {
+            "label": "Top left",
+            "value": "is-top is-left"
+          },
+          {
+            "label": "Top center",
+            "value": "is-top is-center"
+          },
+          {
+            "label": "Top right",
+            "value": "is-top is-right"
+          },
+          {
+            "label": "Middle left",
+            "value": "is-middle is-left"
+          },
+          {
+            "label": "Middle center",
+            "value": "is-middle is-center"
+          },
+          {
+            "label": "Middle right",
+            "value": "is-middle is-right"
+          },
+          {
+            "label": "Bottom left",
+            "value": "is-bottom is-left"
+          },
+          {
+            "label": "Bottom center",
+            "value": "is-bottom is-center"
+          },
+          {
+            "label": "Bottom right",
+            "value": "is-center"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "default": "is-center",
+        "options": [
+          {
+            "label": "Left",
+            "value": "is-left"
+          },
+          {
+            "label": "Center",
+            "value": "is-center"
+          },
+          {
+            "label": "Right",
+            "value": "is-right"
+          }
+        ]
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text colour",
+        "default": "#000000"
+      },
+      {
+        "type": "select",
+        "id": "call_to_action_theme",
+        "label": "Button colour",
+        "options": [
+          {
+            "value": "button--primary",
+            "label": "Primary"
+          },
+          {
+            "value": "button--secondary",
+            "label": "Secondary"
+          },
+          {
+            "value": "button--light",
+            "label": "Light"
+          }
+        ],
+        "default": "button--primary"
+      },
+      {
+        "type": "select",
+        "id": "button_size",
+        "label": "Button size",
+        "default": "button--large",
+        "options": [
+          {
+            "label": "Small",
+            "value": "button--small"
+          },
+          {
+            "label": "Medium",
+            "value": ""
+          },
+          {
+            "label": "Large",
+            "value": "button--large"
+          },
+          {
+            "label": "Block",
+            "value": "button--block"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Video hero",
+        "category": "Video"
+      }
+    ]
+  }
+{% endschema %}

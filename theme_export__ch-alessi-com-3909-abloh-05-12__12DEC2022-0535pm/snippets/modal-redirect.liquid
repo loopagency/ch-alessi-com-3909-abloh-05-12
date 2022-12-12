@@ -1,0 +1,26 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Redirect modal
+  - This is an optional feature for Frame.
+------------------------------------------------------------------------------
+{% endcomment %}
+{% assign modifiers = '' %}
+{% assign is_styleguide = false %}
+
+{% if handle == 'styleguide' %}
+  {% assign is_styleguide = true %}
+  {% assign modifiers = modifiers | append: 'is-active' %}
+{% endif %}
+
+<div
+  id="redirect-modal"
+  class="modal {{ modifiers }} redirect-modal critical-clear"
+  aria-hidden="true"
+  js-redirect-modal="container"
+>
+  <div class="modal__overlay" data-micromodal-close>
+    <div js-modal="body">
+      {% render 'modal-redirect-settings' %}
+    </div>
+  </div>
+</div>

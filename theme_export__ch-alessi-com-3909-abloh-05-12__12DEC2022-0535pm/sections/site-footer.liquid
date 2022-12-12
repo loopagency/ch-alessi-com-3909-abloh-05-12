@@ -1,0 +1,162 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Section: Site footer
+  - This is a required section for the Shopify Theme Store.
+  - Settings available in `Footer` section in the theme editor.
+  - Three column linklists with newsletter callout, store selector and
+  social icons.
+----------------------------------------------------------------------------
+{% endcomment %}
+
+<footer class="critical-clear">
+  <section
+    class="site-footer"
+    data-section-id="{{ section.id }}"
+    data-section-type="site-footer"
+  >
+    <div class="site-footer__container container">
+      <div id="footerAccordion" class="row" js-accordion="container">
+        <div class="col xs12 s12 l4">
+          {% if section.settings.show_social_icons %}
+            {% render 'social-icons' %}
+          {% endif %}
+
+          {% render 'newsletter-callout' %}
+        </div>
+
+        {% for i in (1..3) %}
+          {% assign menu_string = 'menu_#' | replace: '#', i %}
+          {% assign menu = section.settings[menu_string] %}
+
+          {% if linklists[menu].links.size > 0 %}
+            <div
+              class="col xs12 l2 {% if forloop.first %}offset-l2{% endif %} site-footer__navlist-wrapper"
+              js-accordion="item"
+            >
+              <h2 class="site-footer__navlist-title subtitle-2">
+                <span js-accordion="control">{{ linklists[menu].title }}</span>
+
+                <button
+                  type="button"
+                  class="site-footer__control"
+                  js-accordion="control"
+                >
+                  {% render 'icon-misc' with icon: 'plus' %}
+                  {% render 'icon-misc' with icon: 'minus' %}
+                </button>
+              </h2>
+
+              <ul
+                class="site-footer__navlist navlist"
+                js-accordion="content"
+              >
+
+                {% for link in linklists[menu].links %}
+                  {% liquid 
+                      assign cookiePreferences = ''
+                      assign cookieLink = link.url
+                      if cookieLink == '#_CookieSettings'
+                        assign cookiePreferences = ' iubenda-cs-preferences-link'
+                        assign linkClean = link.url | split: '_' | first 
+                      else 
+                        assign linkClean = link.url 
+                      endif
+                      
+                      %}
+                  <li class="navlist__item">
+                    <a
+                      class="navlist__link body-2 {{ cookiePreferences }}"
+                      href="{{ linkClean }}"
+                      data-datalayer-parent="{{ linklists[menu].title | handleize | replace: '-', '_' }}"
+                      data-datalayer-title="{{ link.title | handleize | replace: '-', '_' }}"
+                      js-footer-link
+                    >
+                      {{ link.title }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="row">
+        <div class="col xs12">
+          <div class="site-footer__footnote">
+            <p class="site-footer__disclaimer caption">
+              &copy; {{ 'now' | date: "%Y" }} {{ shop.name | link_to: '/' }}
+            </p>
+
+            <div class="site-footer__misc">
+              <div class="site-footer__store-selector">
+                {% render 'store-selector' with id: section.id %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</footer>
+
+{% schema %}
+  {
+    "name": "Footer",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Social icons"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_social_icons",
+        "label": "Show social icons",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "Email service provider (ESP)"
+      },
+      {
+        "type": "text",
+        "id": "esp_title",
+        "label": "Heading",
+        "default": "Subscribe to our newsletter"
+      },
+      {
+        "type": "richtext",
+        "id": "esp_subtitle",
+        "label": "Description",
+		    "default": "<p>Subscribe to our newsletter</p>"
+      },
+      {
+        "type": "paragraph",
+        "content": "Any customers who sign up will have an account created for them in Shopify. [View customers](/admin/customers?query=&accepts_marketing=1)"
+      },
+      {
+        "type": "header",
+        "content": "Footer Menu"
+      },
+      {
+        "type": "link_list",
+        "id": "menu_1",
+        "label": "Menu column 1",
+        "default": "footer"
+      },
+      {
+        "type": "link_list",
+        "id": "menu_2",
+        "label": "Menu column 2",
+        "default": "footer"
+      },
+      {
+        "type": "link_list",
+        "id": "menu_3",
+        "label": "Menu column 3",
+        "default": "footer"
+      }
+    ]
+  }
+
+{% endschema %}

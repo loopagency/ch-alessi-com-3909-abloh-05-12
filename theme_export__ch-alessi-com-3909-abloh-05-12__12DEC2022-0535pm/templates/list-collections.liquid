@@ -1,0 +1,70 @@
+
+{% comment %}
+----------------------------------------------------------------------------
+  Template: List Collections
+----------------------------------------------------------------------------
+{% endcomment %}
+
+<div class="template-page">
+  <div class="container template-page__container page-row">
+    <div id="collections-listing">
+      <div class="row no-gutter">
+        <div class="template-page__column col xs12">
+          {% paginate collections by 16 %}
+
+            {% if collections.size > 0 %}
+
+            <h1 class="d3">Product Collections</h1>
+
+            <ul>
+              {% for collection in collections %}
+                <li class="{{ collection.handle }}-collection">
+                <strong><a href="{{ collection.url }}">{{ collection.title | escape }}</a></strong>
+                <small class="hint">{{ collection.products_count | pluralize: 'product', 'products' }}</small>
+                </li>
+              {% endfor %}
+            </ul>
+
+            <div class="template-blog__pagination">
+              {% if paginate.prev %}
+                <a
+                  class="template-blog__pagination-link"
+                  href="{{ paginate.prev.url }}"
+                >
+                  {% render 'icon-direction' with icon: 'chevron-left' %}
+
+                  <div class="visually-hidden">
+                    {{ 'blogs.pagination.prev' | t }}
+                  </div>
+                </a>
+              {% else %}
+                {% render 'icon-direction' with icon: 'chevron-left' %}
+              {% endif %}
+
+              {{ paginate | default_pagination: next: '', previous: '' }}
+
+              {% if paginate.next %}
+                <a
+                  class="template-blog__pagination-link"
+                  href="{{ paginate.next.url }}"
+                >
+                  {% render 'icon-direction' with icon: 'chevron-right' %}
+
+                  <div class="visually-hidden">
+                    {{ 'blogs.pagination.next' | t }}
+                  </div>
+                </a>
+              {% else %}
+                {% render 'icon-direction' with icon: 'chevron-right' %}
+              {% endif %}
+            </div>
+
+            {% else %}
+              <p>No Collections found...</p>
+            {% endif %}
+          {% endpaginate %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

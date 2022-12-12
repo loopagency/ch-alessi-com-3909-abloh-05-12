@@ -1,0 +1,142 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Component: Lifestyle main
+  - A custom component setup as a snippet to be pulled into custom section template
+------------------------------------------------------------------------------
+{% endcomment %}
+
+<div class="lifestyle-main">
+  {% for block in section.blocks %}
+    <div
+      class="lifestyle-main__container"
+      js-fade-in="container"
+    >
+      <div class="lifestyle-main__column lifestyle-main__column--image">
+        <div
+          class="lifestyle-main__featured-image lazyload
+          animate animate--opacity animate--translateY"
+          js-fade-in="item"
+          data-bgset="
+            {% render 'responsive-bg-image', image: block.settings.lifestyle_feature_image %}
+          "
+        ></div>
+      </div>
+
+      <div
+        class="
+        lifestyle-main__column lifestyle-main__column--content
+        animate animate--opacity animate--translateY"
+        js-fade-in="item"
+      >
+        <div class="container">
+          <div class="row">
+            <div class="lifestyle-main__copy col xs12 l10">
+              {% if block.settings.lifestyle_main_title %}
+                <h2 class="lifestyle-main__title h1">
+                  {{ block.settings.lifestyle_main_title }}
+                </h2>
+              {% endif %}
+              {% if block.settings.lifestyle_main_desc %}
+                <p class="lifestyle-main__desc body-1">
+                  {{ block.settings.lifestyle_main_desc }}
+                </p>
+              {% endif %}
+              {% if block.settings.lifestyle_main_link_url %}
+                <div class="lifestyle-main__cta">
+                  <a
+                    class="button button--secondary button--dark"
+                    href="{{ block.settings.lifestyle_main_link_url }}"
+                  >
+                    {{ block.settings.lifestyle_main_link_text }}
+                  </a>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="lifestyle-main__supporting col xs12">
+              <div
+                class="lifestyle-main__supporting-image lazyload"
+                data-bgset="
+                  {% render 'responsive-bg-image', image: block.settings.supporting_image_1 %}
+                "
+              ></div>
+              <div
+                class="lifestyle-main__supporting-image lazyload"
+                data-bgset="
+                  {% render 'responsive-bg-image', image: block.settings.supporting_image_2 %}
+                "
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+{% schema %}
+  {
+    "name": "Lifestyle",
+    "class": "custom-section",
+    "blocks": [
+      {
+        "type": "lifestyle-box",
+        "name": "Lifestyle Box",
+        "settings": [
+          {
+            "type": "header",
+            "content": "Messaging"
+          },
+          {
+            "type": "text",
+            "id": "lifestyle_main_title",
+            "label": "Title",
+            "default": "Il Bagno Alessi"
+          },
+          {
+            "type": "textarea",
+            "id": "lifestyle_main_desc",
+            "label": "Description",
+            "default": "Lorem ipsum dolor"
+          },
+          {
+            "type": "text",
+            "id": "lifestyle_main_link_text",
+            "label": "Button text",
+            "default": "Discover"
+          },
+          {
+            "type": "url",
+            "id": "lifestyle_main_link_url",
+            "label": "Select link destination"
+          },
+          {
+            "type": "header",
+            "content": "Lifestyle main image"
+          },
+          {
+            "type": "image_picker",
+            "id": "lifestyle_feature_image",
+            "label": "Image"
+          },
+          {
+            "type": "header",
+            "content": "Supporting images"
+          },
+          {
+            "type": "image_picker",
+            "id": "supporting_image_1",
+            "label": "Supporting image 1"
+          },
+          {
+            "type": "image_picker",
+            "id": "supporting_image_2",
+            "label": "Supporting image 2"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

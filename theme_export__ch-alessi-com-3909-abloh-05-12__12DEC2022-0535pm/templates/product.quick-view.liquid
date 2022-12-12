@@ -1,0 +1,32 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Template: Product quick-view
+  - Rendered when viewing the quick-view of a product.
+----------------------------------------------------------------------------
+{% endcomment %}
+{% layout none %}
+
+{% assign current_variant = product.selected_or_first_available_variant %}
+{% assign featured_image = current_variant.featured_image | default: product.featured_image %}
+
+<div class="quick-view__container">
+  <div class="quick-view__gallery">
+    {% render 'product-gallery' with
+      hide_thumbnail_nav: true,
+      hide_zoom: true,
+      single_image: true,
+      id: 2,
+    %}
+  </div>
+
+  <div class="quick-view__aside">
+    {% render 'product-form' with
+      namespace: 'quick-view'
+      quick_view: true,
+    %}
+
+    {% if settings.enable_free_shipping_notification %}
+      {% render 'free-shipping-notification' with class: 'quick-view' %}
+    {% endif %}
+  </div>
+</div>

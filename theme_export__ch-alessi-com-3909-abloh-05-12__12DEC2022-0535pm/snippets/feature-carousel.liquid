@@ -1,0 +1,84 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Component: Feature carousel
+  - Draggable
+  - Simple scrollbar
+------------------------------------------------------------------------------
+{% endcomment %}
+
+<div
+  class="container container--right"
+  js-draggable="container"
+>
+  {% case type %}
+    {% when 'collection' %}
+      <div
+        class="featured-collection__container product-carousel {{ class }}"
+        data-datalayer="{{ featured_collection.handle }}"
+        js-datalayer="featured_collection"
+        js-simplebar="container"
+      >
+      <script>var datalayer{{ featured_collection.handle | capitalize | replace: '-', '_' }} = [];</script>
+        {% if template == 'index' %}
+          <style>
+            .product-card__thumbnail--lifestyle {
+              opacity: 1 !important;
+            }
+          </style>
+        {% endif %}
+        {% for product in featured_collection.products limit: 8 %}
+          <div
+            class="
+              product-carousel__item
+              animate
+              animate--opacity
+            "
+            js-fade-in="item"
+          >
+            {% render 'product-card' with
+              product: product,
+              collection: featured_collection,
+              modifier: '',
+              index: forloop.index
+            %}
+            
+          </div>
+        {% endfor %}
+      </div>
+
+    {% when 'products' %}
+
+      <div
+        class="featured-collection__container product-carousel {{ class }}"
+        data-datalayer="spareParts"
+        js-datalayer="featured_collection"
+        js-simplebar="container"
+      >
+        <script>var datalayerSpareParts = [];</script>
+        {% for handle in handles %}
+          {% assign part_product = all_products[handle] %}
+
+          {% if part_product.available == true %}
+            <div
+              class="
+                product-carousel__item
+                animate
+                animate--opacity
+              "
+              js-fade-in="item"
+            >
+              {% render 'product-card' with
+                product: part_product,
+                index: forloop.index,
+                spare_parts: true
+              %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+    {% else %}
+      <span>No carousel found!</span>
+
+  {% endcase %}
+</div>

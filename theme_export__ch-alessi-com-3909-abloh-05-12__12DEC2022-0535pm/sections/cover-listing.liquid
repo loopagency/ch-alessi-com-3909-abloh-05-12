@@ -1,0 +1,191 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Cover listing
+  - A flexible section to display multiple cover items.
+  - Uses Shopify placeholder svgs if an image is not uploaded to a cover item.
+------------------------------------------------------------------------------
+{% endcomment %}
+{% assign modifiers = '' %}
+
+<section
+  class="cover-listing {{ modifiers }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="cover-listing"
+>
+  {% if section.settings.enable_section_container %}
+    <div class="container">
+      <div class="row">
+  {% endif %}
+
+  {% if section.settings.title != blank %}
+    <h3 class="cover-listing__title">{{ section.settings.title }}</h2>
+  {% endif %}
+
+  <div class="cover-listing__grid">
+    {% for block in section.blocks %}
+      {% assign has_cover_image = false %}
+
+      {% if block.settings.image != blank %}
+        {% assign has_cover_image = true %}
+
+      {% else %}
+        {% assign cover_placeholder = 'collection-' |
+          append: forloop.index |
+          placeholder_svg_tag: 'placeholder-svg'
+        %}
+      {% endif %}
+
+      {% capture cover_template %}
+        {% unless has_cover_image %}
+          <div class="cover_placeholder placeholder-background">
+            {{ cover_placeholder }}
+          </div>
+        {% endunless %}
+
+        <div
+          class="cover__description"
+          style="color: {{ block.settings.text_color }}"
+        >
+          <h4 class="cover__title">{{ block.settings.title }}</h4>
+
+          <p class="cover__subtitle">
+            {{ block.settings.subtitle }}
+          </p>
+        </div>
+
+        {% if section.settings.enable_overlay %}
+          <div class="cover__overlay"></div>
+        {% endif %}
+      {% endcapture %}
+
+      {% if block.settings.link != blank %}
+        <a
+          class="cover-listing__item cover lazyload"
+          href="{{ block.settings.cover_link }}"
+          {% if has_cover_image %}
+            data-bgset="{% render 'responsive-bg-image', image: block.settings.image %}"
+          {% endif %}
+        >
+          {{ cover_template }}
+        </a>
+
+      {% else %}
+        <div
+          class="cover-listing__item cover lazyload"
+          {% if has_cover_image %}
+            data-bgset="{% render 'responsive-bg-image', image: block.settings.image %}"
+          {% endif %}
+        >
+          {{ cover_template }}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  {% if section.settings.enable_section_container %}
+      </div>
+    </div>
+  {% endif %}
+</section>
+
+{% schema %}
+  {
+    "name": "Cover listing",
+    "class": "index-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Content"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title",
+        "default": "Cover listing"
+      },
+      {
+        "type": "header",
+        "content": "Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_section_container",
+        "label": "Enable section container",
+        "info": "Wrap section inside a container.",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_overlay",
+        "label": "Enable cover overlay",
+        "info": "Add background overlay to improve contrast",
+        "default": true
+      }
+    ],
+    "max_blocks": 4,
+    "blocks": [
+      {
+        "type": "image",
+        "name": "Item",
+        "settings": [
+          {
+            "type": "header",
+            "content": "Content",
+            "info": "Leave empty to hide."
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image",
+            "info": "Upload a 420x420px"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "Link"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Cover title"
+          },
+          {
+            "type": "text",
+            "id": "subtitle",
+            "label": "Subtitle",
+            "default": "Cover subtitle"
+          },
+          {
+            "type": "header",
+            "content": "Options"
+          },
+          {
+            "type": "color",
+            "id": "text_color",
+            "label": "Text Color",
+            "default": "#000000"
+          }
+        ]
+      }
+    ],
+    "presets": [{
+      "name": "Cover listing",
+      "category": "Images",
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        }
+      ]
+    }]
+  }
+{% endschema %}

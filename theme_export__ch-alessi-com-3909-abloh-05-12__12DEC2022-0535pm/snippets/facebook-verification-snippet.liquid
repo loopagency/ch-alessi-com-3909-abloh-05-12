@@ -1,0 +1,12 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Facebook Verification Meta Tag
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{% if settings.enable_facebook_verification %}
+  <meta
+    content="{{ settings.facebook_verification_id }}"
+    name="facebook-domain-verification"
+  >
+{% endif %}

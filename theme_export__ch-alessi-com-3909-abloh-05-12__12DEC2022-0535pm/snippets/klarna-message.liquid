@@ -1,0 +1,30 @@
+
+{% liquid 
+  assign currentLang = request.locale.iso_code
+  assign currentCountry = request.locale.iso_code | upcase 
+  assign storeCode = settings.store_code
+
+  if storeCode == 'EU' and currentLang == 'en'
+    assign currentCountry = 'FR'
+  elsif storeCode == 'CH'
+    assign currentCountry = 'CH'
+  elsif storeCode == 'CH' and currentLang == 'en'
+    assign currentLang = 'en'
+  elsif storeCode == 'GB'
+    assign currentCountry = 'GB'
+  elsif storeCode == 'US'
+    assign currentCountry = 'US'
+  endif
+
+  if template == 'product'
+    assign purchaseAmount = product.price
+  elsif template == 'cart'
+    assign purchaseAmount = cart.total_price
+  endif
+  %}
+
+
+  <klarna-placement
+    data-key="credit-promotion-auto-size"
+    data-locale="{{ currentLang }}-{{ currentCountry }}"
+    data-purchase-amount="{{ purchaseAmount }}"></klarna-placement>  

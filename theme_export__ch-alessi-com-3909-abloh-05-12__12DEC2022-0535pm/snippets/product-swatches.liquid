@@ -1,0 +1,108 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Product swatches
+  - Substitutes the standard select menu for clickable cards for variant options.
+  -- Required inside an product option loop.
+  -- Label is the clickable element that toggles a radio button.
+
+  - Dependencies:
+  -- Relies on product-swatches.js for interactivity.
+  -- product-form.liquid controls the master variant updates.
+------------------------------------------------------------------------------
+{% endcomment %}
+{% assign sanitized_selected_option = option.selected_value | handleize %}
+{% assign enable_swatch_labels = swatch_labels %}
+
+<fieldset
+  id="OptionSelector-{{ forloop.index0 }}"
+  data-index="{{ option.position }}"
+  data-progress="inactive"
+  js-product-swatches="container"
+>
+  <legend class="product-form__label" tabindex="0">
+    {{ option.name }}
+  </legend>
+
+  <div class="swatch-grid" js-product-swatches="grid" js-simplebar="container">
+    {% for value in option.values %}
+      {% assign swatch_classes = 'swatch' %}
+      {% assign sanitized_value = value | handleize %}
+
+      {%- capture swatch_namespace -%}
+        {{- sanitized_option_name -}}-{{- sanitized_value -}}-{{- forloop.index0 -}}-{{- id -}}
+      {%- endcapture -%}
+
+      {% if sanitized_selected_option == sanitized_value %}
+        {% assign swatch_classes = swatch_classes | append: ' is-active' %}
+      {% endif %}
+
+      {% unless enable_swatch_labels %}
+        {% assign swatch_classes = swatch_classes | append: ' swatch--empty' %}
+      {% endunless %}
+
+      {% assign has_variant = false %}
+
+      {% for variant in product.variants %}
+        {% assign variant_name =  variant.title | handleize %}
+
+        {% if variant_name contains sanitized_value %}
+          {% unless product.options_with_values.size < 2 and variant.price == 0%}
+            <div
+              class="swatch-grid__item {{ swatch_classes }}"
+              data-value="{{ value }}"
+              data-variant-id="{{ variant.id }}"
+              js-product-swatches="option"
+            >
+              <input
+                id="{{ swatch_namespace }}"
+                class="swatch__input visually-hidden"
+                {% if sanitized_selected_option == sanitized_value %}
+                  checked="checked"
+                {% endif %}
+                name="{{ option.name }}"
+                tabindex="-1"
+                type="radio"
+                value="{{ value | escape }}"
+                data-index="option{{ option.position }}"
+                {% if enable_swatch_labels %}
+                  data-swatch-value="{{ value }}"
+                {% endif %}
+                js-product-swatches="optionInput"
+                js-product-form="optionSelector"
+              >
+
+              <label
+                class="swatch__label"
+                for="{{ swatch_namespace }}"
+                tabindex="0"
+              >
+                {% if enable_swatch_labels %}
+                  <div class="swatch__button" js-product-swatches="label">
+                    <span>{{ value }}</span>
+                  </div>
+
+                {% else %}
+                  <div
+                    class="swatch__button"
+                    js-product-swatches="label"
+                  >
+                    {% render 'responsive-image' with
+                      image: variant.image,
+                      image_class: 'css-class',
+                      wrapper_class: 'swatch__image',
+                      max_width: 700,
+                      max_height: 800,
+                    %}
+                  </div>
+                {% endif %}
+              </label>
+            </div>
+          {% endunless %}
+          {% assign has_variant = true %}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+  </div>
+<p class="caption" js-product-swatches="swatch-name"></p>
+</fieldset>

@@ -1,0 +1,22 @@
+<div class="aa-footer">
+    <a class="aa-footer-link" href="/search?q=[[ query ]]">
+    [[ translations.allProducts ]]
+    [[ translations.matching ]]
+    <span class="aa-query">
+      "[[ query ]]"
+    </span>
+    (<span class="aa-nbhits">[[# helpers.formatNumber ]][[ nbHits ]][[/ helpers.formatNumber ]]</span>)
+  </a>
+
+  <button
+            type="submit"
+            class="button search-bar__submit"
+            js-search-bar="submit"
+          >
+            <span class="icon-fallback-text">
+              {{ 'general.search.submit' | t }}
+            </span>
+
+            {% render 'icon-direction' with icon: 'arrow-right-long' %}
+          </button>
+</div>

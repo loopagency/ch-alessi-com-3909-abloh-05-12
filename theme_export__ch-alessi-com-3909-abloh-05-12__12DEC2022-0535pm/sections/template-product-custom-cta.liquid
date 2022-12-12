@@ -1,0 +1,341 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Template product custom cta.
+  - Product template with custom cta options.
+------------------------------------------------------------------------------
+{% endcomment %}
+{% assign has_designer = false %}
+
+{% for tag in product.tags %}
+  {% assign tag_lowercase = tag | downcase %}
+
+  {% assign current_locale = request.locale.iso_code | downcase | append: ':' %}
+    {% assign description_tag = 'description_' | append: current_locale %}
+    {% if tag_lowercase contains description_tag %}
+      {% assign product_type = tag | split: ':' | last | strip %}
+    {% endif %}
+
+  {% if tag_lowercase contains 'designers:' %}
+    {% assign designers_list = tag | split: ':' %}
+
+    {% if designers_list.size > 1 %}
+      {% assign designers_list_array = designers_list | last | strip | split: '|' %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+{%- liquid
+  if product.metafields.custom_cta.text != blank and product.metafields.custom_cta.link != blank
+    assign cta_text = product.metafields.custom_cta.text.value
+    assign cta_link = product.metafields.custom_cta.link.value
+    assign disable_cta = 'no'
+  elsif section.settings.cta_text != blank and section.settings.cta_link != blank
+    assign cta_text = section.settings.cta_text
+    assign cta_link = section.settings.cta_link
+    assign disable_cta = section.settings.disable_cta
+  endif
+-%}
+
+<div class="template-product__container">
+  <div class="row no-gutter">
+    {% comment %}
+    ----------------------------------------------------------------------------
+      Product gallery
+    ----------------------------------------------------------------------------
+    {% endcomment %}
+    <div class="col xs12 l7">
+      <div class="template-product__gallery">
+        {% render 'product-gallery' %}
+      </div>
+    </div>
+
+    {% comment %}
+    ----------------------------------------------------------------------------
+      Product form
+      - With accordion containing description.
+    ----------------------------------------------------------------------------
+    {% endcomment %}
+    <div class="template-product__aside col l5" js-product="aside">
+      <div class="template-product__aside-scrollable" js-product="asideScrollable">
+        <div class="template-product__content">
+
+          {% render 'product-form'
+            with designers_list_array: designers_list_array,
+            product_type: product_type,
+            cta_text: cta_text,
+            cta_link: cta_link,
+            disable_cta: disable_cta
+          %}
+          {% assign current_tag = '' %}
+          {% for block in section.blocks %}
+            {% liquid 
+              assign current_tag = block.settings.tag
+              for tag in product.tags
+                if tag contains current_tag
+                  assign tag_accepted = tag
+                endif
+              endfor
+              %}
+
+
+          {% for tag in product.tags %}
+            {% if tag contains current_tag %}
+            <div class="notification notification__pdp-push-message" role="alert">
+              <div class="notification__text-wrapper">
+                  {{ block.settings.push_message | replace: '<p', '<p class="notification__text caption"' }} 
+              </div>
+            </div>
+            {% endif %}
+          {% endfor %}
+
+          {% endfor %}
+
+
+          <div
+            id="productAccordion"
+            class="template-product__accordion accordion"
+            js-accordion="container"
+          >
+            <div
+              class="template-product__description accordion__item"
+              js-accordion="item"
+            >
+              {% assign product_description = product.description
+                | split: '##SPECIFICATION##'
+                | first
+              %}
+
+              {% if product_description.size > 100 and product.has_only_default_variant == false %}
+                <p class="template-product__description-title accordion__title body-2">
+                  {{ product_description | truncate: 50 , '...' }}
+                </p>
+
+                <button
+                  class="template-product__description-toggle accordion__control body-2"
+                  aria-controls="content-1"
+                  aria-expanded="true"
+                  data-datalayer="read_more"
+                  js-accordion="control"
+                >
+                  {{ 'products.product.read_more' | t }}
+                </button>
+
+                <div
+                  id="content-1"
+                  class="accordion__content"
+                  role="region"
+                  js-accordion="content"
+                >
+                  <p class="body-2">
+                    {{ product_description }}
+
+                    <button
+                      class="template-product__description-toggle accordion__control body-2"
+                      aria-controls="content-1"
+                      data-datalayer="read_less"
+                      js-accordion="control"
+                    >
+                      {{ 'products.product.read_less' | t }}
+                    </button>
+                  </p>
+                </div>
+              {% else %}
+                <p class="template-product__description-title body-2">
+                  {{ product_description }}
+                </p>
+              {% endif %}
+            </div>
+          </div>
+
+          {% comment %}
+          ----------------------------------------------------------------------------
+            More information.
+          ----------------------------------------------------------------------------
+          {% endcomment %}
+          <div class="template-product__more">
+            <button
+              class="
+                template-product__more__desktop
+                template-product__more-item
+                text-link
+              "
+              data-target="moreInformation"
+              js-toggle="moreInformation"
+            >
+              {{ 'products.product.more' | t }}
+              {% render 'icon-misc' with icon: 'plus' %}
+            </button>
+
+            {% render 'product-spare-parts' with
+              snippet: 'link'
+              class: 'template-product__more-item'
+            %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% comment %}
+  ----------------------------------------------------------------------------
+    Specifications - Pulled from tags
+    Delivery and returns - Pulled from page with the handle `delivery-and-returns`.
+  ----------------------------------------------------------------------------
+  {% endcomment %}
+  <div
+    id="moreInformation"
+    class="
+      template-product__accordion
+      template-product__accordion--more-information
+      accordion
+      critical-hide
+    "
+    js-accordion="container"
+    js-simplebar="container"
+  >
+    <button
+      class="template-product__close"
+      type="button"
+      data-target="moreInformation"
+      js-toggle="moreInformation"
+    >
+      {% render 'icon-misc' with icon: 'close' %}
+    </button>
+
+    <div class="container template-product__accordion-content">
+      <h2 class="template-product__accordion-subtitle subtitle-1">
+        {{ 'products.product.specifications.title' | t }}
+      </h2>
+
+      {% assign product_specification = product.description
+        | split: '##SPECIFICATION##'
+        | last
+      %}
+
+      {% if product_specification.size > 0 and product_specification != '<br>' %}
+        <p>{{ product_specification }}</p>
+      {% endif %}
+
+      {% render 'product-custom-cta-specifications' %}
+
+      {% if pages['delivery-and-returns'] != blank %}
+        <h2 class="template-product__accordion-subtitle subtitle-1">
+          {{ 'products.product.delivery_returns' | t }}
+        </h2>
+
+        {{ pages['delivery-and-returns'].content }}
+      {% endif %}
+    </div>
+  </div>
+
+  {% comment %}
+  ----------------------------------------------------------------------------
+    Family excerpt.
+  ----------------------------------------------------------------------------
+  {% endcomment %}
+
+  {% render 'product-meet-the-family' with snippet: 'excerpt' %}
+
+  {% comment %}
+  ----------------------------------------------------------------------------
+    Meet the family.
+  ----------------------------------------------------------------------------
+  {% endcomment %}
+
+  {% render 'product-meet-the-family' with snippet: 'collection-row' %}
+
+  {% comment %}
+  ----------------------------------------------------------------------------
+    Meet the designer.
+  ----------------------------------------------------------------------------
+  {% endcomment %}
+  {% render 'meet-the-designer'
+    for designers_list_array as designer
+    with designer: designer
+  %}
+
+  {% comment %}
+  ----------------------------------------------------------------------------
+    Product reviews
+  ----------------------------------------------------------------------------
+  {% endcomment %}
+  {% if settings.enable_product_reviews %}
+    <div class="row">
+      <div class="col xs12">
+        <div class="template-product__reviews">
+          {% render 'product-reviews' %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% comment %}
+  ----------------------------------------------------------------------------
+    Spare parts
+  ----------------------------------------------------------------------------
+  {% endcomment %}
+
+  {% render 'product-spare-parts' %}
+</div>
+{% comment %}
+----------------------------------------------------------------------------
+  Breadcrumb
+----------------------------------------------------------------------------
+{% endcomment %}
+{% render 'breadcrumb' %}
+
+{% render 'product-schema' %}
+
+{% render 'script-klaviyo-product' %}
+
+{% schema %}
+{
+  "name": "Custom CTA",
+  "settings": [
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA text"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA link"
+    },
+    {
+      "type": "radio",
+      "id": "disable_cta",
+      "label": "Disable CTA",
+      "default": "no",
+      "options": [
+        {
+          "value": "no",
+          "label": "No"
+        },
+        {
+          "value": "yes",
+          "label": "Yes"
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "icon",
+      "name": "Message under CTA",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tag",
+          "label": "Tag for matching text to pdp"
+        },
+        {
+          "type": "richtext",
+          "id": "push_message",
+          "label": "Push message"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

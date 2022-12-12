@@ -1,0 +1,228 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Address fields
+  - Used to output all address fields in the addresses template.
+----------------------------------------------------------------------------
+{% endcomment %}
+{% if id == 'New' %}
+  {% assign field_id = id %}
+  {% assign default_address_id = '_new' %}
+
+{% else %}
+  {% assign edit_address = true %}
+  {% assign field_id = id | prepend: '_' %}
+  {% assign default_address_id = field_id %}
+{% endif %}
+
+<div class="address-fields">
+  <div class="row">
+    <div class="col xs12 m6">
+      <label
+        class="visually-hidden"
+        for="AddressFirstName{{ field_id }}"
+      >
+        {{ 'customer.addresses.first_name' | t }}
+      </label>
+
+      <input
+        id="AddressFirstName{{ field_id }}"
+        autocapitalize="words"
+        name="address[first_name]"
+        required="true"
+        type="text"
+        placeholder="{{ 'customer.addresses.first_name' | t }}"
+        {% if edit_address %}
+          value="{{ form.first_name }}"
+        {% endif %}
+      >
+    </div>
+
+    <div class="col xs12 m6">
+      <label
+        class="visually-hidden"
+        for="AddressLastName{{ field_id }}"
+      >
+        {{ 'customer.addresses.last_name' | t }}
+      </label>
+
+      <input
+        id="AddressLastName{{ field_id }}"
+        autocapitalize="words"
+        name="address[last_name]"
+        required="true"
+        type="text"
+        placeholder="{{ 'customer.addresses.last_name' | t }}"
+        {% if edit_address %}
+          value="{{ form.last_name }}"
+        {% endif %}
+      >
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col xs12 m6">
+      <label
+        class="visually-hidden"
+        for="AddressAddress1{{ field_id }}"
+      >
+        {{ 'customer.addresses.address1' | t }}
+      </label>
+
+      <input
+        id="AddressAddress1{{ field_id }}"
+        autocapitalize="words"
+        name="address[address1]"
+        required="true"
+        type="text"
+        placeholder="{{ 'customer.addresses.address1' | t }}"
+        {% if edit_address %}
+          value="{{ form.address1 }}"
+        {% endif %}
+      >
+    </div>
+    <div class="col xs12 m6">
+      <label
+        class="visually-hidden"
+        for="AddressAddress2{{ field_id }}"
+      >
+        {{ 'customer.addresses.address2' | t }}
+      </label>
+
+      <input
+        id="AddressAddress2{{ field_id }}"
+        autocapitalize="words"
+        name="address[address2]"
+        type="text"
+        placeholder="{{ 'customer.addresses.address2' | t }}"
+        {% if edit_address %}
+          value="{{ form.address2 }}"
+        {% endif %}
+      >
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col xs12 m6">
+      <label
+        class="visually-hidden"
+        for="AddressCity{{ field_id }}"
+      >
+        {{ 'customer.addresses.city' | t }}
+      </label>
+
+      <input
+        id="AddressCity{{ field_id }}"
+        autocapitalize="words"
+        name="address[city]"
+        required="true"
+        type="text"
+        placeholder="{{ 'customer.addresses.city' | t }}"
+        {% if edit_address %}
+          value="{{ form.city }}"
+        {% endif %}
+      >
+    </div>
+
+    <div class="col xs12 m6">
+      <label
+        class="visually-hidden"
+        for="AddressCountry{{ field_id }}"
+      >
+        {{ 'customer.addresses.country' | t }}
+      </label>
+
+      <select
+        id="AddressCountry{{ field_id }}"
+        name="address[country]"
+        style="background-image: url({{ 'icon-chevron-down.svg' | asset_url }});"
+        data-default="{{ form.country }}"
+        {% if edit_address %}
+          data-form-id="{{ id }}"
+          js-addresses="countryOption"
+        {% endif %}
+      >
+        {{ country_option_tags }}
+      </select>
+    </div>
+  </div>
+
+  <div
+    id="AddressProvinceContainer{{ field_id }}"
+    class="row"
+    style="display: none"
+  >
+    <div class="col xs12 m6">
+      <label
+        class="visually-hidden"
+        for="AddressProvince{{ field_id }}"
+      >
+        {{ 'customer.addresses.province' | t }}
+      </label>
+
+      <select
+        id="AddressProvince{{ field_id }}"
+        name="address[province]"
+        data-default="{{ form.province }}"
+      >
+      </select>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col xs12 m6">
+      <label
+        class="visually-hidden"
+        for="AddressZip{{ field_id }}"
+      >
+        {{ 'customer.addresses.zip' | t }}
+      </label>
+
+      <input
+        id="AddressZip{{ field_id }}"
+        autocapitalize="characters"
+        name="address[zip]"
+        required="true"
+        type="text"
+        placeholder="{{ 'customer.addresses.zip' | t }}"
+        {% if edit_address %}
+          value="{{ form.zip }}"
+        {% endif %}
+      >
+    </div>
+
+    <div class="col xs12 m6">
+      <label
+        class="visually-hidden"
+        for="AddressPhone{{ field_id }}"
+      >
+        {{ 'customer.addresses.phone' | t }}
+      </label>
+
+      <input
+        id="AddressPhone{{ field_id }}"
+        name="address[phone]"
+        pattern="[0-9\-]*"
+        type="tel"
+        placeholder="{{ 'customer.addresses.phone' | t }}"
+        {% if edit_address %}
+          value="{{ form.phone }}"
+        {% endif %}
+      >
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col xs12">
+      <div class="checkbox__container" js-addresses="checkbox">
+        {{ form.set_as_default_checkbox }}
+
+        <label
+          class="checkbox__label body-2"
+          for="address_default_address{{ default_address_id }}"
+        >
+          {{ 'customer.addresses.set_default' | t }}
+        </label>
+      </div>
+    </div>
+  </div>
+</div>

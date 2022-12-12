@@ -1,0 +1,95 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Component: Professionals page listing
+  - Pulling content from blocks unto the post-listing-item.liquid template
+------------------------------------------------------------------------------
+{% endcomment %}
+
+<section class="template-professionals__listing">
+  {% for block in section.blocks %}
+    {% render 'post-listing-item'
+      with post: block,
+      post_type: 'page_block',
+      gallery: true,
+      index: forloop.index | plus: 1
+    %}
+  {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Professionals Blocks",
+    "settings": [],
+    "blocks": [
+      {
+        "type": "press_release",
+        "name": "Feature row",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Feature title"
+          },
+          {
+            "type": "textarea",
+            "id": "excerpt",
+            "label": "Description",
+            "default": "Professionals feature description with longer copy and a more than a sentence.\nPress release description with longer copy and a more than a sentence."
+          },
+          {
+            "type": "header",
+            "content": "CTAs"
+          },
+          {
+            "type": "text",
+            "id": "cta_01_text",
+            "label": "CTA 1 Text",
+            "default": "Reference Book"
+          },
+          {
+            "type": "url",
+            "id": "cta_01_link",
+            "label": "CTA 1 Link"
+          },
+          {
+            "type": "text",
+            "id": "cta_02_text",
+            "label": "CTA 2 Text",
+            "default": "Catalogue"
+          },
+          {
+            "type": "url",
+            "id": "cta_02_link",
+            "label": "CTA 1 Link"
+          },
+          {
+            "type": "header",
+            "content": "Feature gallery images"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_gallery_1",
+            "label": "Image 1"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_gallery_2",
+            "label": "Image 2"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_gallery_3",
+            "label": "Image 3"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_gallery_4",
+            "label": "Image 4"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,151 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Post Listing Item
+
+  Showing the item with image or carousel, title, description and CTAs.
+  The block fields should be named as the article object attributes
+  [article.image, article.published_at, article.title,
+  article.excerpt, article.content, article.url]
+
+  Required variables:
+  - post: {object} - either a blog or an article
+  - post_type: {string} - either 'page_block' or 'article'
+  - index: {number} - foorloop index
+
+  Optional variables:
+  - gallery: {boolean} - true if multiple images fields are present
+    [name the fields as image_gallery_# with # a number between 1 and 4]
+  - paginate: {object} - paginate object in blogs
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{% assign has_gallery = false %}
+{% assign copy_class = 'h6' %}
+
+{% if post_type == 'page_block' %}
+  {% assign post = post.settings %}
+{% endif %}
+
+{% if template.suffix contains 'professionals' %}
+  {% assign copy_class = 'body-1' %}
+{% endif %}
+
+<div
+  class="
+    post-listing-item
+    {% if index == 1 %} post-listing-item--first{% endif %}
+    {% if paginate.current_page == 1 %} post-listing-item--first-page{% endif %}
+  "
+>
+  <div class="post-listing-item__column post-listing-item__column--image">
+
+    {% comment %}
+    -------------------------------
+    Check if gallery option is true
+    -------------------------------
+    {% endcomment %}
+    {% if gallery %}
+      {% for i in (1..4) %}
+        {%- assign image_field_name = 'image_gallery_#' | replace: '#', i -%}
+        {%- assign image = post[image_field_name] -%}
+        {% if image %}
+          {% comment %}
+          -----------------------------------------------
+          Assign variable to use only the gallery and
+          add wrapper for gallery if it's the first slide
+          -----------------------------------------------
+          {% endcomment %}
+          {% assign has_gallery = true %}
+
+          {% if i == 1 %}
+            <div
+              id="ListItemCarousel-{{ index }}"
+              class="post-listing-item__gallery swiper-container"
+              js-post-listing="carousel"
+            >
+            <div class="swiper-wrapper">
+          {% endif %}
+
+          <div class="swiper-slide" js-carousel="cell" >
+            <div
+              class="post-listing-item__image lazyload"
+              data-bgset="{% render 'responsive-bg-image', image: image %}"
+            >
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      {% comment %}
+      ----------------------------------------
+      Show static image if there is no gallery
+      ----------------------------------------
+      {% endcomment %}
+      {% if has_gallery == true %}
+        </div>
+        <div class="swiper-pagination"></div>
+        </div>
+      {% endif %}
+    {% endif %}
+
+    {% if has_gallery == false %}
+      <div
+        class="post-listing-item__image lazyload"
+        data-bgset="{% render 'responsive-bg-image', image: post.image %}"
+      >
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="post-listing-item__column post-listing-item__column--copy">
+    <div class="post-listing-item__content">
+      <time
+        class="post-listing-item__date body-2 color--secondary"
+        datetime="{{ post.published_at | date: '%Y-%m-%d' }}"
+      >
+        {{ post.published_at | time_tag: format: 'month_day_year' }}
+      </time>
+
+      <h2 class="post-listing-item__title{% if index == 1%} h1{% endif %}">
+        {{ post.title }}
+      </h2>
+
+      <p class="post-listing-item__excerpt {{ copy_class }}">
+        {% if post_type == 'page_block' or post.excerpt != blank %}
+          {{ post.excerpt | strip_html }}
+        {% else %}
+          {{ post.content | strip_html | truncatewords: 10 }}
+        {% endif %}
+      </p>
+
+      {% if post_type == 'page_block' %}
+        <div class="post-listing-item__cta" js-post-listing="cta">
+          {% if post.cta_01_text != blank and post.cta_01_link != blank  %}
+            <a
+              class="button button--primary button--dark"
+              href="{{ post.cta_01_link }}"
+            >
+              {{ post.cta_01_text }}
+            </a>
+          {% endif %}
+
+          {% if post.cta_02_text != blank and post.cta_02_link != blank  %}
+            <a
+              class="button button--primary button--dark"
+              href="{{ post.cta_02_link }}"
+            >
+              {{ post.cta_02_text }}
+            </a>
+          {% endif %}
+        </div>
+      {% else %}
+        <a
+          class="button button--primary button--dark"
+          href="{{ post.url }}"
+        >
+          {{ 'blogs.general.read_more' | t }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>

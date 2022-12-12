@@ -1,0 +1,312 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Product form
+  - Each product form can be assigned a namespace to target
+  independently with scripts.
+------------------------------------------------------------------------------
+{% endcomment %}
+{% assign current_variant = product.selected_or_first_available_variant %}
+{% assign featured_image = current_variant.featured_image | default: product.featured_image %}
+
+{% assign form_namespace = 'container' %}
+{% assign supported_swatch_list = 'color, colour, size, waist, value' | split: ', ' %}
+{% assign max_inventory = current_variant.inventory_quantity %}
+
+{% assign cta_attributes = '' %}
+{% assign cta_classes = '' %}
+{% for tag in product.tags %}
+  {% if tag contains 'Size:' %}
+    {% assign triggerChart = true %}
+  {% endif %}
+{% endfor %}
+
+
+{% if namespace %}
+  {% assign form_namespace = namespace %}
+{% endif %}
+
+{% if max_inventory < 0 %}
+  {% assign max_inventory = 999 %}
+{% endif %}
+
+{% if product.variants[0].weight_unit == 'g'
+  or product.variants[0].weight_unit == 'kg'
+%}
+  {% assign unit_pound = false %}
+{% else %}
+  {% assign unit_pound = true %}
+{% endif %}
+
+{% if disable_cta == 'yes' %}
+  {% assign cta_attributes = 'disabled' %}
+  {% assign cta_classes = 'is-disabled' %}
+{% endif %}
+
+<form
+  class="product-form"
+  action="/cart/add"
+  enctype="multipart/form-data"
+  method="post"
+  js-product-form="{{ form_namespace }}"
+>
+  <div class="product-form__header">
+    <div class="product-form__header-row">
+      <p class="product-form__product-type caption">
+        {{ product_type }}
+      </p>
+
+      <div class="product-form__misc">
+        <button
+          class="product-form__share"
+          type="button"
+          data-title="{{ product.title }}"
+          js-product-form="share"
+        >
+          {% render 'icon-misc' with icon: 'share' %}
+        </button>
+
+        {% comment %} {% render 'icon-misc' with icon: 'heart' %} {% endcomment %}
+      </div>
+
+    </div>
+
+    <div class="product-form__header-row">
+      <h1 class="product-form__title h2">{{ product.title }}</h1>
+
+      <div
+        class="product-form__price h6"
+        js-product-form="priceWrapper"
+      >
+        {% render 'product-price' with current_variant: current_variant %}
+      </div>
+    </div>
+
+    {% if designers_list_array %}
+      <div class="product-form__header-row">
+        <p class="caption">
+          {{ 'products.product.design' | t }}
+
+          {% for designer in designers_list_array %}
+            {% if forloop.index > 1 %}, {% endif %}
+            <span
+              class="product-form__designer"
+              js-smooth-scroll="ProductDesigner-{{ designer | handleize | strip }}"
+            >{{ designer | strip }}</span>
+          {% endfor %}
+        </p>
+      </div>
+    {% endif %}
+
+    
+  </div>
+
+  <div class="product-form__body" js-product-form="body">
+    {% unless product.has_only_default_variant %}
+      {% for option in product.options_with_values %}
+        {% assign sanitized_option_name = option.name | handleize %}
+        {% assign option_is_swatch = false %}
+        {% assign option_has_label = true %}
+
+        {% if supported_swatch_list contains sanitized_option_name %}
+          {% assign option_is_swatch = true %}
+        {% endif %}
+
+        {% if sanitized_option_name contains 'color' or sanitized_option_name contains 'colour' %}
+          {% assign option_has_label = false %}
+        {% endif %}
+
+        <div class="product-form__option" js-product-form="swatch-container">
+          {% if
+            sanitized_option_name contains 'color' or
+            sanitized_option_name contains 'colour'
+          %}
+
+            {% render 'product-swatches' with
+              option: option,
+              id: forloop.index,
+              name: option.name,
+              sanitized_option_name: sanitized_option_name,
+            %}
+
+          {% else %}
+
+              <label
+                class="product-form__label caption"
+                for="OptionSelector-{{ forloop.index0 }}"
+              >
+                <span>
+                  {{ option.name }}
+                </span>
+                {% if triggerChart == true %}
+                  <div js-size-chart="container">
+                    <a
+                      class=""
+                      type="button"
+                      js-size-chart="descShow"
+                      id="size-chart"
+          
+                    >
+                    {{ 'products.product.size_chart' | t }}
+                    </a>
+                    <style>.product-form__label {justify-content: space-between;}</style>
+                  </div>
+                {% endif %}
+              </label>
+
+            
+            <select
+              class="product-form__select subtitle-2"
+              id="OptionSelector-{{ forloop.index0 }}"
+              style="background-image: url({{ 'icon-caret-down.svg' | asset_url }});"
+              data-index="option{{ option.position }}"
+              js-product-form="optionSelector"
+
+              {% if sanitized_option_name contains 'size' %}
+                js-product-swatches="size"
+              {% endif %}
+            >
+              <option
+                value=""
+                selected="selected"
+              >
+                {% if sanitized_option_name contains 'size' %}
+                  {{ 'products.product.select_size' | t }}
+                {% else %}
+                  {{ 'products.product.select_model' | t }}
+                {% endif %}
+              </option>
+
+              {% for value in option.values %}
+                {% if unit_pound %}
+                  {% assign value_option = value | split: '||' | last | strip %}
+                {% else %}
+                  {% assign value_option = value | split: '||' | first | strip %}
+                {% endif %}
+
+                {% if product.options_with_values.size == 1 %}
+                  {% for variant in product.variants %}
+                    {% assign sanitized_variant_name = variant.title | handleize %}
+                    {% assign sanitized_value = value | handleize %}
+                    {% if sanitized_variant_name == sanitized_value and variant.price > 0 %}
+                      <option
+                        value="{{ value | escape }}"
+                      >
+                        {{ value_option }}
+                      </option>
+                    {% endif %}
+                  {% endfor %}
+                {% else %}
+                  <option
+                    value="{{ value | escape }}"
+                  >
+                    {{ value_option }}
+                  </option>
+                {% endif %}
+              {% endfor %}
+            </select>
+          {% endif %}
+        </div>
+      {% endfor %}
+    {% endunless %}
+    <div class="product-form__add-to-cart caption">
+      {% if cta_link != null %}
+        <a
+          class="button button--primary button--dark button--block button--large"
+          href="{{ cta_link }}"
+        >
+          <span>
+            {% if cta_text != '' %}
+              {{ cta_text }}
+            {% elsif current_variant.available %}
+              {{ 'products.product.add_to_cart' | t }}
+            {% else %}
+              {{ 'products.product.sold_out' | t }}
+            {% endif %}
+          </span>
+        </a>
+
+      {% else %}
+        <button
+          class="
+            button
+            button--primary
+            button--dark
+            button--block
+            button--large
+            {{ cta_classes }}
+          "
+          name="add"
+          type="submit"
+          data-cy="addToCart"
+          js-ajax-cart="addToCart"
+          js-product-form="addToCart"
+          {{ cta_attributes }}
+        >
+          <span>
+            {% if cta_text != '' %}
+              {{ cta_text }}
+            {% elsif current_variant.available %}
+              {{ 'products.product.add_to_cart' | t }}
+            {% else %}
+              {{ 'products.product.sold_out' | t }}
+            {% endif %}
+          </span>
+        </button>
+      {% endif %}
+    </div>
+
+    <div class="product-form__footer-bottom">
+      {% if settings.enable_product_reviews %}
+        <div class="product-form__review-badges">
+          <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+        </div>
+      {% endif %}
+
+      {% if settings.enable_free_shipping_notification-pdp %}
+        {% render 'free-shipping-notification' with class: 'template-product' %}
+      {% endif %}
+    </div>
+  </div>
+
+  <select
+    class="no-js"
+    name="id"
+    js-product-form="masterSelector"
+  >
+    {% for variant in product.variants %}
+      <option
+        {% unless variant.available %}
+          disabled="disabled"
+        {% endunless %}
+        {% if variant == current_variant %}
+          selected="selected"
+        {% endif %}
+        value="{{ variant.id }}"
+      >
+        {{ variant.title }}
+      </option>
+    {% endfor %}
+  </select>
+
+  <input
+    name="properties[_max_inventory]"
+    type="hidden"
+    value="{{ max_inventory }}"
+    js-product-form="maxQuantityInput"
+  >
+
+  {% if product.tags contains 'large-item' %}
+    <input name="properties[_large_item]" type="hidden" value="true">
+  {% endif %}
+
+  {% if settings.enable_upsell_features %}
+    {% render 'line-items-bundle' %}
+  {% endif %}
+
+  {% unless product == empty %}
+    {% render 'product-json' with
+      id: namespace,
+      featured_image: featured_image,
+    %}
+  {% endunless %}
+</form>

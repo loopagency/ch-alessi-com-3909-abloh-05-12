@@ -1,0 +1,17 @@
+{% if settings.store_code == "US" %}
+  <script
+    async
+    src="https://na-library.klarnaservices.com/lib.js"
+    data-client-id="{{ settings.data_client_id }}"
+    ></script>
+{% else %}
+  <script
+  async
+  src="https://eu-library.klarnaservices.com/lib.js"
+  data-client-id="{{ settings.data_client_id }}"
+  ></script>
+{% endif %}
+<script>
+  window.KlarnaOnsiteService = window.KlarnaOnsiteService || [];
+  window.KlarnaOnsiteService.push({ eventName: 'refresh-placements' });
+</script>

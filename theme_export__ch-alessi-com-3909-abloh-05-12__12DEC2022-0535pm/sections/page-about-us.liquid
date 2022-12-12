@@ -1,0 +1,99 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Section: About Us
+----------------------------------------------------------------------------
+{% endcomment %}
+
+{% assign index = 0 %}
+
+<section
+  data-section-id="{{ section.id }}"
+  data-section-type="page-about-us"
+>
+  <div
+    class="slider-page"
+    js-slider-page="main"
+  >
+    <div
+      class="slider-page__container swiper-container"
+      js-slider-page="container"
+    >
+      <div class="slider-page__wrapper swiper-wrapper">
+
+        {% for block in section.blocks %}
+          {% assign index = index | plus: 1 %}
+
+          {% if block.settings.add_to_nav == true %}
+            {% assign slider_name = block.settings.strapline | remove: '-' | strip %}
+          {% else %}
+            {% assign slider_name = '' %}
+          {% endif %}
+
+          <div
+            class="slider-page__slide swiper-slide"
+            js-slider-page="slide"
+            js-slide-name="{{ slider_name }}"
+            {{ block.shopify_attributes }}
+          >
+            {% render 'slider-page-slide'
+              with strapline: block.settings.strapline
+              and title: block.settings.title
+              and description: block.settings.description
+              and image: block.settings.image
+              and index: index
+            %}
+          </div>
+
+        {% endfor %}
+
+      </div>
+    </div>
+
+    <div class="swiper-pagination" js-slider-page="pagination"></div>
+
+    {% render 'modal-slider-page' %}
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "About Us Page",
+    "blocks": [
+      {
+        "type": "block",
+        "name": "Block",
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "add_to_nav",
+            "label": "Add to navigation",
+            "info": "Add this section to the footer navigation (optional)",
+            "default": true
+          },
+          {
+            "type": "text",
+            "id": "strapline",
+            "label": "Strapline",
+            "info": "(optional)"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title"
+          },
+          {
+            "type": "richtext",
+            "id": "description",
+            "label": "Description"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image",
+            "info": "Recommended min dimensions: 1000 x 1000 px (.jpg)"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

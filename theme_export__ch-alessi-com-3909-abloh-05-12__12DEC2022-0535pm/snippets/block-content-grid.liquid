@@ -1,0 +1,237 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Content Grid Block
+  - Content grid block for custom page content
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- assign heading = block.settings.heading -%}
+{%- assign copy = block.settings.copy -%}
+{%- assign grid_item_1 = block.settings.grid_item_1 -%}
+{%- assign grid_item_1_title = block.settings.grid_item_1_title -%}
+{%- assign grid_item_1_link = block.settings.grid_item_link_1 -%}
+{%- assign grid_item_2 = block.settings.grid_item_2 -%}
+{%- assign grid_item_2_title = block.settings.grid_item_2_title -%}
+{%- assign grid_item_2_link = block.settings.grid_item_link_2 -%}
+{%- assign grid_item_3 = block.settings.grid_item_3 -%}
+{%- assign grid_item_3_title = block.settings.grid_item_3_title -%}
+{%- assign grid_item_3_link = block.settings.grid_item_link_3 -%}
+{%- assign grid_item_4 = block.settings.grid_item_4 -%}
+{%- assign grid_item_4_title = block.settings.grid_item_4_title -%}
+{%- assign grid_item_4_link = block.settings.grid_item_link_4 -%}
+{%- assign grid_item_5 = block.settings.grid_item_5 -%}
+{%- assign grid_item_5_title = block.settings.grid_item_5_title -%}
+{%- assign grid_item_5_link = block.settings.grid_item_link_5 -%}
+{%- assign grid_item_6 = block.settings.grid_item_6 -%}
+{%- assign grid_item_6_title = block.settings.grid_item_6_title -%}
+{%- assign grid_item_6_link = block.settings.grid_item_link_6 -%}
+{%- assign grid_item_7 = block.settings.grid_item_7 -%}
+{%- assign grid_item_7_title = block.settings.grid_item_7_title -%}
+{%- assign grid_item_7_link = block.settings.grid_item_link_7 -%}
+{%- assign grid_item_8 = block.settings.grid_item_8 -%}
+{%- assign grid_item_8_title = block.settings.grid_item_8_title -%}
+{%- assign grid_item_8_link = block.settings.grid_item_link_8 -%}
+{%- assign grid_item_9 = block.settings.grid_item_9 -%}
+{%- assign grid_item_9_title = block.settings.grid_item_9_title -%}
+{%- assign grid_item_9_link = block.settings.grid_item_link_9 -%}
+{%- assign grid_item_10 = block.settings.grid_item_10 -%}
+{%- assign grid_item_10_title = block.settings.grid_item_10_title -%}
+{%- assign grid_item_10_link = block.settings.grid_item_link_10 -%}
+{%- assign grid_item_11 = block.settings.grid_item_11 -%}
+{%- assign grid_item_11_title = block.settings.grid_item_11_title -%}
+{%- assign grid_item_11_link = block.settings.grid_item_link_11 -%}
+{%- assign grid_item_12 = block.settings.grid_item_12 -%}
+{%- assign grid_item_12_title = block.settings.grid_item_12_title -%}
+{%- assign grid_item_12_link = block.settings.grid_item_link_12 -%}
+
+{%-if block_settings -%}
+{%- assign block_settings_array = block_settings | replace: ',"', '##split##' | replace: '{', '' | replace: '}', '' | replace: '"', '' | split: '##split##' -%}
+  {%- for block_setting in block_settings_array -%}
+    {%- if block_setting != blank -%}
+      {%- assign block_setting_name_value = block_setting | split: '=>' -%}
+      {%- assign block_setting_name = block_setting_name_value[0] | replace: ' ', '' -%}
+      {%- assign block_setting_value = block_setting_name_value[1] -%}
+      {%- assign block_setting_value_slice = block_setting_value | slice: 0, 5 -%}
+      {%- if block_setting_value_slice == 'files' -%}
+        {%- assign block_setting_value = block_setting_value | replace: 'files/' -%}
+        {%- assign block_setting_value = images[block_setting_value] -%}
+      {%- endif -%}
+      {%- case block_setting_name -%}
+        {%- when 'heading' -%}
+          {%- assign heading = block_setting_value -%}
+        {%- when 'copy' -%}
+          {%- assign copy = block_setting_value -%}
+        {%- when 'grid_item_1' -%}
+          {%- assign grid_item_1 = block_setting_value -%}
+        {%- when 'grid_item_1_title' -%}
+          {%- assign grid_item_1_title = block_setting_value -%}
+        {%- when 'grid_item_1_link' -%}
+          {%- assign grid_item_1_link = block_setting_value -%}
+        {%- when 'grid_item_2' -%}
+          {%- assign grid_item_2 = block_setting_value -%}
+        {%- when 'grid_item_2_title' -%}
+          {%- assign grid_item_2_title = block_setting_value -%}
+        {%- when 'grid_item_2_link' -%}
+          {%- assign grid_item_2_link = block_setting_value -%}
+        {%- when 'grid_item_3' -%}
+          {%- assign grid_item_3 = block_setting_value -%}
+        {%- when 'grid_item_3_title' -%}
+          {%- assign grid_item_3_title = block_setting_value -%}
+        {%- when 'grid_item_3_link' -%}
+          {%- assign grid_item_3_link = block_setting_value -%}
+        {%- when 'grid_item_4' -%}
+          {%- assign grid_item_4 = block_setting_value -%}
+        {%- when 'grid_item_4_title' -%}
+          {%- assign grid_item_4_title = block_setting_value -%}
+        {%- when 'grid_item_4_link' -%}
+          {%- assign grid_item_4_link = block_setting_value -%}
+        {%- when 'grid_item_5' -%}
+          {%- assign grid_item_5 = block_setting_value -%}
+        {%- when 'grid_item_5_title' -%}
+          {%- assign grid_item_5_title = block_setting_value -%}
+        {%- when 'grid_item_5_link' -%}
+          {%- assign grid_item_5_link = block_setting_value -%}
+        {%- when 'grid_item_6' -%}
+          {%- assign grid_item_6 = block_setting_value -%}
+        {%- when 'grid_item_6_title' -%}
+          {%- assign grid_item_6_title = block_setting_value -%}
+        {%- when 'grid_item_6_link' -%}
+          {%- assign grid_item_6_link = block_setting_value -%}
+        {%- when 'grid_item_7' -%}
+          {%- assign grid_item_7 = block_setting_value -%}
+        {%- when 'grid_item_7_title' -%}
+          {%- assign grid_item_7_title = block_setting_value -%}
+        {%- when 'grid_item_7_link' -%}
+          {%- assign grid_item_7_link = block_setting_value -%}
+        {%- when 'grid_item_8' -%}
+          {%- assign grid_item_8 = block_setting_value -%}
+        {%- when 'grid_item_8_title' -%}
+          {%- assign grid_item_8_title = block_setting_value -%}
+        {%- when 'grid_item_8_link' -%}
+          {%- assign grid_item_8_link = block_setting_value -%}
+        {%- when 'grid_item_9' -%}
+          {%- assign grid_item_9 = block_setting_value -%}
+        {%- when 'grid_item_9_title' -%}
+          {%- assign grid_item_9_title = block_setting_value -%}
+        {%- when 'grid_item_9_link' -%}
+          {%- assign grid_item_9_link = block_setting_value -%}
+        {%- when 'grid_item_10' -%}
+          {%- assign grid_item_10 = block_setting_value -%}
+        {%- when 'grid_item_10_title' -%}
+          {%- assign grid_item_10_title = block_setting_value -%}
+        {%- when 'grid_item_10_link' -%}
+          {%- assign grid_item_10_link = block_setting_value -%}
+        {%- when 'grid_item_11' -%}
+          {%- assign grid_item_11 = block_setting_value -%}
+        {%- when 'grid_item_11_title' -%}
+          {%- assign grid_item_11_title = block_setting_value -%}
+        {%- when 'grid_item_11_link' -%}
+          {%- assign grid_item_11_link = block_setting_value -%}
+        {%- when 'grid_item_12' -%}
+          {%- assign grid_item_12 = block_setting_value -%}
+        {%- when 'grid_item_12_title' -%}
+          {%- assign grid_item_12_title = block_setting_value -%}
+        {%- when 'grid_item_12_link' -%}
+          {%- assign grid_item_12_link = block_setting_value -%}
+      {%- endcase -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+<section
+  class="content-grid"
+  data-section-id="{{ block_id }}"
+  data-section-type="content-grid"
+>
+  <div class="container">
+    <div class="content-grid__header">
+      <h1 class="content-grid__heading d3">{{ heading }}</h1>
+      <p class="content-grid__copy body-1">{{ copy }}</p>
+    </div>
+    <ul class="content-grid__content">
+      {% if grid_item_1 != blank %}
+        {% render 'content-grid-item'
+          grid_item: grid_item_1,
+          grid_item_title: grid_item_1_title,
+          grid_item_link: grid_item_1_link %}
+      {% endif %}
+      
+      {% if grid_item_2 != blank %}
+        {% render 'content-grid-item'
+          grid_item: grid_item_2,
+          grid_item_title: grid_item_2_title,
+          grid_item_link: grid_item_2_link %}
+      {% endif %}
+
+      {% if grid_item_3 != blank %}
+        {% render 'content-grid-item'
+          grid_item: grid_item_3,
+          grid_item_title: grid_item_3_title,
+          grid_item_link: grid_item_3_link %}
+      {% endif %}
+
+      {% if grid_item_4 != blank %}
+        {% render 'content-grid-item'
+          grid_item: grid_item_4,
+          grid_item_title: grid_item_4_title,
+          grid_item_link: grid_item_4_link %}
+      {% endif %}
+
+      {% if grid_item_5 != blank %}
+        {% render 'content-grid-item'
+          grid_item: grid_item_5,
+          grid_item_title: grid_item_5_title,
+          grid_item_link: grid_item_5_link %}
+      {% endif %}
+
+      {% if grid_item_6 != blank %}
+        {% render 'content-grid-item'
+          grid_item: grid_item_6,
+          grid_item_title: grid_item_6_title,
+          grid_item_link: grid_item_6_link %}
+      {% endif %}
+
+      {% if grid_item_7 != blank %}
+        {% render 'content-grid-item'
+          grid_item: grid_item_7,
+          grid_item_title: grid_item_7_title,
+          grid_item_link: grid_item_7_link %}
+      {% endif %}
+
+      {% if grid_item_8 != blank %}
+        {% render 'content-grid-item'
+          grid_item: grid_item_8,
+          grid_item_title: grid_item_8_title,
+          grid_item_link: grid_item_8_link %}
+      {% endif %}
+
+      {% if grid_item_9 != blank %}
+        {% render 'content-grid-item'
+          grid_item: grid_item_9,
+          grid_item_title: grid_item_9_title,
+          grid_item_link: grid_item_9_link %}
+      {% endif %}
+
+      {% if grid_item_10 != blank %}
+        {% render 'content-grid-item'
+          grid_item: grid_item_10,
+          grid_item_title: grid_item_10_title,
+          grid_item_link: grid_item_10_link %}
+      {% endif %}
+
+      {% if grid_item_11 != blank %}
+        {% render 'content-grid-item'
+          grid_item: grid_item_11,
+          grid_item_title: grid_item_11_title,
+          grid_item_link: grid_item_11_link %}
+      {% endif %}
+
+      {% if grid_item_12 != blank %}
+        {% render 'content-grid-item'
+          grid_item: grid_item_12,
+          grid_item_title: grid_item_12_title,
+          grid_item_link: grid_item_12_link %}
+      {% endif %}
+    </ul>
+  </div>
+</section>

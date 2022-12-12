@@ -1,0 +1,22 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Store selector
+  - Options are rendered from `Frame.MultiStore` options.
+  - Redirect options are defined in Redirect Modal section settings.
+------------------------------------------------------------------------------
+{% endcomment %}
+<div class="store-selector" js-store-selector="container">
+  <button
+    class="store-selector__button"
+    href="#"
+    js-site-footer="redirectModalToggle"
+  >
+    {% render 'icon-misc' with icon: 'globe' %}
+
+    <span class="visually-hidden">
+      {{ 'layout.store_settings.change_store' | t }}
+    </span>
+
+    {{ settings.store_code }} | {{ request.locale.iso_code | upcase }}
+  </button>
+</div>

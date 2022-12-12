@@ -1,0 +1,78 @@
+<!-- Accessibility - us.alessi.com -->
+
+<script> 
+  window.interdeal = {
+    sitekey   : "6c7f05ed6d11734fec9fa70824e427a0",
+    Position  : "left",
+    Menulang  : "EN",
+    domains	 : {
+      js  : "https://aacdn.nagich.com/",
+      acc : "https://access.nagich.com/"
+    },
+    btnStyle  : {
+        color : {
+            main   : "#000000",
+            second : "#fff"
+        },
+        vPosition : ["80%","10%"], //Y-axis position of the widget, left side is reffering to the desktop version, the right side is for mobile.
+        scale	  : ["0.7","0.7"], //Size of the widget, the left side is referring to the desktop version, the right side is for mobile.
+        icon	  : { 
+          type	: 11, //You can choose between 1- 14 icons, or set value as string like "Accessibility".
+          shape	: "circle", //You can choose the following shapes: "circle", "rectangle", "rounded", "semicircle".
+          outline	: false //true / false.
+        }
+      }
+  };
+  (function(doc, head, body){
+    var coreCall             = doc.createElement('script');
+    coreCall.src             = 'https://aacdn.nagich.com/core/4.3.2/accessibility.js';
+    coreCall.defer           = true;
+    coreCall.integrity       = 'sha512-73oZhkzO+7F1r8AXT5BtChHyVvx8GMuB3Pokx6jdnP5Lw7xyBUO4L5KKi7BwqovhoqOWjNmkah1iCiMniyt6Kw==';
+    coreCall.crossOrigin     = 'anonymous';
+    coreCall.setAttribute('data-cfasync', true );
+    body? body.appendChild(coreCall) : head.appendChild(coreCall);
+  })(document, document.head, document.body);
+</script>
+
+<style>
+  .INDpositionLeft #INDmenu-btn {
+    left: 24px!important;
+    top: calc(100vh - 100px)!important;
+  }
+  #INDmenu.INDmenu-loaded .INDmenuFooter {
+    background: #edede8!important;
+  }
+  #INDmenu.INDmenu-loaded .INDmenuFooter div:first-child button {
+    color: #515151!important;
+    padding-top: 10px;
+  }
+  #INDmenu.INDmenu-loaded .INDmenuFooter div:nth-child(2) {
+  display: none!important;
+  }
+  #INDmenu.INDmenu-loaded #INDmenuHeader_bg, #INDmenu.INDmenu-loaded[data-expanded="true"] #INDmenuHeader_expanded_bg {
+    display:none;
+  }
+  #INDmenu.INDmenu-loaded .INDmenuHeader {
+    background-color: black!important;
+  }
+  #INDmenu #INDlangsCombo {
+    background: black!important;
+    border-bottom: 1px solid white !important;
+    border-radius: 0!important;
+  }
+  #INDmenu.INDmenu-loaded .INDmenuBody .INDmenuRow .INDmenuPanel #INDmenuGroup-customcolor #INDcustomcolor-radioGroup label {
+    border-radius: 0!important;
+    height: 30px;
+    padding-top: 8px;
+  }
+  :root {
+    --ind-menu-main-color: #000000;
+    --ind-menu-hover-color: #000000;
+    --ind-menu-active-color: #000000;
+    --ind-color-picker: #000000;
+    --ind-color-bg-picker: #000000;
+    --ind-color-text-picker: #000000;
+    --ind-color-heading-picker: #000000;
+    --ind-color-heading-picker-default: #000000;
+  }
+</style>

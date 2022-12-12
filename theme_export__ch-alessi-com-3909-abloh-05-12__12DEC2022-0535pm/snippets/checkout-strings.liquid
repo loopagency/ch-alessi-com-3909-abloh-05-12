@@ -1,0 +1,39 @@
+
+{% comment %}
+----------------------------------------------------------------------------
+  Snippets: Checkout strings
+  - Pass variables into JS based on Liquid variables.
+----------------------------------------------------------------------------
+{% endcomment %}
+<script>
+  {% capture arrow_down %}{% render 'icons' with icon: 'arrow-down' %}{% endcapture %}
+
+  var theme = {
+    strings: {
+      currency: {{ checkout.currency | json }},
+      loqateKey: "{{ settings.loqate_key }}",
+      lookupLabel: {{ 'checkout.lookup.label' | t | json }},
+      lookupLoading: {{ 'checkout.lookup.loading' | t | json }},
+      lookupLoaded: {{ 'checkout.lookup.loaded' | t | json }},
+      lookupError: {{ 'checkout.lookup.error' | t | json }},
+      skipToResults: {{ 'checkout.lookup.skip_to_results' | t | json }},
+      addOn: {
+        preview: {{ 'cart.add_on.message.preview' |  t | json }},
+        checkout: {{ 'cart.add_on.message.checkout' |  t | json }}
+      }
+    },
+    features: {
+      freeGift: {{ settings.enable_free_gift | json }}
+    },
+    freeGift: {
+      minValue1: {{ settings.free_gift_min_cart_value_1 }},
+      itemQty1: {{ settings.free_gift_qty_1 }}
+    },
+    freeGift2: {
+      itemQty2: {{ settings.free_gift_qty_2 }}
+    },
+    images: {
+      addOnPreview: {{ settings.cart_addon_image_preview | img_url: '500x' | json }}
+    }
+  };
+</script>

@@ -1,0 +1,185 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Store settings modal
+------------------------------------------------------------------------------
+{% endcomment %}
+<div
+  class="
+    modal__card
+    redirect-modal__card
+    redirect-modal__card--settings
+  "
+  tabindex="0"
+  js-modal="card"
+  js-redirect-modal="settingsContainer"
+>
+  <div class="redirect-modal__header">
+    <div class="container">
+      <h3
+        class="redirect-modal__title visible-settings h4"
+      >
+        {{ 'redirect.modal.settings.title' | t }}
+      </h3>
+
+      <h3 class="redirect-modal__title visible-choice h4">
+        <span class="visible-choice" js-redirect-translation="title">
+        </span>
+
+        <span class="visible-settings">
+          {{ 'redirect.modal.choice.title' | t }}
+        </span>
+      </h3>
+
+      <p class="redirect-modal__lead visible-choice body-2">
+        <span class="visible-choice" js-redirect-translation="description">
+        </span>
+
+        <span class="visible-settings">
+          {{ 'redirect.modal.choice.text' | t | newline_to_br }}
+        </span>
+      </p>
+
+      <button class="redirect-modal__close button" js-redirect-modal="close">
+        <span class="visually-hidden">
+          {{ 'general.accessibility.close' | t }}
+        </span>
+
+        {% render 'icon-misc' with icon: 'close' %}
+      </button>
+    </div>
+  </div>
+
+  <div class="redirect-modal__body">
+    <form
+      id="RedirectSettings"
+      class="form-group redirect-modal__form"
+      action="#"
+      method="GET"
+      js-redirect-modal="form"
+    >
+      <div class="container">
+        <div class="row">
+          <div class="col xs12 redirect-modal__country-selector">
+            <label
+              class="form-group__label visually-hidden"
+              for="RedirectCountry"
+            >
+              <span
+                class="visible-choice"
+                js-redirect-translation="country_selector_label"
+              >
+              </span>
+
+              <span class="visible-settings">
+                {{ 'redirect.modal.country_selector_label' | t }}
+              </span>
+            </label>
+
+            <div
+              class="redirect-modal__icon"
+              js-redirect-modal="icon"
+            ></div>
+
+            <select
+              id="RedirectCountry"
+              class="redirect-modal__country-select"
+              name="loc"
+              js-redirect-modal="countrySelector"
+            >
+              <option value="IT">Italy</option>
+            </select>
+          </div>
+
+          <div class="col xs12" js-redirect-modal="languageSelectorContainer">
+            <label
+              class="form-group__label visually-hidden"
+              for="RedirectLanguage"
+            >
+              <span
+                class="visible-choice"
+                js-redirect-translation="language_selector_label"
+              >
+              </span>
+
+              <span class="visible-settings">
+                {{ 'redirect.modal.language_selector_label' | t }}
+              </span>
+            </label>
+
+            <select
+              name="lang" id="RedirectLanguage"
+              js-redirect-modal="languageSelector"
+            >
+              <option value="English">English</option>
+            </select>
+          </div>
+
+          <div class="col xs12" js-redirect-modal="currencySelectorContainer">
+            <label
+              class="form-group__label visually-hidden"
+              for="RedirectCurrency"
+            >
+              {{ 'redirect.modal.currency_selector_label' | t }}
+            </label>
+
+            <select
+              id="RedirectCurrency"
+              name="currency"
+              js-redirect-modal="currencySelector"
+            >
+              <option value="{{ cart.currency.iso_code }}">
+                {{ cart.currency.iso_code }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col xs12">
+            <button
+              class="
+                button
+                button--primary
+                button--dark
+                button--block
+                redirect-modal__update
+              "
+              data-store-url="%redirect_store_url%"
+              js-redirect-modal="updateButton"
+            >
+              <span
+                class="visible-choice"
+                js-redirect-translation="update_preferences"
+              >
+              </span>
+
+              <span class="visible-settings">
+                {{ 'redirect.modal.update_preferences' | t }}
+              </span>
+            </button>
+
+            <button
+              class="redirect-modal__country-button body-2 color--primary"
+              js-redirect-modal="choiceContinue"
+            >
+              <span
+                class="visible-choice"
+                data-micromodal-close
+                js-redirect-translation="stay_on_site"
+              >
+              </span>
+
+              <span
+                class="visible-settings"
+                data-micromodal-close
+              >
+                {{ 'redirect.modal.choice.continue' | t }}
+              </span>
+            </button>
+
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

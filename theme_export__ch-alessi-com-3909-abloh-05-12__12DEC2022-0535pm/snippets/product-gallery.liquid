@@ -1,0 +1,205 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Product gallery
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{% unless id %}
+  {% assign id = 1 %}
+{% endunless %}
+
+{% assign has_video = false %}
+{% for tag in product.tags %}
+  {% if tag contains 'video__' %}
+    {% assign has_video = true %}
+    {% assign video_settings = tag | replace: 'video__', '' | split: '__' %}
+
+    {% assign vimeo_id = video_settings | first %}
+    {% assign position = video_settings[1] | plus: 0 %}
+    {% assign video_image = video_settings[2] %}
+  {% endif %}
+{% endfor %}
+
+{% capture video_block %}
+  <li class="swiper-slide">
+    <div
+      class="product-gallery__featured product-gallery__featured--video"
+      js-product-gallery="featuredImage"
+      js-gallery-dot="Image{{ product.id }}"
+      js-video-image="gallery"
+    >
+      {% render 'image-video' with
+        video_card: false,
+        product_gallery: true,
+        vimeo_id: vimeo_id,
+        video_id: product.id,
+        large_image: video_image,
+        small_image: video_image,
+        image_alignment: 'image-center'
+      %}
+    </div>
+
+    <button class="product-gallery__video-trigger" type="button" js-image-video="trigger">
+      <span class="product-gallery__play">
+        {% render 'icon-media' with icon: 'play' %}
+      </span>
+
+      <span  class="product-gallery__pause">
+        {% render 'icon-media' with icon: 'pause' %}
+      </span>
+    </button>
+  </li>
+{% endcapture %}
+
+
+{% comment %}
+------------------------------------------------------------------------------
+  Build Gallery
+------------------------------------------------------------------------------
+{% endcomment %}
+<div class="product-gallery" js-product-gallery="container">
+  <div
+    id="ProductGalleryMain-{{ id }}"
+    class="
+      product-gallery__featured-carousel
+      {% unless single_image %}swiper-container{% endunless %}
+    "
+    js-product-gallery="featuredCarousel"
+
+  >
+    {% if settings.enable_image_zoom and hide_zoom != true %}
+      <div class="product-gallery__zoom-pane" js-product-gallery="zoomPane"></div>
+    {% endif %}
+
+    {% if single_image %}
+      {% render 'responsive-image' with
+        image_attributes: image_attributes,
+        image: product.featured_image,
+        max_height: 1280,
+        max_width: 900,
+        wrapper_attributes: wrapper_attributes,
+        wrapper_class: wrapper_class,
+      %}
+
+    {% else %}
+      <ul class="swiper-wrapper">
+        {% for image in product.images %}
+          {% if has_video and forloop.index == position %}
+            {{ video_block }}
+          {% endif %}
+
+          {% capture image_attributes %}
+            data-image-id="{{ image.id }}"
+
+            {% if settings.enable_image_zoom and hide_zoom != true %}
+              data-zoom="{{ image | img_url: 'original' }}"
+            {% endif %}
+          {% endcapture %}
+
+          {% capture wrapper_class %}
+            product-gallery__featured-image
+          {% endcapture %}
+
+          {% capture wrapper_attributes %}
+            js-product-gallery="featuredImage"
+          {% endcapture %}
+
+          <li class="swiper-slide">
+            <div
+              class="product-gallery__featured lazyload"
+              data-bgset="{% render 'responsive-bg-image', image: image %}"
+              js-product-gallery="featuredImage"
+              js-gallery-dot="Image{{ image.id }}"
+            ></div>
+          </li>
+
+          {% if forloop.last and has_video and position > forloop.length %}
+            {{ video_block }}
+          {% endif %}
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+
+  {% if product.images.size > 1 %}
+    {% assign image_counter = 0 %}
+
+    <ul
+      class="product-gallery__dots is-active"
+      js-carousel="container"
+      js-product-gallery="dotContainer"
+    >
+      {% comment %}
+      ------------------------------------------------------------------------
+        Product image dots
+      ------------------------------------------------------------------------
+      {% endcomment %}
+      {% for image in product.images %}
+        {% if has_video and forloop.index == position %}
+          <li
+            class="
+              product-gallery__dot
+              {% if image_counter == 0 %}is-active{% endif %}
+            "
+            data-id="{{ image_counter }}"
+            data-image="{{ product.id }}"
+            role="button"
+            js-carousel="cell"
+            js-product-gallery="dot"
+          >
+            <span class="visually-hidden">Image {{ image_counter }}</span>
+          </li>
+
+           {% assign image_counter = image_counter | plus: 1 %}
+        {% endif %}
+
+        {% unless image.attached_to_variant? %}
+          <li
+            class="
+              product-gallery__dot
+              {% if image_counter == 0 %}is-active{% endif %}
+            "
+            data-id="{{ image_counter }}"
+            data-image="{{ image.id }}"
+            role="button"
+            js-carousel="cell"
+            js-product-gallery="dot"
+          >
+            <span class="visually-hidden">Image {{ image_counter }}</span>
+          </li>
+        {% endunless %}
+
+        {% comment %}
+        ------------------------------------------------------------------------------
+          Variant-based images
+        ------------------------------------------------------------------------------
+        {% endcomment %}
+        {% if image.attached_to_variant? %}
+          {% assign variant_set = false %}
+          {% for variant in image.variants %}
+            {% if variant.image.id == image.id and variant_set == false %}
+              <li
+                class="
+                  product-gallery__dot
+                "
+                data-id="{{ image_counter }}"
+                data-image="{{ image.id }}"
+                data-variant-id="{{ variant.id }}"
+                role="button"
+                js-carousel="cell"
+                js-product-gallery="dot"
+              >
+                <span class="visually-hidden">Image {{ image_counter }}</span>
+              </li>
+              {% assign variant_set = true %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+
+        {% assign image_counter = image_counter | plus: 1 %}
+      {% endfor %}
+
+      {% render 'icon-direction' with icon: 'arrow-down-long' %}
+    </ul>
+  {% endif %}
+</div>

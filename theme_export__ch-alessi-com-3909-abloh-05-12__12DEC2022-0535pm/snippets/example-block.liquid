@@ -1,0 +1,40 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Example Block
+  - This is an Example Page Builder Block
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- assign heading = block.settings.heading -%}
+{%- assign paragraph = block.settings.paragraph -%}
+
+{%-if block_settings -%}
+{%- assign block_settings_array = block_settings | replace: ',"', '##split##' | replace: '{', '' | replace: '}', '' | replace: '"', '' | split: '##split##' -%}
+  {%- for block_setting in block_settings_array -%}
+    {%- if block_setting != blank -%}
+      {%- assign block_setting_name_value = block_setting | split: '=>' -%}
+      {%- assign block_setting_name = block_setting_name_value[0] | replace: ' ', '' -%}
+      {%- assign block_setting_value = block_setting_name_value[1] -%}
+      {%- assign block_setting_value_slice = block_setting_value | slice: 0, 5 -%}
+      {%- if block_setting_value_slice == 'files' -%}
+        {%- assign block_setting_value = block_setting_value | replace: 'files/' -%}
+        {%- assign block_setting_value = images[block_setting_value] -%}
+      {%- endif -%}
+      {%- case block_setting_name -%}
+        {%- when 'heading' -%}
+          {%- assign heading = block_setting_value -%}
+        {%- when 'paragraph' -%}
+          {%- assign paragraph = block_setting_value -%}
+      {%- endcase -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+<section
+  class="example-block"
+  data-section-id="{{ block_id }}"
+  data-section-type="example-block"
+>
+  <h1>{{ heading }}</h1>
+  <p>{{ paragraph }}</p>
+</section>

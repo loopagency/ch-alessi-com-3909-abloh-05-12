@@ -1,0 +1,70 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Search bar
+  - Used in header and on search page.
+----------------------------------------------------------------------------
+{% endcomment %}
+{% assign namespace = '' %}
+
+{% if id %}
+  {% assign namespace = id | prepend: '-' %}
+{% endif %}
+
+<div class="search-bar">
+  <div class="search-bar__input-wrapper">
+    <form
+      class="search-bar__form"
+      action="/search"
+      autocomplete="off"
+      method="get"
+      role="search"
+      js-search-bar="form"
+      onsubmit="submitDatalayer(this)"
+    >
+      <div class="search-bar__container">
+        <div class="search-bar__field">
+          <label
+            class="search-bar__label visually-hidden"
+            for="Search{{ namespace }}"
+            js-search-bar="label"
+          >
+            {{ 'general.search.placeholder' | t }}
+          </label>
+
+          <input
+            id="Search{{ namespace }}"
+            class="search-bar__input"
+            name="q"
+            placeholder="{{ 'general.search.placeholder' | t }}"
+            type="search"
+            js-search-bar="input"
+          >
+          <button
+            type="submit"
+            class="button search-bar__submit"
+            js-search-bar="submit"
+          >
+            <span class="icon-fallback-text">
+              {{ 'general.search.submit' | t }}
+            </span>
+
+            {% render 'icon-direction' with icon: 'arrow-right-long' %}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function submitDatalayer(element) {
+  var inputField = element.querySelector('[js-search-bar="input"]');
+  window.dataLayer.push({
+    event: 'GAevent',
+    eventID: '22',
+    eventCategory: 'search',
+    eventAction: 'free_search',
+    eventLabel: inputField.value.replace(/-/g, '_').replace(/\s/g, '_'),
+  });
+}
+</script>

@@ -1,0 +1,165 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Predictive search
+  - A Gows special 2019
+------------------------------------------------------------------------------
+{% endcomment %}
+<div
+  id="searchBarHeader"
+  class="site-header__search critical-hide"
+  data-section-id="{{ section.id }}"
+  data-section-type="predictive-search"
+  js-site-header="searchBar"
+  js-search-bar-active="false"
+>
+  {% include 'search-bar' with id: section.id %}
+</div>
+
+<script>
+  window.Frame = window.Frame || {};
+  window.Frame.PredictiveSearch = {
+    headings: {
+      articles: {{ 'predictive_search.article_suggestions_heading' | t | json }},
+      pages: {{ 'predictive_search.page_suggestions_heading' | t | json }},
+      products: {{ 'predictive_search.product_suggestions_heading' | t | json }},
+    },
+    fields: {
+      author: {{ section.settings.enable_predictive_search_author | json }},
+      body: {{ section.settings.enable_predictive_search_body | json }},
+      productType: {{ section.settings.enable_predictive_search_product_type | json }},
+      tag: {{ section.settings.enable_predictive_search_tag | json }},
+      variantsBarcode: {{ section.settings.enable_predictive_search_variants_barcode | json }},
+      variantsSku: {{ section.settings.enable_predictive_search_variants_sku | json }},
+      variantsTitle: {{ section.settings.enable_predictive_search_variants_title | json }},
+      vendor: {{ section.settings.enable_predictive_search_vendor | json }},
+    },
+    limit: {{ section.settings.predictive_search_limit | json }},
+    type: {
+      article: {{ section.settings.enable_predictive_search_article | json }},
+      page: {{ section.settings.enable_predictive_search_page | json }},
+      product: {{ section.settings.enable_predictive_search_products | json }},
+    },
+    unavailable_products: {{ section.settings.unavailable_predictive_search_products | json }},
+  }
+</script>
+
+
+{% schema %}
+  {
+    "name": "Predictive Search",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Type",
+        "info": "Specifies the type of results requested"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_predictive_search_products",
+        "label": "Enable products",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_predictive_search_page",
+        "label": "Enable pages",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_predictive_search_article",
+        "label": "Enable articles",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Unavailable Products",
+        "info": "Specifies whether to display results for unavailable products"
+      },
+      {
+        "type": "radio",
+        "id": "unavailable_predictive_search_products",
+        "label": "Text",
+        "options": [
+          { "value": "show", "label": "Show" },
+          { "value": "hide", "label": "Hide" },
+          { "value": "last", "label": "Last" }
+        ],
+        "default": "show"
+      },
+      {
+        "type": "header",
+        "content": "Limit",
+        "info": "Limit the number of items shown"
+      },
+      {
+        "type": "range",
+        "id": "predictive_search_limit",
+        "min": 1,
+        "max": 10,
+        "step": 1,
+        "label": "Range",
+        "default": 3
+      },
+      {
+        "type": "header",
+        "content": "Fields",
+        "info": "Specifies the list of fields to search on"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_predictive_search_author",
+        "label": "Enable authors",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_predictive_search_body",
+        "label": "Enable body",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_predictive_search_product_type",
+        "label": "Enable product type",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_predictive_search_tag",
+        "label": "Enable tags",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_title",
+        "label": "Enable title",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_predictive_search_variants_barcode",
+        "label": "Enable variants barcode",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_predictive_search_variants_sku",
+        "label": "Enable variants sku",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_predictive_search_variants_title",
+        "label": "Enable variants title",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_predictive_search_vendor",
+        "label": "Enable vendor",
+        "default": true
+      }
+    ]
+  }
+{% endschema %}

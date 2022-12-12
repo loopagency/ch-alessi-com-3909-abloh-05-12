@@ -1,0 +1,81 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Art direction image
+  - Responsively serve two image sources based on small and large screen sizes.
+  - This heavily relies on the picture element which will need to be polyfilled
+    for older browsers (IE9-11).
+
+  https://developer.mozilla.org/en-US/docs/Web/HTML/Element/picture
+  https://github.com/aFarkas/lazysizes
+
+  Accepts:
+    small_image: This image will be served for tablet and mobile screen sizes
+    large_image: This image will be served for laptop and desktop screen sizes
+    alt: Alt tags should be supplied for SEO and screen reader accessibility
+
+  Usage:
+    In your liquid template file, copy the following line
+    - {% render 'art-direction-image' with
+      alt: 'text to be used in the alt tag',
+      large_image: featured_image_1,
+      small_image: featured_image_2,
+    %}
+
+  Globals:
+    Media queries are defined in helpers/lazysizes.js
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{% if type == 'file' %}
+  {% assign large_url = large_image | file_img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+  {% assign small_url = small_image | file_img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+
+  <picture>
+    <source data-srcset="{{ small_url }}" media="--small">
+    <source data-srcset="{{ small_url }}" media="--medium">
+    <source data-srcset="{{ large_url }}" media="--large">
+    <source data-srcset="{{ large_url }}" media="--wide">
+    <source data-srcset="{{ large_image | file_img_url: '640x' }}">
+
+    <img
+      alt="{{ alt }}"
+      class="lazyload blur-up"
+      src="{{ small_image | file_img_url }}"
+      data-sizes="auto"
+      data-widths="[576, 768, 1024, 1360, 2000]"
+      width="640"
+      height="360"
+      loading="lazy"
+    >
+  </picture>
+{% else %}
+  {% assign large_url = large_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+  {% assign small_url = small_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+
+  <picture>
+    <source data-srcset="{{ small_url }}" media="--small">
+    <source data-srcset="{{ small_url }}" media="--medium">
+    <source data-srcset="{{ large_url }}" media="--large">
+    <source data-srcset="{{ large_url }}" media="--wide">
+    {% if template.name == 'collection'%}
+      <source data-srcset="{{ large_image | img_url: '640x' }}">
+    {% else %}
+      <source data-srcset="{{ large_image | img_url: '2000x' }}">
+    {% endif %}
+
+    <img
+      alt="{{ alt }}"
+      class="lazyload blur-up"
+      src="{{ large_image | img_url }}"
+      data-sizes="auto"
+      data-widths="[576, 768, 1024, 1360, 2000]"      
+      loading="lazy"
+      {% if template.name == 'collection'%}
+        width="640"
+        height="360"
+      {% else %}
+        width="2000"
+      {% endif %}
+    >
+  </picture>
+{% endif %}

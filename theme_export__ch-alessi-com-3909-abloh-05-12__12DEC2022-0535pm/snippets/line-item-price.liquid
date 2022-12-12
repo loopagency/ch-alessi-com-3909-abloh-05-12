@@ -1,0 +1,37 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Line item price.
+  - Used to output the AJAX Cart line item price used in.
+  -- Cart drawer.
+  -- Cart table.
+
+  Requires placement inside a line item loop.
+------------------------------------------------------------------------------
+{% endcomment %}
+{% if item.original_line_price != item.line_price %}
+  {% if item.discounted_price != item.price %}
+    <span class="visually-hidden">{{ 'cart.label.discounted_price' | t }}</span>
+
+    <span data-price="{{ item.price }}" js-currency="price">
+      {{ item.discounted_price | money }}
+    </span>
+
+    <span class="visually-hidden">{{ 'cart.label.original_price' | t }}</span>
+    <s>{{ item.price | money }}</s>
+
+  {% else %}
+    <span class="visually-hidden">{{ 'cart.label.discounted_price' | t }}</span>
+
+    <span data-price="{{ item.price }}" js-currency="price">
+      {{ item.price | money }}
+    </span>
+
+    <span class="visually-hidden">{{ 'cart.label.original_price' | t }}</span>
+    <s>{{ item.original_price | money }}</s>
+  {% endif %}
+
+{% else %}
+  <span data-price="{{ item.price }}" js-currency="price">
+    {{ item.price | money }}
+  </span>
+{% endif %}

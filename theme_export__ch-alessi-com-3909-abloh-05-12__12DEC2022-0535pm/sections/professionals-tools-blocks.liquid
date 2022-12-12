@@ -1,0 +1,109 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Blocks - For Professionals - Tools
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{% for block in section.blocks %}
+  {% render 'page-professionals-blocks' with
+    block: block,
+    forloop: forloop
+  %}
+{% endfor %}
+
+{% schema %}
+  {
+    "name": "Tools Blocks",
+    "blocks": [
+      {
+        "type": "feature-row",
+        "name": "Feature row",
+        "settings": [
+          {
+            "type": "header",
+            "content": "Feature content"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Feature title"
+          },
+          {
+            "type": "textarea",
+            "id": "excerpt",
+            "label": "Description",
+            "default": "Professionals feature description with longer copy and a more than a sentence.\nPress release description with longer copy and a more than a sentence."
+          },
+          {
+            "type": "header",
+            "content": "CTAs"
+          },
+          {
+            "type": "text",
+            "id": "cta_01_text",
+            "label": "CTA 1 Text",
+            "default": "Reference Book"
+          },
+          {
+            "type": "url",
+            "id": "cta_01_link",
+            "label": "CTA 1 Link"
+          },
+          {
+            "type": "text",
+            "id": "cta_02_text",
+            "label": "CTA 2 Text",
+            "default": "Catalogue"
+          },
+          {
+            "type": "url",
+            "id": "cta_02_link",
+            "label": "CTA 1 Link"
+          },
+          {
+            "type": "header",
+            "content": "Feature gallery images"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_gallery_1",
+            "label": "Image 1"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_gallery_2",
+            "label": "Image 2"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_gallery_3",
+            "label": "Image 3"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_gallery_4",
+            "label": "Image 4"
+          }
+        ]
+      },
+      {
+        "type": "collection",
+        "name": "Collection",
+        "settings": [
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "Title",
+            "info": " Defaults to collection title if unset"
+          },
+          {
+            "type": "collection",
+            "id": "collection",
+            "label": "Collection"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

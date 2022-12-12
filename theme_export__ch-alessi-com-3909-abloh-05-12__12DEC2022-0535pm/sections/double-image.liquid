@@ -1,0 +1,79 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Double Image
+  - This section requires a block-double-image template.
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- render 'block-double-image' with block: section -%}
+
+{% schema %}
+  {
+    "name": "Double Image",
+    "class": "index-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "First Image Block"
+      },
+      {
+        "type": "image_picker",
+        "id": "image1",
+        "label": "First image",
+        "info": "Recommended size 720 x 653"
+      },
+      {
+        "type": "image_picker",
+        "id": "image1_mobile",
+        "label": "First image in mobile",
+        "info": "Recommended size 360 x 432"
+      },
+      {
+        "type": "text",
+        "id": "image1_subtitle",
+        "label": "Subtitle",
+        "default": "Alessi"
+      },
+      {
+        "type": "richtext",
+        "id": "image1_description",
+        "label": "Description",
+        "default": "<p>Lorem</p>"
+      },
+      {
+        "type": "header",
+        "content": "Second Image Block"
+      },
+      {
+        "type": "image_picker",
+        "id": "image2",
+        "label": "Second side image",
+        "info": "Recommended size 720 x 653"
+      },
+      {
+        "type": "image_picker",
+        "id": "image2_mobile",
+        "label": "Second image in mobile",
+        "info": "Recommended size 360 x 432"
+      },
+      {
+        "type": "text",
+        "id": "image2_subtitle",
+        "label": "Subtitle",
+        "default": "Alessi"
+      },
+      {
+        "type": "richtext",
+        "id": "image2_description",
+        "label": "Description",
+        "default": "<p>Lorem</p>"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Double Image",
+        "category": "Custom Content Blocks"
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,43 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Collection hero
+  - Header shown on the collection page.
+----------------------------------------------------------------------------
+{% endcomment %}
+{% assign hero_banner_fields = collection.metafields.hero_banner %}
+
+{% if collection.metafields.hero_banner['text_color'] != blank %}
+  {% assign hero_text_color = hero_banner_fields['text_color'] %}
+{% endif %}
+
+{% if collection.image %}
+  {% assign collection_featured_image = collection.image %}
+{% endif %}
+
+<header
+  class="template-collection__hero hero lazyload"
+  data-bgset="{% render 'responsive-bg-image', image: collection_featured_image %}"
+>
+  <div class="container">
+    <div class="row no-margin-bottom">
+      <div class="col xs12">
+        <div
+          class="hero__container"
+          {% if hero_text_color %}
+            style="color: {{ hero_text_color }}"
+          {% endif %}
+        >
+          <h1 class="hero__title">{{ collection.title }}</h1>
+
+          {% if collection.description != blank %}
+            <div class="hero__description">
+              <p>
+                {{ collection.description }}
+              </p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

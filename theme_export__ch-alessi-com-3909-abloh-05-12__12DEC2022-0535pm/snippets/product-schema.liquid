@@ -1,0 +1,63 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Product schema
+  - Schema data, see http://schema.org/ for more information.
+----------------------------------------------------------------------------
+{% endcomment %}
+
+{% assign current_variant = product.selected_or_first_available_variant %}
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org/",
+    "@type": "Product",
+    "name": {{ product.title | escape | json }},
+    "url": {{ shop.url | append: product.url | json }},
+    {% if product.featured_image %}
+      {% assign image_size = product.featured_image.width | append: 'x' %}
+      "image": [
+        {{ product.featured_image.src | img_url: image_size | prepend: 'https:' | json }}
+      ],
+    {% endif %}
+    "description": {{ product.description | strip_html | json | remove: '##SPECIFICATION##' }},
+    {% if current_variant.sku != blank %}
+      "sku": {{ current_variant.sku | json | replace: ' ', '-' }},
+    {% elsif current_variant.barcode != blank %}
+      "sku": {{ current_variant.barcode | json | replace: ' ', '-' }},
+    {% endif %}
+    {% if current_variant.barcode != blank %}
+      "identifier": {{ current_variant.barcode | json | replace: ' ', '-' }},
+    {% endif %}
+    "brand": {
+      "@type": "Brand",
+      "name": {{ product.vendor | json }}
+    },
+    {% if product.variants %}
+      "offers": [
+        {% for variant in product.variants %}
+          {% if variant.price > 0 %}
+            {
+              "@type" : "Offer",
+              "availability" : "http://schema.org/{% if variant.available %}InStock{% else %}OutOfStock{% endif %}",
+              {% if variant.sku != blank %}
+                "sku": {{ variant.sku | json | replace: ' ', '-' }},
+              {% endif %}
+              "price" : {{ variant.price | money_without_currency | json | replace: ',', '.' }},
+              "priceCurrency" : {{ cart.currency.iso_code | json }},
+              "itemCondition" : "http://schema.org/NewCondition",
+              "priceValidUntil": {{ 'now' | date: '%s' | plus: 31536000 | date: '%Y-%m-%d' | uri_encode | replace:'+','%20' | json }},
+              "url" : {{ shop.url | append: variant.url | json }}
+            }{% unless forloop.last %},{% endunless %}
+          {% endif %}
+        {% endfor %}
+      ]
+    {% endif %}
+    {% if product.metafields.spr.reviews != blank %}
+    ,"aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": {{ product.metafields.spr.reviews | split: '"ratingValue": "' | last | split: '"' | first | plus: 0 }},
+      "ratingCount": {{ product.metafields.spr.reviews | split: 'reviewCount": "' | last | split: '"' | first | plus: 0 }}
+    }
+    {% endif %}
+  }
+</script>

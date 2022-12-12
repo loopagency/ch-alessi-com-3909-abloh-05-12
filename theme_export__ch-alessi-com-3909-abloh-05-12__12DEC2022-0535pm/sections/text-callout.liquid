@@ -1,0 +1,66 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Text Callout
+------------------------------------------------------------------------------
+{% endcomment %}
+<section
+  class="text-callout"
+  data-section-id="{{ section.id }}"
+  data-section-type="text-callout"
+  js-fade-in="container"
+>
+  <div
+    class="
+      container
+      animate
+      animate--opacity
+      animate--translateY
+    "
+    js-fade-in="item"
+    >
+    <div class="row">
+      <div class="col xs12 m8 offset-m2">
+        <p class="h1">
+          {{ section.settings.text }}
+        </p>
+        {% if section.settings.call_to_action_link != blank %}
+          <a href="{{ section.settings.call_to_action_link }}" class="button button--secondary button--dark">
+            {{ section.settings.call_to_action_text }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Text Callout",
+    "class": "index-section",
+    "settings": [
+      {
+        "type": "textarea",
+        "id": "text",
+        "label": "Text Callout",
+        "default": "Alessi has been descibed as The Dream Factory; our products are designed to provide people with the art and poetry that they seek"
+      },
+      {
+        "type": "text",
+        "id": "call_to_action_text",
+        "label": "CTA text",
+        "default": "Go to link"
+      },
+      {
+        "type": "url",
+        "id": "call_to_action_link",
+        "label": "CTA Link"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Text Callout",
+        "category": "Content"
+      }
+    ]
+  }
+{% endschema %}

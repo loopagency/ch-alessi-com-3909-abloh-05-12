@@ -1,0 +1,118 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Contacts list
+------------------------------------------------------------------------------
+{% endcomment %}
+<div class="area-contacts" js-fade-in="container">
+  <div class="container">
+    <div class="row">
+      <div class="col xs12">
+        {% if section.settings.contacts_title != blank %}
+          <h3 class="area-contacts__title">{{ section.settings.contacts_title }}</h2>
+        {% endif %}
+      </div>
+      {% for block in section.blocks %}
+        <div class="col xs12 l3 push-right-l1">
+          <div class="area-contacts__block">
+            <h6 class="area-contacts__area button">{{ block.settings.contacts_area }}</h6>
+            <p class="area-contacts__name subtitle-2">{{ block.settings.contacts_name }}</p>
+            <p class="area-contacts__content body-2">
+              {{ block.settings.contacts_content | newline_to_br }}
+            </p>
+
+            <p class="body-2">
+              {% if block.settings.phone != blank %}
+                {{ block.settings.phone }}<br>
+              {% endif %}
+
+              {% if block.settings.email != blank %}
+                <a
+                  class="area-contacts__email"
+                  href="mailto:{{ block.settings.email }}"
+                >
+                  {{ block.settings.email }}
+                </a>
+              {% endif %}
+
+              {% if block.settings.additional_email != blank %}
+                <br>
+                <a
+                  class="area-contacts__email"
+                  href="mailto:{{ block.settings.additional_email }}"
+                >
+                  {{ block.settings.additional_email }}
+                </a>
+              {% endif %}
+            </p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Area contacts",
+    "class": "custom-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Title"
+      },
+      {
+        "type": "text",
+        "id": "contacts_title",
+        "label": "Main title",
+        "default": "Lorem ipsum"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "area-contacts",
+        "name": "Area contacts",
+        "settings": [
+          {
+            "type": "header",
+            "content": "Area contact"
+          },
+          {
+            "type": "text",
+            "id": "contacts_area",
+            "label": "Area"
+          },
+          {
+            "type": "text",
+            "id": "contacts_name",
+            "label": "Name",
+            "default": "Lorem ipsum"
+          },
+          {
+            "type": "textarea",
+            "id": "contacts_content",
+            "label": "Area content",
+            "default": "Default textarea content"
+          },
+          {
+            "type": "text",
+            "id": "phone",
+            "label": "Phone",
+            "default": "Tel. (+39)0323 868611"
+          },
+          {
+            "type": "text",
+            "id": "email",
+            "label": "Email",
+            "default": "corporateb2b@alessi.com"
+          },
+          {
+            "type": "text",
+            "id": "additional_email",
+            "label": "Additional Email",
+            "default": "corporateb2b@alessi.com"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

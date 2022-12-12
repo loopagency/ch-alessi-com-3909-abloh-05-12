@@ -1,0 +1,54 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Order header
+  - Order header on account order page.
+----------------------------------------------------------------------------
+{% endcomment %}
+
+<div class="order-header">
+  <div class="order-header__back-button-wrapper">
+    <a
+      class="button button--primary button--outline"
+      href="/account/orders"
+    >
+      <span>{{ 'customer.account.return_to_orders' | t }}</span>
+    </a>
+  </div>
+
+  <div class="order-header__content">
+    <div class="order-header__body">
+      <h2 class="h3 order-header__title">
+        {{ 'customer.order.title' | t: name: order.name }}
+      </h2>
+
+      <p class="body-1">
+        {{ 'customer.order.subtitle' | t }}
+      </p>
+    </div>
+
+    <div class="order-header__meta">
+      <span class="caption order-header__label">
+        {{ 'customer.order.date_label' | t }}
+      </span>
+
+      <span class="body-2">
+        {{ 'customer.order.date' | t: date: order.created_at | date: '%B %d, %Y' }}
+      </span>
+
+      {% if order.cancelled %}
+        <span class="caption order-header__label">
+          {% assign cancelled_at = order.cancelled_at | date: '%B %d, %Y %I:%M%p' %}
+        </span>
+
+        <p class="body-2">
+          {{ 'customer.order.cancelled' | t: date: cancelled_at }}
+        </p>
+
+        <p class="body-2">
+          {{ 'customer.order.cancelled_reason' | t: reason: order.cancel_reason }}
+        </p>
+      {% endif %}
+
+    </div>
+  </div>
+</div>

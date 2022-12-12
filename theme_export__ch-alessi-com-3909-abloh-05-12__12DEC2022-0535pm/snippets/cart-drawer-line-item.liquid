@@ -1,0 +1,131 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Cart drawer line item
+----------------------------------------------------------------------------
+{% endcomment %}
+{% assign product_type = item.product.type | handleize %}
+{% assign quantity_selector_id = 'cart-drawer-' | append: forloop.index %}
+{% liquid
+  assign is_gift_product = false
+  for property in item.properties
+    if property.first == '_gift-product'
+      assign is_gift_product = true
+      break
+    endif
+  endfor
+%}
+
+{% unless product_type == 'add-on' %}
+  <div
+    class="ajax-cart__line-item"
+    data-index="{{ forloop.index }}"
+    data-key="{{ item.key }}"
+    js-ajax-cart="lineItem"
+  >
+    {% if item.image %}
+      <div class="ajax-cart__image responsive-image__wrapper">
+        <div class="ajax-cart__image-container">
+          <img
+            alt="{{ item.image.alt }}"
+            sizes="auto"
+            src="{{ item.image | img_url: '50x' }}"
+            srcset="
+              {{ item.image | img_url: '120x' }} 120w,
+              {{ item.image | img_url: '240x' }} 240w,
+              {{ item.image | img_url: '320x' }} 320w
+            "
+          >
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="ajax-cart__description">
+      <div class="row no-margin no-gutter">
+        <div class="col xs9 m9">
+          <div class="ajax-cart__inner">
+            {% if enable_product_vendor %}
+              <p class="ajax-cart__vendor caption">
+                {{ item.vendor }}
+              </p>
+            {% endif %}
+
+            <a
+              class="ajax-cart__title"
+              href="{{ item.url }}"
+              js-ajax-cart="productLink"
+            >
+              {{ item.product.title }}
+            </a>
+
+            {% unless item.product.has_only_default_variant %}
+              <p class="ajax-cart__variant-title caption">
+                {{ item.variant.title }}
+              </p>
+            {% endunless %}
+
+            <div
+              class="ajax-cart__amount"
+              data-label="{{ 'cart.label.price' | t }}"
+            >
+              <div class="ajax-cart__quantity">
+                {{ item.quantity }} x&nbsp;
+              </div>
+
+              <div class="ajax-cart__price">
+                {% render 'line-item-price' with item: item %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col xs3 m3">
+          {% unless is_gift_product %}
+            <button
+              class="ajax-cart__remove"
+              tabindex="0"
+              type="button"
+              data-key="{{ item.key }}"
+              js-ajax-cart="remove"
+            >
+              {% render 'icon-misc' with icon: 'close' %}
+
+              <span class="visually-hidden">
+                {{ 'cart.general.remove' | t }}
+              </span>
+            </button>
+          {% endunless %}
+
+        </div>
+      </div>
+    </div>
+    {% assign variant = '' %}
+    {% assign dimension16 = '' %}
+
+    {% unless product_has_only_default_variant %}
+      {% if variant_options[0] %}
+        {% assign variant = variant_options[0] %}
+      {% endif %}
+
+      {% if variant_options[1] %}
+        {% assign dimension16 = variant_options[1] %}
+      {% endif %}
+    {% endunless %}
+
+    {% assign price_value = item.price | divided_by: 100.00 | round: 2 | split: "." %}
+    {% assign integral = price_value[0] %}
+    {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
+
+    <script js-product-json 
+      type="application/json">
+      {
+        "name": "{{ item.product.title | handleize | replace: '-', '_' }}",
+        "id": "{{ item.id }}",
+        "price": {{ integral }}.{{ decimal }},
+        "brand": "alessi",
+        "variant": "{{ variant }}",
+        "quantity": {{ item.quantity }},
+        "dimension16": "{{ dimension16 }}"
+      }
+    </script>
+  </div>
+{% endunless %}

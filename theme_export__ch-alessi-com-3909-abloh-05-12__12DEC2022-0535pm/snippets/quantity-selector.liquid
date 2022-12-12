@@ -1,0 +1,125 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Quantity selector
+  - A form control component with buttons on both sides to increment/decrement a counter.
+
+  - Configuration:
+  -- Can be passed with a maximum limit and size.
+  -- Item key is required on cart page for the form to submit to checkout.
+------------------------------------------------------------------------------
+{% endcomment %}
+{% assign modifiers = '' %}
+{% assign is_available = true %}
+{% assign quantity_value = 1 %}
+{% assign max_inventory = current_variant.inventory_quantity %}
+
+{% unless selected_variant %}
+  {% assign selected_variant = current_variant %}
+{% endunless %}
+
+{% unless selected_variant.available %}
+  {% assign quantity_value = 0 %}
+  {% assign is_available = false %}
+{% endunless %}
+
+{% unless id %}
+  {% assign id = 1 %}
+{% endunless %}
+
+{% capture selector %}
+  {% if namespace %}
+    js-{{ namespace }}="quantitySelector"
+
+  {% else %}
+    js-quantity-selector="container"
+  {% endif %}
+{% endcapture %}
+
+{% if value %}
+  {% assign quantity_value = value %}
+{% endif %}
+
+{% if size == 'small' %}
+  {% assign modifiers = modifiers | append: ' quantity-selector--small' %}
+{% endif %}
+
+{% if max_inventory < 0 %}
+  {% assign max_inventory = 999 %}
+{% endif %}
+
+<label
+  class="visually-hidden"
+  for="Quantity-{{ id }}"
+  tabindex="0"
+>
+  {{ 'products.product.quantity' | t }}
+</label>
+
+<div
+  id="QuantitySelector-{{ id }}"
+  class="quantity-selector {{ modifiers }}"
+  data-available="{{ is_available }}"
+  data-max="{{ max_inventory }}"
+  {{ selector }}
+>
+  <div class="quantity-selector__control">
+    <button
+      class="button quantity-selector__button"
+      {% if is_free_gift %}
+        disabled="true"
+      {% endif %}
+      value="decrement"
+      js-quantity-selector="decrement"
+    >
+      <span class="visually-hidden">-</span>
+      {% render 'icon-misc' with icon: 'minus' %}
+    </button>
+  </div>
+
+  <div class="quantity-selector__control">
+    {% if key %}
+      <input
+        id="Quantity-{{ id }}"
+        class="quantity-selector__input"
+        min="1"
+        name="updates[]"
+        pattern="[0-9]*"
+        readonly
+        tabindex="-1"
+        type="number"
+        value="{{ quantity_value }}"
+        js-quantity-selector="input"
+      >
+
+    {% else %}
+      <input
+        id="Quantity-{{ id }}"
+        class="quantity-selector__input"
+        min="1"
+        name="quantity"
+        pattern="[0-9]*"
+        readonly
+        tabindex="-1"
+        type="number"
+        value="{{ quantity_value }}"
+        js-quantity-selector="input"
+      >
+    {% endif %}
+  </div>
+
+  <div class="quantity-selector__control">
+    <button
+      class="button quantity-selector__button"
+      {% if is_free_gift %}
+        disabled="true"
+      {% endif %}
+      value="increment"
+      type="button"
+      data-cy="quantityIncrease"
+      js-quantity-selector="increment"
+    >
+      <span class="visually-hidden">+</span>
+      {% render 'icon-misc' with icon: 'plus' %}
+    </button>
+  </div>
+</div>

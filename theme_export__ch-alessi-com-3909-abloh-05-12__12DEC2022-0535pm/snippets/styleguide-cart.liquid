@@ -1,0 +1,109 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Styleguide - cart
+------------------------------------------------------------------------------
+{% endcomment %}
+<content-block status="WIP" name="Cart overview">
+  <p slot="description">A snapshot of what to expect after this step of the process such as subtotal, VAT, shipping and taxes. This is also the last interface before users leave for the checkout stage.</p>
+
+  <content-example>
+    <div slot="demo">
+      <div class="template-cart__panel">
+        <div class="container">
+          <div class="row">
+            <div class="col xs12">
+              <h1 class="h4">{{ 'cart.general.total' | t }}</h1>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col xs4">
+              <span class="cart-table__label">
+                {{ 'cart.general.subtotal' | t | append: ':' }}
+              </span>
+            </div>
+
+            <div class="col xs8 text-right">
+              <span class="cart-table__meta" js-cart-table="subtotal" js-currency="price" data-price="{{ cart.total_price }}">
+                {{ cart.total_price | money }}
+              </span>
+            </div>
+          </div>
+
+          <div class="row {% unless cart.total_discounts > 0 %}is-hidden{% endunless %}">
+            <div class="col xs4">
+              <span class="cart-table__label">
+                {{ 'cart.general.savings' | t | append: ':' }}
+              </span>
+            </div>
+
+            <div class="col xs8 text-right">
+              <span class="cart-table__meta" js-cart-table="totalDiscount" js-currency="price" data-price="{{ cart.total_discounts }}">
+                {{ cart.total_discounts | money }}
+              </span>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col xs4">
+              <span class="cart-table__label">
+                {{ 'cart.general.shipping' | t | append: ':' }}
+              </span>
+            </div>
+
+            <div class="col xs8 text-right">
+              <span class="cart-table__meta">
+                {{ 'cart.general.shipping_at_checkout' | t }}
+              </span>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col xs12">
+              <div class="cart-table__overview-footer">
+                {% if settings.enable_free_shipping_notification %}
+                  {% render 'free-shipping-notification' with class: 'cart-table' %}
+                {% endif %}
+
+                <div class="cart-table__total">
+                  <span class="subtitle-1">
+                    {{ 'cart.general.total' | t | append: ':' }}
+                  </span>
+
+                  <span class="subtitle-1" js-cart-table="total" js-currency="price" data-price="{{ cart.total_price }}">
+                    {{ cart.total_price | money }}
+                  </span>
+                </div>
+
+                <div class="cart-table__checkout-button">
+                  <input type="submit" name="checkout" class="button button--primary button--dark button--block" value="{{ 'cart.general.checkout' | t }}">
+                </div>
+
+                <p class="cart-table__disclaimer caption text-center">
+                  {{ 'cart.general.currency_disclaimer' | t | replace: '%shop_currency%', cart.currency.iso_code }}
+                </p>
+
+                <div class="cart-table__payment-options">
+                  {% unless shop.enabled_payment_types == empty %}
+                    <span class="visually-hidden">{{ 'layout.footer.payment_methods' | t }}</span>
+                    {% render 'payment-icons' with class: 'payment-icons--centered' %}
+                  {% endunless %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </content-example>
+</content-block>
+
+<content-block status="WIP" name="Cart table" is-synced>
+  <p slot="description">A loosely coupled flex table to display and interact with items currently in the customers cart.</p>
+
+  <content-example size="xs12 m8 offset-m2" is-fluid>
+    <div slot="demo">
+      {% render 'cart-table' %}
+    </div>
+  </content-example>
+</content-block>

@@ -1,0 +1,41 @@
+<div data-algolia-index="[[ _index ]]" data-algolia-position="[[ _position ]]" data-algolia-queryid="[[ queryID ]]" data-algolia-objectid="[[ objectID ]]" class="aa-product product-card">
+  <div class="
+    aa-product-picture 
+    product-card__thumbnail-container
+    no-hover
+    "
+  >
+    <img 
+      src="[[# helpers.largeImage ]][[/ helpers.largeImage ]]"
+      class="responsive-card-image__wrapper
+        product-card__thumbnail
+        product-card__thumbnail--product
+      ">
+      [[# named_tags.Badge ]]
+        <div class="product-card__badge-listing">
+          <div class="product-card__badge badge badge--grey">
+            <span>
+              [[ named_tags.Badge ]] 
+            </span>
+          </div>
+        </div> 
+      [[/ named_tags.Badge ]]
+      [[^ inventory_available ]]
+        <span class="product-card__soldout border--light color--secondary label">
+        {{ 'products.product.sold_out' | t }}
+        </span>
+      [[/ inventory_available ]]
+  </div>
+  <div class="product-card__footer">
+    <p class="product-card__product-type caption">
+      [[ named_tags.description_{{shop.locale}} ]] 
+      [[# helpers.fullTitle ]]
+      [[/ helpers.fullTitle ]]
+     
+    </p>
+    <p class="product-card__title label">
+      [[ title ]]
+    </p>
+  </div>
+</div>
+

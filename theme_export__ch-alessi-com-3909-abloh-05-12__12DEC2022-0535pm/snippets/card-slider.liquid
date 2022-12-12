@@ -1,0 +1,91 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Component: Card slider
+  - Draggable
+  - Simple scrollbar
+------------------------------------------------------------------------------
+{% endcomment %}
+<div class="card-slider custom-section" js-fade-in="container">
+  <div class="container">
+    <div class="row">
+      <div class="col xs12">
+        {% if slider_main_title != blank %}
+          <h3 class="card-slider__title">{{ slider_main_title }}</h2>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  
+  <div
+    class="container container--right"
+    js-draggable="container"
+  >
+      <div class="card-slider__container product-carousel {{ class }}" js-simplebar="container">
+
+        {% if card_image_1 %}
+          <div class="card-slider__item product-carousel__item animate animate--opacity" js-fade-in="item">
+            <a href="{{ card_url_1 }}" class="card-slider__link">
+              <div class="lifestyle-main__featured-image lazyload" data-bgset="{% render 'responsive-bg-image', image: card_image_1 %}"></div>
+              <p class="card-slider__card-title subtitle-1">{{ card_title_1 }}</p>
+            </a>
+          </div>
+        {% endif %}
+        {% if card_image_2 %}
+          <div class="card-slider__item product-carousel__item animate animate--opacity" js-fade-in="item">
+            <a href="{{ card_url_2 }}" class="card-slider__link">
+              <div class="lifestyle-main__featured-image lazyload" data-bgset="{% render 'responsive-bg-image', image: card_image_2 %}"></div>
+              <p class="card-slider__card-title subtitle-1">{{ card_title_2 }}</p>
+            </a>
+          </div>
+        {% endif %}
+        {% if card_image_3 %}
+          <div class="card-slider__item product-carousel__item animate animate--opacity" js-fade-in="item">
+            <a href="{{ card_url_3 }}" class="card-slider__link">
+              <div class="lifestyle-main__featured-image lazyload" data-bgset="{% render 'responsive-bg-image', image: card_image_3 %}"></div>
+              <p class="card-slider__card-title subtitle-1">{{ card_title_3 }}</p>
+            </a>
+          </div>
+        {% endif %}
+        {% if card_image_4 %}
+          <div class="card-slider__item product-carousel__item animate animate--opacity" js-fade-in="item">
+            <a href="{{ card_url_4 }}" class="card-slider__link">
+              <div class="lifestyle-main__featured-image lazyload" data-bgset="{% render 'responsive-bg-image', image: card_image_4 %}"></div>
+              <p class="card-slider__card-title subtitle-1">{{ card_title_4 }}</p>
+            </a>
+          </div>
+        {% endif %}
+        {% if card_image_5 %}
+          <div class="card-slider__item product-carousel__item animate animate--opacity" js-fade-in="item">
+            <a href="{{ card_url_5 }}" class="card-slider__link">
+              <div class="lifestyle-main__featured-image lazyload" data-bgset="{% render 'responsive-bg-image', image: card_image_5 %}"></div>
+              <p class="card-slider__card-title subtitle-1">{{ card_title_5 }}</p>
+            </a>
+          </div>
+        {% endif %}
+        {% if card_image_6 %}
+          <div class="card-slider__item product-carousel__item animate animate--opacity" js-fade-in="item">
+            <a href="{{ card_url_6 }}" class="card-slider__link">
+              <div class="lifestyle-main__featured-image lazyload" data-bgset="{% render 'responsive-bg-image', image: card_image_6 %}"></div>
+              <p class="card-slider__card-title subtitle-1">{{ card_title_6 }}</p>
+            </a>
+          </div>
+        {% endif %}
+        {% if card_image_7 %}
+          <div class="card-slider__item product-carousel__item animate animate--opacity" js-fade-in="item">
+            <a href="{{ card_url_7 }}" class="card-slider__link">
+              <div class="lifestyle-main__featured-image lazyload" data-bgset="{% render 'responsive-bg-image', image: card_image_7 %}"></div>
+              <p class="card-slider__card-title subtitle-1">{{ card_title_7 }}</p>
+            </a>
+          </div>
+        {% endif %}
+        {% if card_image_8 %}
+          <div class="card-slider__item product-carousel__item animate animate--opacity" js-fade-in="item">
+            <a href="{{ card_url_8 }}" class="card-slider__link">
+              <div class="lifestyle-main__featured-image lazyload" data-bgset="{% render 'responsive-bg-image', image: card_image_8 %}"></div>
+              <p class="card-slider__card-title subtitle-1">{{ card_title_8 }}</p>
+            </a>
+          </div>
+        {% endif %}
+      </div>
+  </div>
+</div>

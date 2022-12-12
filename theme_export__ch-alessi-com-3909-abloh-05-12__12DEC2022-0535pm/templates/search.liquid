@@ -1,0 +1,137 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Search
+  - Search results template.
+------------------------------------------------------------------------------
+{% endcomment %}
+{% paginate search.results by 24 %}
+  <div
+    class="critical-clear bc-sf-filter-wrapper-page"
+  >
+    <div class="container">
+      <div class="row">
+        <div class="template-search__header">
+          <div class="col xs12">
+            <h1 class="h2 template-search__title bc-sf-search-result-header">
+            </h1>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="
+        container
+        template-search__tools-container
+        container--full-width
+      "
+    >
+      <div
+        class="
+          container
+          template-search__bs-tools
+          template-search__bs-tools--desktop
+        "
+      >
+        <span class="bc-sf-filter-total-product body-2">
+          {% include 'bc-sf-filter-skeleton', width: 1 %}
+        </span>
+
+        <div
+          id="bc-sf-filter-tree-h"
+          js-filters-container
+        >
+          {% include 'bc-sf-filter-tree-placeholder-h' %}
+        </div>
+
+        <div
+          id="bc-sf-filter-top-sorting"
+          class="
+            bc-sf-filter-custom-sorting
+            bc-sf-filter-toolbar-item
+            text-right
+          "
+        >
+          {% include 'bc-sf-filter-skeleton', width: 1 %}
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="
+        container
+        template-search__bs-tools
+        template-search__bs-tools--mobile
+      "
+    >
+      <div class="row">
+        <div id="bc-sf-filter-tree-mobile" class="col xs6">
+          {% include 'bc-sf-filter-skeleton', type: 'button' %}
+        </div>
+
+        <div
+          id="bc-sf-filter-top-sorting-mobile"
+          class="bc-sf-filter-custom-sorting col xs6"
+        >
+          {% include 'bc-sf-filter-skeleton', type: 'button' %}
+        </div>
+
+        <div
+          id="bc-sf-filter-tree"
+          js-filters-container
+        >
+          {% include 'bc-sf-filter-tree-placeholder' %}
+        </div>
+
+        <div class="col xs12">
+          <span class="bc-sf-filter-total-product body-2">
+            {% include 'bc-sf-filter-skeleton', width: 1 %}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    {% comment %}
+    ----------------------------------------------------------------------------
+      Product cards
+    ----------------------------------------------------------------------------
+    {% endcomment %}
+    <div class="container">
+      <div class="row">
+        <div class="template-search__body">
+          {% if product_search_count == 0 %}
+            <h2 class="text-center">
+              {{ 'general.search.no_results_html' | t: terms: search.terms }}
+            </h2>
+
+          {% else %}
+            <div
+              id="bc-sf-filter-products"
+              class="template-search__grid products-list__grid card-grid"
+              data-bc-sort="{{ collection.default_sort_by }}"
+            >
+              {% for result in search.results %}
+                <div class="card-grid__item">
+                  {% render 'product-card' with product: result %}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <div>
+          <div id="bc-sf-filter-bottom-pagination">
+            {% if paginate.pages > 1 %}
+              {% include 'bc-sf-filter-pagination' %}
+            {% endif %}
+          </div>
+          <div id="bc-sf-filter-load-more"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endpaginate %}
+
+<div class="template-search__breadcrumb">
+  {% render 'breadcrumb' %}
+</div>

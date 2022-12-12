@@ -1,0 +1,102 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Critical
+  - This snippet includes all 'critical' scripts and styles to display the theme.
+  - These must be manually updated.
+------------------------------------------------------------------------------
+{% endcomment %}
+<style>
+  :root {
+    --f12: 100%;
+    --f6: 50%;
+    --f4: 33.333333%;
+    --f3: 25%; 
+
+    /**
+     * Grid.
+     */
+    --grid-tiny: 320px;
+    --grid-small: 576px;
+    --grid-medium: 768px;
+    --grid-large: 1024px;
+    --grid-wide: 1328px;
+
+    /**
+     * Spacing.
+     */
+    --spacing-3xs: 0.125rem;
+    --spacing-2xs: 0.25rem;
+    --spacing-xs: 0.5rem;
+    --spacing-s: 0.75rem;
+    --spacing-m: 1rem;
+    --spacing-l: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 2.5rem;
+    --spacing-3xl: 3rem;
+
+    /**
+     * Layers.
+     */
+    --layer-base: 0;
+    --layer-flat: 1;
+    --layer-raised: 2;
+    --layer-sticky: 8;
+    --layer-overlay: 12;
+    --layer-temporary: 16;
+    --layer-pop-out: 24;
+
+    /**
+     * Colors.
+     */
+    --color-primary: rgb(0, 0, 0);
+    --color-secondary: rgb(237, 28, 36);
+    --color-text-primary: rgb(0, 0, 0);
+    --color-text-secondary: rgb(81, 81, 81);
+    --color-text-light: rgb(118, 118, 118);
+    --color-text-inverse: rgb(255, 255, 255);
+    --color-background-dark: rgb(0, 0, 0);
+    --color-background-medium: rgb(237, 237, 232);
+    --color-background-light: rgb(246, 246, 246);
+    --color-background-white: rgb(255, 255, 255);
+    --color-border-dark: rgb(173, 173, 173);
+    --color-border-light: rgb(239, 239, 239);
+    --color-link: rgb(0, 0, 0);
+    --color-link-hover: rgb(0, 0, 0);
+    --color-button: rgb(0, 0, 0);
+    --color-button-hover: rgb(0, 0, 0);
+
+    /**
+     * Typography
+     */
+    --font-display: 'BasicGrotesque', 'Helvetica', sans-serif;
+    --font-heading: 'BasicGrotesque', 'Helvetica', sans-serif;
+    --font-body: 'BasicGrotesque', 'Helvetica', sans-serif;
+
+    --ms-minus-2: 11.11111px;
+    --ms-minus-1: 13.33333px;
+    --ms-0: 16px;
+    --ms-1: 19.2px;
+    --ms-2: 23.04px;
+    --ms-3: 27.648px;
+    --ms-4: 33.1776px;
+    --ms-7: 57.33089px;
+
+    --weight-light: 300;
+    --weight-medium: 500;
+    --weight-bold: 700;
+
+    --baseline: 1rem;
+    --line-height-meta: 1.3;
+    --line-height-body: 1.5;
+    --line-height-caption: 1.25;
+    --line-height-display: 1.3;
+    --letter-spacing-body: 0;
+    --letter-spacing-display: 0;
+    --letter-spacing-subtitle: 0;
+    --letter-spacing-button: 0.5px;
+    --letter-spacing-label: 0.5px;
+  }
+</style>
+
+{% render 'critical-base' %}
+{% render 'critical-site-header' %}

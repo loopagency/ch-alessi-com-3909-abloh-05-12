@@ -1,0 +1,81 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Header - For Professionals - Gifts
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{% render 'page-professionals-header' %}
+
+{% schema %}
+  {
+    "name": "Gifts Header",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Header"
+      },
+      {
+        "type": "link_list",
+        "id": "menu",
+        "label": "Menu"
+      },
+      {
+        "type": "header",
+        "content": "Images for gallery"
+      },
+      {
+        "type": "image_picker",
+        "id": "image_gallery_1",
+        "label": "Image 1"
+      },
+      {
+        "type": "image_picker",
+        "id": "image_gallery_2",
+        "label": "Image 2"
+      },
+      {
+        "type": "image_picker",
+        "id": "image_gallery_3",
+        "label": "Image 3"
+      },
+      {
+        "type": "image_picker",
+        "id": "image_gallery_4",
+        "label": "Image 4"
+      }
+    ],
+    "max_blocks": 2,
+    "blocks": [
+      {
+        "type": "contact",
+        "name": "Contact",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Contact title",
+            "default": "International"
+          },
+          {
+            "type": "textarea",
+            "id": "address",
+            "label": "Address",
+            "default": "Via Privata Alessi, 6 28887 Crusinallo (Vb) Italia."
+          },
+          {
+            "type": "text",
+            "id": "phone",
+            "label": "Phone",
+            "default": "Tel. (+39)0323 868611"
+          },
+          {
+            "type": "text",
+            "id": "email",
+            "label": "Email",
+            "default": "corporateb2b@alessi.com"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

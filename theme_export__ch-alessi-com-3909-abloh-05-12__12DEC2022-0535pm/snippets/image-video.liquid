@@ -1,0 +1,118 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Image and Video
+  - Generate a snippet with an image cover and a video player
+    if the Vimeo ID is passed
+
+  Accepts:
+    video_card: The video is going to be resized to fit a card instead
+                of the fullscreen resizing
+    product_gallery: The video is used as part of product gallery
+    vimeo_id: Vimeo video ID
+    video_id: ID of the video player to be used by the Vimeo API
+              to generate and control the player
+    video_hidden_mobile: true will add the class to hide the video player opn
+                         mobile
+    small_image: This image will be served for tablet and mobile screen sizes
+    large_image: This image will be served for laptop and desktop screen sizes
+    image_alignment: Defines the object-position of the element
+                     (accepted values: image-left, image-center, image-right)
+
+  Usage:
+    In your liquid template file, copy the following line
+    - {% render 'image-video' with
+        video_card: boolean,
+        product_gallery: boolean,
+        vimeo_id: vimeo_video_id,
+        video_id: video_player_id,
+        video_hidden_mobile: boolean,
+        large_image: image_1,
+        small_image: image_2,
+        image_alignment: value,
+        custom_height: value,
+        custom_width: value
+      %}
+------------------------------------------------------------------------------
+{% endcomment %}
+{% assign player_classes = '' %}
+{% assign image_classes = '' %}
+
+{% if video_card %}
+  {% assign player_classes = player_classes | append: ' image-video__player--card' %}
+{% endif %}
+
+{% if video_hidden_mobile %}
+  {% assign player_classes = player_classes | append: ' image-video__player--no-mobile' %}
+  {% assign image_classes = image_classes | append: ' image-video__image-container--no-desktop' %}
+{% endif %}
+
+{% if location == 'homepage' %}
+  {% assign player_classes = player_classes | append: ' image-video__player--full-width js-no-resize' %}
+{% endif %}
+
+{% if location == 'homepage' and mobile_vimeo_id != blank %}
+  <div
+    class="image-video__player image-video__player--mobile"
+    id="{{ mobile_video_id }}"
+    data-video-id="{{ mobile_vimeo_id }}"
+    {% if custom_height != '' %} data-custom-height="{{ custom_height }}" {% endif %}
+    {% if custom_width != '' %} data-custom-width="{{ custom_width }}" {% endif %}
+    js-image-video="video"
+  >
+  </div>
+{% endif %}
+
+{% if location == 'homepage' and vimeo_id != blank %}
+  <div
+    class="image-video__player {{ player_classes }}"
+    id="{{ video_id }}"
+    data-video-id="{{ vimeo_id }}"
+    js-image-video="video"
+  >
+  </div>
+{% endif %}
+
+{% if vimeo_id != blank and video_link != 'youtube' and location != 'homepage' %}
+  <div
+    class="image-video__player {{ player_classes }}"
+    id="{{ video_id }}"
+    data-video-id="{{ vimeo_id }}"
+    {% if product_gallery %} data-controls="true" {% endif %}
+    {% if custom_height != '' %} data-custom-height="{{ custom_height }}" {% endif %}
+    {% if custom_width != '' %} data-custom-width="{{ custom_width }}" {% endif %}
+    js-image-video="video"
+  >
+  </div>
+{% endif %}
+
+{% if video_youtube != blank and video_link == 'youtube' %}
+  <div class="image-video__player image-video__youtube {{ player_classes }}">
+    <iframe
+      frameBorder="0"
+      src="https://www.youtube.com/embed/{{ video_youtube }}?enablejsapi=1&html5=1&playsinline=1"
+      width="664"
+      height="485"
+      js-video="youtube"
+    ></iframe>
+  </div>
+{% endif %}
+
+{% assign type = '' %}
+{% if product_gallery %}
+  {% assign type = 'file' %}
+{% endif %}
+
+<div
+  class="image-video__image-container {{ image_classes }}"
+  js-image-video="image"
+>
+  <div class="image-video__image {{ image_alignment }}">
+    {% render 'art-direction-image' with
+      alt: section.settings.alt_text
+      large_image: large_image,
+      small_image: small_image,
+      type: type,
+      lazyload: true
+    %}
+  </div>
+</div>

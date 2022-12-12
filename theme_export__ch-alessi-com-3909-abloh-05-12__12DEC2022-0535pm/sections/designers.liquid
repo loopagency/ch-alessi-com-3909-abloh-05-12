@@ -1,0 +1,48 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Section: Designers
+----------------------------------------------------------------------------
+{% endcomment %}
+
+<script>
+  window.theme.designers = [
+    {% for block in section.blocks %}
+      {
+        description: {{ block.settings.description | json }},
+        image: {{ block.settings.image | img_url: '1024x' | json }},
+        name: {{ block.settings.title | json }},
+      }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ]
+</script>
+
+
+{% schema %}
+  {
+    "name": "Designers",
+    "blocks": [
+      {
+        "type": "block",
+        "name": "Designer",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Name"
+          },
+          {
+            "type": "richtext",
+            "id": "description",
+            "label": "Description"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image",
+            "info": "Recommended min dimensions: 1024 x 1024 px (.jpg)"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

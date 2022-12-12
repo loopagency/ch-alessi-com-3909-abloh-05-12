@@ -1,0 +1,22 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Payment icon
+----------------------------------------------------------------------------
+{% endcomment %}
+{% assign modifiers = '' %}
+
+{% if class %}
+  {% assign modifiers = modifiers | append: class %}
+{% endif %}
+
+<ul class="payment-icons {{ modifiers }}">
+  {% for type in shop.enabled_payment_types %}
+    <li class="payment-icons__item">
+      <img
+        class="icon"
+        alt="{{ type }}"
+        src="{{ type | payment_type_img_url }}"
+      >
+    </li>
+  {% endfor %}
+</ul>

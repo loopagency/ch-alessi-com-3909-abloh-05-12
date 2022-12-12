@@ -1,0 +1,47 @@
+{%- comment -%} Feature added by Shopify Plus FED | 2020-02-02 | Alternate country message {%- endcomment -%}
+<style>
+  .plus-alternate-country-message {
+    margin-bottom: 0.428571em;
+  }
+</style>
+{%- capture plus_alternate_country_link -%}
+  <a class="plus-alternate-country-message_link" href="#">{{ 'plus.checkout.alternate_country_message_link' | t }}</a>
+{%- endcapture -%}
+<script>
+  (function($) {
+    plusNewLineRegex = /\r?\n/g;
+    plusAlternateCountryMessage = {
+      message: {{ 'plus.checkout.alternate_country_message_html' | t: link: plus_alternate_country_link | json }},
+      shippingAddressFieldSelector: '[data-shipping-address]',
+      countryList: (`{{ settings.plus_alternate_countries }}`).replace(plusNewLineRegex, '').replace('\n', '').split(',').map(country => country.trim()),
+      urlList: (`{{ settings.plus_alternate_countries_urls }}`).replace(plusNewLineRegex, '').replace('\n', '').split(',').map(url => url.trim()),
+      addressSelectors: '[data-step] [name="checkout[shipping_address][first_name]"]input:visible, [data-step] [name="checkout[shipping_address][last_name]"]input:visible'
+    };
+    $(document).on('page:load page:change', function() {
+      plusAlternateCountryMessageInit = function(settings) {
+        if (settings.countryList.length === settings.urlList.length) {
+          countryListItems = settings.countryList.map(function(country, i) {
+            // Check if URL includes a scheme otherwise append https://
+            var includesProtocolRegex = /(^https?:)?(\/\/)/g;
+            var url = settings.urlList[i].match(includesProtocolRegex) ? settings.urlList[i] : 'https:\/\/' + settings.urlList[i];
+            return '<li>' + '<a href="' + url + '" target="_blank">' + country + '</a></li>';
+          }).join('');
+          if ($('.plus-alternate-country-message').length < 1) {
+            $(settings.shippingAddressFieldSelector).append('<p class="plus-alternate-country-message">' + settings.message + '</p>');
+          };
+  
+          $('.plus-alternate-country-message_link').on('click', function() {
+            if ($('.plus-alternate-country-links').length < 1) {
+              $('.plus-alternate-country-message').after('<ul class="plus-alternate-country-links">' + countryListItems + '</ul>');
+            };
+          });
+        } else if (Shopify.designMode) {
+          $(settings.shippingAddressFieldSelector).append('<p>The number of alternate countries doesn\'t match number of URLs. Please update this in the theme settings (this message will only appear in the theme editor).</p>');
+        };
+      }
+      if (Shopify.Checkout.step === 'contact_information') {
+        plusAlternateCountryMessageInit(plusAlternateCountryMessage);
+      };
+    });
+  })(Checkout.$);
+</script>

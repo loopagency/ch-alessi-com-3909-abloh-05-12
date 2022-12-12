@@ -1,0 +1,44 @@
+
+
+<script 
+    id="gorgias-chat-widget-install-v2" 
+    src="https://config.gorgias.chat/gorgias-chat-bundle-loader.js?applicationId={{ settings.gorgias_lib_id }}"
+    >
+</script>
+
+{% if settings.enable_settings %}
+    {% liquid 
+        assign gorgias_timezone = settings.gorgias_timezone
+        assign gorgias_days = settings.gorgias_days
+        assign gorgias_hours_1 = settings.gorgias_hours_1 | split: '/' | first
+        assign gorgias_hours_2 = settings.gorgias_hours_1 | split: '/' | last
+        assign gorgias_hours_3 = settings.gorgias_hours_3 | split: '/' | first
+        assign gorgias_hours_4 = settings.gorgias_hours_3 | split: '/' | last
+        %}
+
+    <script>
+    var gorgiasTimezone = `{{ gorgias_timezone }}`;
+    var gorgiasHours_1 = `{{ gorgias_hours_1 }}`;
+    var gorgiasHours_2 = `{{ gorgias_hours_2 }}`;
+    var gorgiasHours_3 = `{{ gorgias_hours_3 }}`;
+    var gorgiasHours_4 = `{{ gorgias_hours_4 }}`;
+
+        GorgiasChat.init().then(function() {
+
+            GorgiasChat.hidePoweredBy(true),
+            GorgiasChat.hideOutsideBusinessHours(true),
+            GorgiasChat.setCustomBusinessHours({
+                // Using a timezone from https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+                // Day 1 represents Monday
+                timezone: gorgiasTimezone, 
+                businessHours: [
+                    { days: [1,2,3,4,5], fromTime: gorgiasHours_1, toTime: gorgiasHours_2 },
+                    { days: [1,2,3,4,5], fromTime: gorgiasHours_3, toTime: gorgiasHours_4 }
+                ]
+            })
+        });
+
+    </script>
+    
+{% endif %}
+

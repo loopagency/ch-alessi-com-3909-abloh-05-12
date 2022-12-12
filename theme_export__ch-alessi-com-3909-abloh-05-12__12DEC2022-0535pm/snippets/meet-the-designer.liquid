@@ -1,0 +1,115 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Component: Meet the designer
+  - Pulling content from individual designer pages unto the product.liquid template
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{% liquid
+  assign has_designer = false
+
+  if template_snippet == 'collection'
+    assign is_collection = true
+    assign designer_collection = collection
+    assign has_designer = true
+  elsif template_snippet == 'collection-mf'
+    assign is_collection = true
+    assign designer_collection = collection
+    assign collection_image = main_image
+    assign has_designer = true
+  else
+    assign handle = designer | handleize
+    assign designer_collection = collections[handle]
+
+    if designer_collection.image and designer_collection.description != blank
+      assign has_designer = true
+    endif
+  endif
+%}
+
+{% if has_designer %}
+  <div
+    id="ProductDesigner-{{ handle | handleize | strip }}"
+    class="meet-designer meet-designer--main"
+    js-datalayer-designer="container"
+  >
+    {% unless is_collection %}
+      <div class="container">
+    {% endunless %}
+
+    <div class="meet-designer__container">
+      <div class="meet-designer__column">
+        {% if template_snippet == 'collection-mf' %}
+        <div
+          class="meet-designer__image lazyload"
+          data-bgset="{% render 'responsive-bg-image-mf', image: collection_image %}">
+        </div>
+        {% else %}
+          <div
+          class="meet-designer__image lazyload"
+          data-bgset="{% render 'responsive-bg-image', image: designer_collection.image %}">
+        </div>
+       {% endif %}
+      </div>
+
+      <div
+        class="
+          meet-designer__column
+          meet-designer__column--left
+        "
+      >
+        <div class="meet-designer__content">
+          {% if is_collection %}
+            <h1 class="meet-designer__name d3">
+              {{ designer_collection.title }}
+            </h1>
+          {% else %}
+            <h2 class="meet-designer__name h2">
+              <a href="{{ designer_collection.url }}">
+                {{ designer_collection.title }}
+              </a>
+            </h2>
+          {% endif %}
+
+          <div class="meet-designer__content-copy">
+            {% if is_collection %}
+              {{ designer_collection.description
+                | remove: '<meta charset="utf-8">'
+                | split: '##EXCERPT##'
+                | first
+              }}
+            {% else %}
+              {{ designer_collection.description
+                | remove: '<meta charset="utf-8">'
+                | split: '##EXCERPT##'
+                | first
+                | truncatewords: 50, '...'
+              }}
+            {% endif %}
+          </div>
+
+          {% unless is_collection %}
+            <p>
+              <a
+                class="
+                  meet-designer__link
+                  button
+                  button--secondary
+                  button--dark
+                "
+                href="{{ designer_collection.url }}"
+                js-datalayer-designer="cta"
+              >
+                {{ 'products.product.meet_the_designer' | t | strip }}
+              </a>
+            </p>
+          {% endunless %}
+        </div>
+      </div>
+    </div>
+
+    {% unless is_collection %}
+      </div>
+    {% endunless %}
+  </div>
+{% endif %}

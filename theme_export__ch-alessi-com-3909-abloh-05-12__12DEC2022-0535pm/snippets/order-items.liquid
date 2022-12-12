@@ -1,0 +1,62 @@
+{% comment %}
+----------------------------------------------------------------------------
+Snippet: Order items
+- Order items on account order page.
+----------------------------------------------------------------------------
+{% endcomment %}
+<div class="order-items">
+  <h3 class="h3 order-items__panel-title">
+    {{ 'customer.order.items_title' | t }}
+  </h3>
+
+  <div class="order-items__grid">
+    {% for line_item in order.line_items %}
+      <div
+        id="{{ line_item.key }}"
+        class="order-items__grid-item"
+      >
+        <div
+          class="order-items__card"
+          data-label="{{ 'customer.order.product' | t }}"
+        >
+          <div class="order-items__image-wrapper">
+            {{
+              line_item.product.featured_image |
+              img_tag: '',
+              'order-items__image',
+              '78x103'
+            }}
+          </div>
+
+          <div class="order-items__description">
+            <h4 class="body-2 order-items__title">
+              <a href="{{ line_item.product.url }}">
+                {{ line_item.product.title }}
+              </a>
+            </h4>
+
+            <div class="order-items__variant-info">
+              <span
+                class="body-2"
+                data-label="{{ 'customer.order.variants' | t }}"
+              >
+                {{ line_item.variant.title }}
+              </span>
+            </div>
+
+            <div class="body-2">
+              <span data-label="{{ 'customer.order.quantity' | t }}">
+                {{ line_item.quantity }} × 
+              </span>
+
+              <span data-label="{{ 'customer.order.price' | t }}">
+                {{ line_item.price | money | remove: '.00' }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  
+  </div>
+</div>

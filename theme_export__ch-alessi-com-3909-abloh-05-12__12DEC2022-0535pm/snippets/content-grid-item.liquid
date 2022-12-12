@@ -1,0 +1,47 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Grid Block Item
+  - Content grid block for custom page content
+------------------------------------------------------------------------------
+{% endcomment %}
+{% if grid_item != blank %}
+  <li class="content-grid__item ">
+    {% if grid_item_link != blank %}
+      <a class="content-grid__item-thumbnail" href="{{ grid_item_link }}">
+        {% render 'art-direction-image' with
+          alt: grid_item_title
+          large_image: grid_item,
+          small_image: grid_item,
+        %}
+      </a>
+    {% else %}
+      <div class="content-grid__item-thumbnail">
+        {% render 'art-direction-image' with
+          alt: grid_item_title
+          large_image: grid_item,
+          small_image: grid_item,
+        %}
+      </div>
+    {% endif %}
+
+    {% if grid_item_title != blank %}
+      <div class="content-grid__item-footer">
+        {% if grid_item_link != blank %}
+          <a 
+            class="
+              content-grid__item-title caption
+              {% if grid_item_link != blank %}content-grid__item-title--underline{% endif %}
+            " 
+            href="{{ grid_item_link }}"
+          >
+            {{ grid_item_title }}
+          </a>
+        {% else %}
+          <h3 class="content-grid__item-title caption">
+            {{ grid_item_title }}
+          </h3>
+        {% endif %}
+      </div>
+    {% endif %}
+  </li>
+{% endif %}

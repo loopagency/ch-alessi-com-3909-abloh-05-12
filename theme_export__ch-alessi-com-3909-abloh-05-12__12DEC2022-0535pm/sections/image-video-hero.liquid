@@ -1,0 +1,303 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Image/Video hero
+  - Can choose between using an image only or a video.
+  - The image will be used as a cover.
+  - Used to display a .mp4 or .mov file using HTML5 video.
+  - Reccommended to upload video in Shopify file CDN and use in video url field.
+------------------------------------------------------------------------------
+{% endcomment %}
+{% assign video_hidden_mobile = false %}
+
+{% if section.settings.video_vimeo_ID != '' %}
+  {% assign video_hidden_mobile = true %}
+{% endif %}
+
+{% assign cta_color =  section.settings.cta_background_color | color_modify: 'alpha', section.settings.cta_opacity %}
+
+<div
+  id="ImageVideoHero-{{ section.id }}"
+  class="image-video-hero"
+  data-section-id="{{ section.id }}"
+  data-section-type="image-video-hero"
+  data-size="fullScreen"
+  js-datalayer-promo="container"
+>
+
+  {% capture video_id %}video-{{ section.id }}{% endcapture %}
+  {% capture mobile_video_id %}video-{{ section.id }}-mobile{% endcapture %}
+
+  {% render 'image-video' with
+    location: 'homepage',
+    mobile_vimeo_id: section.settings.mobile_video_vimeo_ID,
+    vimeo_id: section.settings.video_vimeo_ID,
+    mobile_video_id: mobile_video_id,
+    video_id: video_id,
+    video_hidden_mobile: video_hidden_mobile,
+    large_image: section.settings.large_image,
+    small_image: section.settings.small_image
+  %}
+
+  {% if section.settings.gradient == true %}
+  <div class="image-video-hero__gradient"></div>
+  {% endif %}
+
+  <div class="image-video-hero__container">
+    <div class="container image-video-hero__content {{ section.settings.text_alignment }}">
+      <div class="row {{ section.settings.content_alignment }}">
+        <div class="col xs12 m6">
+          <h2
+            class="image-video-hero__title d1"
+            style="color: {{ section.settings.text_color }}"
+            js-datalayer-promo="name"
+          >
+            {{ section.settings.title }}
+          </h2>
+
+          {% if section.settings.call_to_action_link %}
+            <a
+              style="
+              background: {{ cta_color }};
+              border: 1px solid {{ section.settings.cta_border_color}};
+              "
+              class="
+                image-video-hero__button button
+                {{ section.settings.call_to_action_theme }}
+                {{ section.settings.button_size }}
+                button--{{ section.settings.cta_text_color }}
+              "
+              href="{{ section.settings.call_to_action_link }}"
+              js-datalayer-promo="cta"
+            >
+              {{ section.settings.button_text }}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Image/Video hero",
+    "class": "index-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Image",
+        "info": "Both images are required."
+      },
+      {
+        "type": "image_picker",
+        "id": "small_image",
+        "label": "Mobile image",
+        "info": "Recommended min dimensions: 340x270px (.jpg)"
+      },
+      {
+        "type": "image_picker",
+        "id": "large_image",
+        "label": "Desktop image",
+        "label": "Desktop image",
+        "info": "Recommended min dimensions: 2000x1280px (.jpg)"
+      },
+      {
+        "type": "checkbox",
+        "id": "gradient",
+        "label": "Show gradient",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Video",
+        "info": "Video will be autoplayed in the background on loop. If left blank then no video will show."
+      },
+      {
+        "type": "text",
+        "id": "mobile_video_vimeo_ID",
+        "label": "Mobile Vimeo video ID"
+      },
+      {
+        "type": "text",
+        "id": "video_vimeo_ID",
+        "label": "Desktop Vimeo video ID"
+      },
+      {
+        "type": "header",
+        "content": "Content",
+        "info": "Leave fields empty to hide."
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title",
+        "default": "Value proposition statement"
+      },
+      {
+        "type": "url",
+        "id": "call_to_action_link",
+        "label": "Link"
+      },
+      {
+        "type": "text",
+        "id": "button_text",
+        "label": "Button text",
+        "default": "Learn more"
+      },
+      {
+        "type": "select",
+        "id": "cta_text_color",
+        "label": "Button Text Color",
+        "default": "dark",
+        "options": [
+          {
+            "label": "Black",
+            "value": "dark"
+          },
+          {
+            "label": "White",
+            "value": "light"
+          }
+        ]
+      },
+		 	{
+				"type": "color",
+				"id": "cta_background_color",
+				"label": "CTA Background Color",
+        "default": "transparent"
+	  },
+      {
+       "type": "color",
+       "id": "cta_border_color",
+       "label": "Border Color",
+       "default": "#000000"
+      },
+      {
+        "type": "range",
+        "id": "cta_opacity",
+        "min": 0,
+        "max": 1,
+        "step": 0.1,
+        "label": "CTA Opacity",
+        "default": 0
+      },
+      {
+        "type": "header",
+        "content": "Options",
+        "info": "Options to define styling of the content."
+      },
+      {
+        "type": "select",
+        "id": "content_alignment",
+        "label": "Content alignment",
+        "default": "is-middle is-center",
+        "options": [
+          {
+            "label": "Top left",
+            "value": "is-top is-left"
+          },
+          {
+            "label": "Top center",
+            "value": "is-top is-center"
+          },
+          {
+            "label": "Top right",
+            "value": "is-top is-right"
+          },
+          {
+            "label": "Middle left",
+            "value": "is-middle is-left"
+          },
+          {
+            "label": "Middle center",
+            "value": "is-middle is-center"
+          },
+          {
+            "label": "Middle right",
+            "value": "is-middle is-right"
+          },
+          {
+            "label": "Bottom left",
+            "value": "is-bottom is-left"
+          },
+          {
+            "label": "Bottom center",
+            "value": "is-bottom is-center"
+          },
+          {
+            "label": "Bottom right",
+            "value": "is-center"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "default": "is-center",
+        "options": [
+          {
+            "label": "Left",
+            "value": "is-left"
+          },
+          {
+            "label": "Center",
+            "value": "is-center"
+          },
+          {
+            "label": "Right",
+            "value": "is-right"
+          }
+        ]
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text colour",
+        "default": "#000000"
+      },
+      {
+        "type": "select",
+        "id": "call_to_action_theme",
+        "label": "Button colour",
+        "options": [
+          {
+            "value": "button--primary button--dark",
+            "label": "Dark"
+          },
+          {
+            "value": "button--primary button--light",
+            "label": "Light"
+          }
+        ],
+        "default": "button--primary button--dark"
+      },
+      {
+        "type": "select",
+        "id": "button_size",
+        "label": "Button size",
+        "default": "button--large",
+        "options": [
+          {
+            "label": "Small",
+            "value": "button--small"
+          },
+          {
+            "label": "Medium",
+            "value": ""
+          },
+          {
+            "label": "Large",
+            "value": "button--large"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Image/Video hero",
+        "category": "Image"
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,57 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Card Gift Item
+    - Display the free gift items
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{% assign free_gift_min_cart_value_1 = settings.free_gift_min_cart_value_1 %}
+{% assign free_gift_min_cart_value_2 = settings.free_gift_min_cart_value_2 %}
+
+{% assign free_gift_min_cart_value_loop = settings.free_gift_min_cart_value_1  | money %}
+
+{% assign free_gift_cart_difference_1 = free_gift_min_cart_value_1 | minus: cart.total_price %}
+{% assign free_gift_cart_difference_2 = free_gift_min_cart_value_2 | minus: cart.total_price %}
+
+{% assign free_gift_cart_difference_money_1 = free_gift_cart_difference_1 | money %}
+{% assign free_gift_cart_difference_money_2 = free_gift_cart_difference_2 | money %}
+
+{% assign loop = true %}
+<div class="cart-gift-item">
+  {% unless loop == true %}
+    <p class="cart-gift-item__text caption " js-free-gift="message">
+      {% if cart.total_price > 0 %}
+        {% if free_gift_cart_difference_1 <= 0 and free_gift_min_cart_value_2 > 0 %}
+          {% if free_gift_cart_difference_2 <= 0 %}
+            {% comment %} Message shown if customer achieved both gifts {% endcomment %}
+            {{ 'cart.free_gift.second_ideal' | t }}
+          {% else %}
+            {% comment %} Message shown if customer achieved first gift and a second gift is available {% endcomment %}
+            {{ 'cart.free_gift.second_partial' | t | replace: '#value#', free_gift_cart_difference_money_2 }}
+          {% endif %}
+        {% else %}
+          {% if free_gift_cart_difference_1 > 0 %}
+            {% comment %} Message shown if customer achieved first gift and a second gift is not available {% endcomment %}
+            {{ 'cart.free_gift.initial_partial' | t | replace: '#value#', free_gift_cart_difference_money_1 }}
+          {% elsif free_gift_min_cart_value_2 == nil or free_gift_min_cart_value_2 == 0 %}
+            {% comment %} Message shown if customer achieved first gift and a second gift is available {% endcomment %}
+            {{ 'cart.free_gift.initial_ideal' | t }}
+          {% endif %}
+        {% endif %}
+      {% else %}
+        {% comment %} Message shown if customer has not achieved any gift {% endcomment %}
+        {{ 'cart.free_gift.blank' | t | replace: '#value#', free_gift_cart_difference_money_1 }}
+      {% endif %}
+    </p>
+    {% else %}
+    <p class="cart-gift-item__text caption" js-free-gift="message">
+      {% if cart.total_price > free_gift_min_cart_value_1 %}
+            {% comment %} Message shown if customer achieved first gift and a second gift is not available {% endcomment %}
+            {{ 'cart.free_gift.initial_ideal' | t | replace: '#value#', free_gift_min_cart_value_loop }}
+            {% else %}
+        {% comment %} Message shown if customer has not achieved any gift {% endcomment %}
+        {{ 'cart.free_gift.blank' | t | replace: '#value#', free_gift_min_cart_value_loop }}
+      {% endif %}
+    </p>
+  {% endunless %}
+</div>

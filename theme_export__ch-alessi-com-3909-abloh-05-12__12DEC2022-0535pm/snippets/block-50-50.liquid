@@ -1,0 +1,161 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: 50-50 Block
+  - This is an Example Page Builder Block
+------------------------------------------------------------------------------
+{% endcomment %}
+{% if block_id == blank %}
+  {%- assign block_id = block.id -%}
+{% endif %}
+
+{%- assign content_align = block.settings.content_align -%}
+{%- assign small_image = block.settings.small_image -%}
+{%- assign large_image = block.settings.large_image -%}
+{%- assign video_vimeo_ID = block.settings.video_vimeo_ID -%}
+{%- assign video_hide_mobile = block.settings.video_hide_mobile -%}
+{%- assign video_youtube = block.settings.video_youtube -%}
+{%- assign video_link = block.settings.video_link -%}
+{%- assign header = block.settings.header -%}
+{%- assign subhead = block.settings.subhead -%}
+{%- assign designer = block.settings.designer -%}
+{%- assign designer_collection = block.settings.designer_collection -%}
+{%- assign copy = block.settings.copy -%}
+{%- assign call_to_action_link = block.settings.call_to_action_link -%}
+{%- assign call_to_action_type = block.settings.call_to_action_type -%}
+{%- assign call_to_action_theme = block.settings.call_to_action_theme -%}
+{%- assign button_size = block.settings.button_size -%}
+{%- assign button_text = block.settings.button_text -%}
+{%- assign custom_width = block.settings.custom_width -%}
+{%- assign custom_height = block.settings.custom_height -%}
+{%- assign full_width = block.settings.full_width -%}
+
+{%-if block_settings -%}
+  {%- assign block_settings_array = block_settings | replace: ',"', '##split##' 
+    | replace: '{', '' 
+    | replace: '}', '' 
+    | replace: '"', '' 
+    | split: '##split##' 
+  -%}
+  {%- for block_setting in block_settings_array -%}
+    {%- if block_setting != blank -%}
+      {%- assign block_setting_name_value = block_setting | split: '=>' -%}
+      {%- assign block_setting_name = block_setting_name_value[0] | replace: ' ', '' -%}
+      {%- assign block_setting_value = block_setting_name_value[1] -%}
+      {%- assign block_setting_value_slice = block_setting_value | slice: 0, 5 -%}
+      {%- if block_setting_value_slice == 'files' -%}
+        {%- assign block_setting_value = block_setting_value | replace: 'files/' -%}
+        {%- assign block_setting_value = images[block_setting_value] -%}
+      {%- endif -%}
+      {%- case block_setting_name -%}
+        {%- when 'content_align' -%}
+          {%- assign content_align = block_setting_value -%}
+        {%- when 'small_image' -%}
+          {%- assign small_image = block_setting_value -%}
+        {%- when 'large_image' -%}
+          {%- assign large_image = block_setting_value -%}
+        {%- when 'video_vimeo_ID' -%}
+          {%- assign video_vimeo_ID = block_setting_value -%}
+        {%- when 'video_hide_mobile' -%}
+          {%- if block_setting_value == 'true' -%}
+            {%- assign video_hide_mobile = true -%}
+          {%- else -%}
+            {%- assign video_hide_mobile = false -%}
+          {%- endif -%}
+        {%- when 'video_youtube' -%}
+          {%- assign video_youtube = block_setting_value -%}
+        {%- when 'video_link' -%}
+          {%- assign video_link = block_setting_value -%}
+        {%- when 'header' -%}
+          {%- assign header = block_setting_value -%}
+        {%- when 'copy' -%}
+          {%- assign copy = block_setting_value -%}
+        {%- when 'call_to_action_link' -%}
+          {%- assign call_to_action_link = block_setting_value -%}
+        {%- when 'call_to_action_type' -%}
+          {%- assign call_to_action_type = block_setting_value -%}
+        {%- when 'call_to_action_theme' -%}
+          {%- assign call_to_action_theme = block_setting_value -%}
+        {%- when 'button_size' -%}
+          {%- assign button_size = block_setting_value -%}
+        {%- when 'button_text' -%}
+          {%- assign button_text = block_setting_value -%}
+        {%- when 'custom_height' -%}
+          {%- assign custom_height = block_setting_value -%}
+        {%- when 'custom_width' -%}
+          {%- assign custom_width = block_setting_value -%}
+        {%- when 'full_width' -%}
+          {%- assign full_width = block_setting_value -%}
+      {%- endcase -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+<section
+  id="Block-50-50-{{ block_id }}"
+  class="block-50-50 {% if full_width == 'true' %}block-50-50--fullscreen{% endif %}"
+  data-section-id="{{ block_id }}"
+  data-section-type="block-50-50"
+  data-size="fullScreen"
+>
+  <div class="container {% if full_width == 'true' %}container--fullscreen{% endif %}">
+    <div class="block-50-50__container block-50-50__container--{{ content_align }}">
+      <div
+        class="
+          block-50-50__column
+          block-50-50__content
+        "
+      >
+        {% if header != blank %}
+          <h2 class="block-50-50__header h2">
+            {{ header }}
+          </h2>
+        {% endif %}
+        
+        {% if copy != blank %}
+          <div class="block-50-50__content-copy">
+            {{ copy }}
+          </div>
+        {% endif %}
+
+        {% if call_to_action_link != blank %}
+          <a
+            class="
+              image-video-hero__button button
+              {% if call_to_action_type == 'button--secondary' %}
+                image-video-hero__button--secondary
+              {% endif %}
+              {{ call_to_action_type }}
+              {{ call_to_action_theme }}
+              {{ button_size }}
+            "
+            href="{{ call_to_action_link }}"
+            js-datalayer-promo="cta"
+          >
+            {{ button_text }}
+          </a>
+        {% endif %}
+      </div>
+
+      <div class="block-50-50__column">
+        {% capture video_id %}video-{{ block_id }}{% endcapture %}
+
+        {% render 'image-video' with
+          vimeo_id: video_vimeo_ID,
+          video_id: video_id,
+          video_hidden_mobile: video_hide_mobile,
+          video_youtube: video_youtube,
+          video_link: video_link,
+          large_image: large_image,
+          small_image: small_image,
+          custom_height: custom_height,
+          custom_width: custom_width
+        %}
+      
+        <div
+          class="block-50-50__image lazyload"
+          data-bgset="{% render 'responsive-bg-image', image: designer_collection.image %}">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

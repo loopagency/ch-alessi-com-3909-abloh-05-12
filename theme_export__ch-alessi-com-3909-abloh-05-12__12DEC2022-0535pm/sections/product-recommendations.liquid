@@ -1,0 +1,128 @@
+{%- for product in recommendations.products -%}
+  {% unless product.type == 'add-on' or product.type == 'Spare Part' %}  
+    {% assign is_product = true %}
+  {% endunless %}
+{%- endfor -%}  
+
+  <section
+    class="featured-collection product-carousel full-width"
+    data-section-id="{{ section.id }}"
+    data-section-type="{{ section.id }}"
+    js-fade-in="container"
+    
+  >
+    <product-recommendations
+      class="product-recommendations featured-collection"
+      data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.limit }}"
+      >
+      {%- if recommendations.performed and recommendations.products_count > 0 -%}
+        {% if is_product %}
+          <style>
+            .featured-collection {
+              margin-bottom: 3rem;
+              margin-top: 3rem;
+            }
+          </style>
+          <div
+          class="container product-meet-family__title"
+          >
+            <h2 class="product-meet-family__title-copy d3">
+              {{ section.settings.heading }}
+            </h2>
+          </div>
+          <div
+            class="container container--right"
+            js-draggable="container"
+            >
+            <div
+              class="featured-collection__container  recommendations" data-simplebar
+              data-datalayer="recommendations-{{ product.id }}"
+              js-datalayer="recommendations"
+              js-simplebar="container"
+              >
+                {%- for product in recommendations.products -%}
+                  {% unless product.type == 'add-on' or product.type == 'Spare Part' %}
+                    <div
+                      class="
+                      product-carousel__item
+                      animate
+                      animate--opacity
+                      "
+                      js-fade-in="item"
+                    >
+                      {% render 'product-card' with
+                        product: product,
+                        collection: featured_collection,
+                        modifier: '',
+                        index: forloop.index
+                      %}
+                    </div>
+                  {% endunless %}
+                {%- endfor -%}
+            </div>
+          </div>
+        {% endif %}
+      {%- endif -%}
+    </product-recommendations>
+  </section>
+
+
+<script>
+  class ProductRecommendations extends HTMLElement {
+    constructor() {
+      super();
+
+      const handleIntersection = (entries, observer) => {
+        if (!entries[0].isIntersecting) return;
+        observer.unobserve(this);
+
+        fetch(this.dataset.url)
+          .then(response => response.text())
+          .then(text => {
+            const html = document.createElement('div');
+            html.innerHTML = text;
+            const recommendations = html.querySelector('product-recommendations');
+
+            if (recommendations && recommendations.innerHTML.trim().length) {
+              this.innerHTML = recommendations.innerHTML;
+            }
+
+            if (html.querySelector('.product-carousel__item')) {
+              this.classList.add('product-recommendations--loaded');
+            }
+          })
+          .catch(e => {
+            console.error(e);
+          });
+      }
+
+      new IntersectionObserver(handleIntersection.bind(this), {rootMargin: '0px 0px 200px 0px'}).observe(this);
+    }
+  }
+
+  customElements.define('product-recommendations', ProductRecommendations);
+</script>
+
+  {% schema %}
+    {
+      "name": "Product recommendations",
+      "settings": [
+        {
+          "type": "range",
+          "id": "limit",
+          "label": "Limit product",
+          "unit": "n",
+          "min": 4,
+          "max": 12,
+          "step": 4,
+          "default": 8
+        },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Title",
+        "default": "You may also like"
+      }
+      ]
+    }
+  {% endschema %}

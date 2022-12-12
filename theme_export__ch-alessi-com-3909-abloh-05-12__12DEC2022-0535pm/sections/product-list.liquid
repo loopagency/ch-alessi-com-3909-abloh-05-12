@@ -1,0 +1,248 @@
+{% render 'section-padding' %}
+{% render 'utility' %}
+
+{% style %}
+  .products-list__grid {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  {% if section.settings.allow_gutter %}
+    .section-{{ section.id }} .products-list__grid  {
+      column-gap: var({{ section.settings.gutter_size }});
+    }
+  {% endif %}
+
+  .responsive-card-image__wrapper {
+    height: auto;
+  }
+  .product-card__footer {
+		grid-row-gap: 0;
+		padding: 0 var(--spacing-xs);
+	}
+	.product-card__product-type {
+		font-weight: 500;
+	}
+  
+{% endstyle %}
+
+<div class="section-{{ section.id }} section-{{ section.id }}{% if section.settings.allow_padding %}-padding{% endif %}{% if section.settings.section_boxed %} section-boxed{% endif %}">
+  {% for block in section.blocks %}
+    {% if section.blocks.size > 1 %}
+      {% style %}
+      .products-list__grid {
+        padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+      }
+      @media screen and (min-width: 750px) { 
+        .products-list__grid {
+          padding-bottom: {{ section.settings.padding_bottom }}px;
+        }
+      }
+      {% endstyle %}
+    {% endif %}
+    {% if section.settings.allow_title %}
+      <div class="row no-gutter">
+        <div class="col xs12">
+            <span class="{{ block.settings.heading_size }}{% if block.settings.allow_uppercase %} uppercase{% endif %}">
+              {{ block.settings.title }}
+            </span>
+        </div>
+      </div>
+    {% endif %}
+    <div class="products-list__grid d--f fw--w">
+      {% for product in block.settings.product_list %}
+        <div class="card-grid__item xs--6 {{ section.settings.col_size }}">
+            {% render 'product-card-beta' with product: product %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>
+
+
+{% schema %}
+  {
+  "name": "BETA - Product list",
+  "class": "beta-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Custom Product list"
+    },
+    {
+      "type": "checkbox",
+      "id": "allow_title",
+      "label": "Show title",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Custom Grid"
+    },
+    {
+      "type": "select",
+      "id": "col_size",
+      "options": [
+        {
+          "value": "l--12",
+          "label": "Full width"
+        },
+        {
+          "value": "l--6",
+          "label": "2 Columns"
+        },
+        {
+          "value": "l--4",
+          "label": "3 Columns"
+        },
+        {
+          "value": "l--3",
+          "label": "4 Columns"
+        }
+      ],
+      "default": "l--3",
+      "label": "Select product column size",
+      "info": "Only for Desktop"
+    },
+    {
+      "type": "checkbox",
+      "id": "allow_gutter",
+      "label": "Allow gutter beetwen column",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "gutter_size",
+      "options": [
+        {
+          "value": "--spacing-3xs",
+          "label": "Extra Small"
+        },
+        {
+          "value": "--spacing-xs",
+          "label": "Small"
+        },
+        {
+          "value": "--spacing-m",
+          "label": "Medium"
+        },
+        {
+          "value": "--spacing-l",
+          "label": "Large"
+        }
+      ],
+      "default": "--spacing-xs",
+      "label": "Dimension Gutter"
+    },
+    {
+      "type": "header",
+      "content": "Padding Section"
+    },
+    {
+      "type": "checkbox",
+      "id": "allow_padding",
+      "label": "Show Padding on top and bottom",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "section_boxed",
+      "label": "Use margin left/right for box the section",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product-list",
+      "name": "Product List",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Title for block"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title for this list",
+          "default": "Title"
+        },
+         {
+          "type": "checkbox",
+          "id": "allow_uppercase",
+          "label": "Use uppercase for letters",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading Size",
+          "options": [
+            {
+              "value": "d1",
+              "label": "Heading 1"
+            },
+            {
+              "value": "d2",
+              "label": "Heading 2"
+            },
+            {
+              "value": "d3",
+              "label": "Heading 3"
+            },
+            {
+              "value": "d4",
+              "label": "Heading 4"
+            },
+            {
+              "value": "d5",
+              "label": "Heading 5"
+            },
+            {
+              "value": "d6",
+              "label": "Heading 6"
+            }
+          ],
+          "default": "d3"
+        },
+        {
+          "type": "product_list",
+          "id": "product_list",
+          "label": "Products",
+          "limit": 12
+        }        
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BETA - Product list",
+      "category": "BETA",
+      "blocks": [
+        {
+          "type": "product-list"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

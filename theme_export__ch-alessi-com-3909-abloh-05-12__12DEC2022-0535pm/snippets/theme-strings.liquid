@@ -1,0 +1,167 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Theme strings
+  - Assign global variables for use in JavaScript.
+----------------------------------------------------------------------------
+{% endcomment %}
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace('no-js', '');
+
+  window.theme = {
+    strings: {
+      addingToCart: {{ 'products.product.adding_to_cart' | t | json }},
+      addToCart: {{ 'products.product.add_to_cart' | t | json }},
+      addOnCharCount: {{ 'cart.add_on.message.count_char' | t | json }},
+      prompt: {{ 'products.product.prompt' | t | json }},
+      remove: {{ 'cart.general.remove' | t | json }},
+      onSale: {{ 'collections.product.sale_badge' | t | json }},
+      soldOut: {{ 'products.product.sold_out' | t | json }},
+      unavailable: {{ 'products.product.unavailable' | t | json }},
+      loadPrevious: {{ 'collections.pagination.load_previous' | t | json }},
+      loadMore: {{ 'collections.pagination.load_more' | t | json }},
+      totalResults: {{ 'collections.general.number_of_products' | t | json }},
+      cart: {
+        general: {
+          continue_browsing: {{ 'cart.general.continue_browsing' | t | json }},
+          empty: {{ 'cart.general.empty' | t | json }},
+          remove: {{ 'cart.general.remove' | t | json }},
+          review: {{ 'cart.general.review' | t | json }},
+          title: {{ 'cart.general.title' | t | json }},
+        },
+        label: {
+          discounted_price: {{ 'cart.label.discounted_price' | t | json }},
+          original_price: {{ 'cart.label.original_price' | t | json }},
+          price: {{ 'cart.label.price' | t | json }},
+          product: {{ 'cart.label.product' | t | json }},
+          quantity: {{ 'cart.label.quantity' | t | json }},
+          total: {{ 'cart.label.total' | t | json }}
+        },
+        add_on: {
+          largeItemMsg: {{ 'cart.add_on.large_item.message' | t | json }},
+          large_item_warning: {{ 'cart.add_on.large_item.warning_html' | t | json }},
+          large_item_warning_all: {{ 'cart.add_on.large_item.warning_all_html' | t | json }}
+        }
+      },
+      productPrice: {
+        fromText:  {{ 'products.product.from_text_html' | t | json }},
+        onSaleFrom: {{ 'products.product.on_sale_from_html' | t | json}},
+        regularPrice: {{ 'products.product.regular_price' | t | json}},
+      },
+      moreVariantsAvailable: {{ 'collections.product.more_variants_available' | t | json }},
+    },
+    currentLanguage: {{ request.locale.iso_code |json }},
+    moneyFormat: {{ shop.money_format | json }},
+    currency: {{ cart.currency.iso_code | json }},
+    enabledCurrencies: [
+      {% for currency in shop.enabled_currencies %}
+        {
+          name: {{ currency.name | json }},
+          iso_code: {{ currency.iso_code | json }},
+          symbol: {{ currency.symbol | json }}
+        }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ],
+    pageType: {{ request.page_type | json }},
+    features: {
+      cartAddOn: {{ settings.enable_cart_addon | json }},
+      cartAddOnMessage: {{ settings.enable_cart_addon_message | json }},
+      cartAddOnMessageMax: {{ settings.cart_addon_max | json }},
+      cartAddOnProduct: {{ settings.cart_addon_product | json }},
+      currencyConverter: {{ settings.enable_currency_converter | json }},
+      currencySelector: {{ settings.enable_currency_selector | json }},
+      freeGift: {{ settings.enable_free_gift | json }},
+      upsellPromo: {{ settings.enable_upsell_features | json }},
+      freeShippingNotification: {{ settings.enable_free_shipping_notification | json }},
+      imageZoom: {{ settings.enable_image_zoom | json }},
+      inventoryThreshold: {{ settings.inventory_quantity_threshold | json }},
+      productSwatches: {{ settings.enable_product_swatches | json }},
+    },
+    low_stock_message: {
+      blank: {{ 'cart.low_stock_message.blank' | t | json }},
+      multiple: {{ 'cart.low_stock_message.multiple' | t | json }},
+      single: {{ 'cart.low_stock_message.single' | t | json }},
+    },
+    {% if settings.store_code != blank %}
+    store: {
+      storeCode: {{ settings.store_code | json }},
+      storeName: {{ settings.store_name | json }},
+    },
+    {% endif %}
+    redirect: {
+      choiceContinue: {{ 'redirect.modal.choice.continue' | t | json }},
+      updatePreferences: {{ 'redirect.modal.update_preferences' | t | json }},
+      updating: {{ 'redirect.modal.updating' | t | json }},
+    },
+    storeSelector: {
+      messages: {
+        error: {{ 'layout.footer.store_selector_error' | t | json }}
+      },
+    },
+    {% if settings.enable_free_gift %}
+    freeGift: {
+      messages: {
+        blank: {{ 'cart.free_gift.blank' | t | json }},
+        initial_partial: {{ 'cart.free_gift.initial_partial' | t | json }},
+        second_partial: {{ 'cart.free_gift.second_partial' | t | json }},
+        initial_ideal: {{ 'cart.free_gift.initial_ideal' | t | json }},
+        second_ideal: {{ 'cart.free_gift.second_ideal' | t | json }}
+      },
+      minValue1: {{ settings.free_gift_min_cart_value_1 }},
+      itemId1: {{ all_products[settings.free_gift_product_1].selected_or_first_available_variant.id }},
+      itemQty1: {{ settings.free_gift_qty_1 }}
+    },
+    {% endif %}
+    {% if settings.enable_free_gift and settings.free_gift_product_2 != blank %}
+    freeGift2: {
+      minValue2: {{ settings.free_gift_min_cart_value_2 }},
+      itemId2: {{ all_products[settings.free_gift_product_2].selected_or_first_available_variant.id }},
+      itemQty2: {{ settings.free_gift_qty_2 }}
+    },
+    {% endif %}
+    {% if settings.enable_free_shipping_notification %}
+    freeShipping: {
+      messages: {
+        blank: {{ 'cart.free_shipping.blank' | t | json }},
+        partial: {{ 'cart.free_shipping.partial' | t | json }},
+        ideal: {{ 'cart.free_shipping.ideal' | t | json }}
+      },
+      threshold: {{ settings.free_shipping_threshold_value }},
+      progressBar: {{ settings.enable_free_shipping_progress_bar | json }}
+    },
+    {% endif %}
+    collection: {
+      currentTags: [
+        {% for tag in current_tags %}
+          {{ tag | handle | json }}{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      ]
+    },
+    icons: {
+      close: '<svg class="icon icon__close"  viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M24,2.42,21.58,0,12,9.59,2.42,0,0,2.42,9.58,12,0,21.59,2.42,24,12,14.42,21.58,24,24,21.59,14.42,12Z"/></svg>',
+      information: '<svg class="icon icon__information" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path d="M24,0A24,24,0,1,0,48,24,24.07,24.07,0,0,0,24,0Zm0,44.8A20.8,20.8,0,1,1,44.8,24,20.86,20.86,0,0,1,24,44.8ZM22.4,18.4h3.2v20H22.4Zm4-5.6A2.4,2.4,0,1,1,24,10.4,2.36,2.36,0,0,1,26.4,12.8Z"/></svg>'
+    },
+    urls: {
+      file_url: {{ '' | file_url | json }},
+      asset_url: {{ '' | asset_url | json }},
+      icon: {
+        caret_down: {{ 'icon-caret-down.svg' | asset_url | json }},
+        chevron_down: {{ 'icon-chevron-down.svg' | asset_url | json }},
+        chevron_up: {{ 'icon-chevron-up.svg' | asset_url | json }},
+      }
+    },
+    {% if settings.enable_upsell_features %}
+      UpsellPromo: {
+        promo_properties: {{ settings.promo_tag | remove: ':' | json }},
+        messages: {
+          initial_partial: {{ settings.initial_text_promo | json }},
+          initial_ideal: {{ settings.ideal_text_promo | json }},
+          bg_color_initial: {{ settings.bg_color | json }},
+          txt_color_initial: {{ settings.txt_color | json }},
+          bg_color_ideal: {{ settings.bg_color_ideal | json }},
+          txt_color_ideal: {{ settings.txt_color_ideal | json }}
+        },
+      },
+      {% endif %}
+  };
+</script>

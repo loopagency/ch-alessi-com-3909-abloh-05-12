@@ -1,0 +1,59 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Slider page - Slide
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{% capture product_description %}
+  {% if description contains '##DESIGNERS##' %}
+    {% assign description_first = description | split: '##DESIGNERS##' | first | remove: '<p></p>' %}
+    {% assign designers = description | split: '##DESIGNERS##' | last | remove: '<p></p>' %}
+
+    <div class="slider-page__description">
+      {{ description_first }}
+    </div>
+
+    <div class="slider-page__description__designers subtitle-2">
+      {{ designers | replace: '<p>', '<button tabindex="-1" js-slider-page="designer">' | replace: '</p>', '</button>' }}
+    </div>
+  {% else %}
+    <div class="slider-page__description">
+      {{ description }}
+    </div>
+  {% endif %}
+{% endcapture %}
+
+{% if index == 1 %}
+  <button
+    class="slider-page__next-slide"
+    js-slider-page="next"
+  >
+    {% render 'icon-direction' with icon: 'navigation-down' %}
+  </button>
+{% endif %}
+
+<div class="slider-page__content-block">
+  <div class="slider-page__content-block__container">
+    {% if strapline != '' %}
+      <span class="slider-page__strapline h2">{{ strapline }}</span>
+    {% endif %}
+
+    {% if title != '' %}
+      <h3 class="slider-page__title d3">{{ title }}</h3>
+    {% endif %}
+
+    {{ product_description }}
+  </div>
+</div>
+
+<div class="slider-page__content-block image">
+  <span
+    class="slider-page__content-block__image lazyload"
+    role="img"
+    aria-label="{{ image.alt }}"
+    data-bgset="
+      {% render 'responsive-bg-image', image: image %}
+    "
+  >
+  </span>
+</div>

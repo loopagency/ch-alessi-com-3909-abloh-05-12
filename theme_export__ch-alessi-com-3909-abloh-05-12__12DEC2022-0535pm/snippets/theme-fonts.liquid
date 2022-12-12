@@ -1,0 +1,40 @@
+{%- comment -%}
+----------------------------------------------------------------------------
+  Snippet: Theme Fonts
+  - Set @font-face properties where we can access Liquid.
+----------------------------------------------------------------------------
+{%- endcomment -%}
+<style>
+  @font-face {
+    font-family: 'BasicGrotesque';
+    font-weight: 300;
+    src: url({{ 'basicgrotesque-light.ttf' | asset_url }}) format('truetype');
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'BasicGrotesque';
+    font-weight: 500;
+    src: url({{ 'basicgrotesque-regular.ttf' | asset_url }}) format('truetype');
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'BasicGrotesque';
+    font-weight: 700;
+    src: url({{ 'basicgrotesque-bold.ttf' | asset_url }}) format('truetype');
+    font-display: swap;
+  }
+
+  @font-face {
+  font-family: bc-sf-filter-ico;
+  src: url({{ 'bc-sf-filter-ico.eot?1fx0e3' | asset_url | json }});
+  src: url({{ 'bc-sf-filter-ico.eot?1fx0e3#iefix' | asset_url | json }}) format('embedded-opentype'),
+  url({{ 'bc-sf-filter-ico.ttf?1fx0e3' | asset_url | json }}) format('truetype'),
+  url({{ 'bc-sf-filter-ico.woff?1fx0e3' | asset_url | json }}) format('woff'),
+  url({{ 'bc-sf-filter-ico.svg?1fx0e3#icomoon' | asset_url | json }}) format('svg');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+</style>

@@ -1,0 +1,245 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Collection promo boxes
+------------------------------------------------------------------------------
+{% endcomment %}
+<script>
+  {%- for block in section.blocks -%}
+    {%- if block.settings.promo_collection == collection.handle -%}
+      window.theme.promoBoxes = {
+        positions: [{{ block.settings.promo_positions }}],
+        boxes: [
+        {%- for i in (1..4) -%}
+          {%- assign promo_link_string = 'promo_link_0#' | replace: '#', i -%}
+          {%- assign promo_title_string = 'promo_title_0#' | replace: '#', i -%}
+          {%- assign promo_subtitle_string = 'promo_subtitle_0#' | replace: '#', i -%}
+          {%- assign promo_btn_string = 'promo_btn_0#' | replace: '#', i -%}
+          {%- assign promo_img_small_string = 'promo_small_image_0#' | replace: '#', i -%}
+          {%- assign promo_img_large_string = 'promo_large_image_0#' | replace: '#', i -%}
+          {%- assign promo_allow_gradient_string = 'allow_gradient_0#' | replace: '#', i -%}
+          {%- assign promo_link = block.settings[promo_link_string] -%}
+          {%- assign promo_title = block.settings[promo_title_string] -%}
+          {%- assign promo_subtitle = block.settings[promo_subtitle_string] -%}
+          {%- assign promo_btn = block.settings[promo_btn_string] -%}
+          {%- assign promo_img_small = block.settings[promo_img_small_string] -%}
+          {%- assign promo_img_large = block.settings[promo_img_large_string] -%}
+          {%- assign promo_img_gradient = block.settings[promo_allow_gradient_string] -%}
+          {%- if promo_link != blank and promo_img_small != blank and promo_img_large != blank -%}
+          {
+            link: {{ promo_link | json }},
+            title: {{ promo_title | json }},
+            subtitle: {{ promo_subtitle | json }},
+            btn: {{ promo_btn | json }},
+            imgLarge: {{ promo_img_small | json }},
+            imgSmall: {{ promo_img_large | json }},
+            gradient: {{ promo_img_gradient | json }}
+          },
+          {%- endif -%}
+        {%- endfor -%}
+        ],
+      }
+    {%- endif -%}
+  {%- endfor -%}
+</script>
+
+{% schema %}
+  {
+    "name": "Promo Boxes",
+    "blocks": [
+      {
+        "type": "promo_boxes",
+        "name": "Promo Boxes",
+        "settings": [
+          {
+            "type": "collection",
+            "id": "promo_collection",
+            "label": "Collection",
+            "info": "In which collection the boxes will be shown"
+          },
+          {
+            "type": "text",
+            "id": "promo_positions",
+            "label": "Position of boxes",
+            "info": "Insert the values in this format: `1, 4, 12, 20`"
+          },
+          {
+            "type": "header",
+            "content": "Box 1"
+          },
+          {
+            "type": "url",
+            "id": "promo_link_01",
+            "label": "Link"
+          },
+          {
+            "type": "text",
+            "id": "promo_subtitle_01",
+            "label": "Subtitle",
+            "default": "Lorem ipsum"
+          },
+          {
+            "type": "text",
+            "id": "promo_title_01",
+            "label": "Title"
+          },
+          {
+            "type": "text",
+            "id": "promo_btn_01",
+            "label": "Button Text",
+            "default": "Discover"
+          },
+         {
+          "type": "checkbox",
+          "id": "allow_gradient_01",
+          "label": "Allow Gradient",
+          "default": true
+         },
+          {
+            "type": "image_picker",
+            "id": "promo_small_image_01",
+            "label": "Mobile image",
+            "info": "Recommended dimensions: 770x960px (.jpg)"
+          },
+          {
+            "type": "image_picker",
+            "id": "promo_large_image_01",
+            "label": "Desktop image",
+            "info": "Recommended dimensions: 650x450px (.jpg)"
+          },
+          {
+            "type": "header",
+            "content": "Box 2"
+          },
+          {
+            "type": "url",
+            "id": "promo_link_02",
+            "label": "Link"
+          },
+          {
+            "type": "text",
+            "id": "promo_subtitle_02",
+            "label": "Subtitle",
+            "default": "Lorem ipsum"
+          },
+          {
+            "type": "text",
+            "id": "promo_title_02",
+            "label": "Title"
+          },
+          {
+            "type": "text",
+            "id": "promo_btn_02",
+            "label": "Button Text",
+            "default": "Discover"
+          },
+         {
+          "type": "checkbox",
+          "id": "allow_gradient_02",
+          "label": "Allow Gradient",
+          "default": true
+         },
+          {
+            "type": "image_picker",
+            "id": "promo_small_image_02",
+            "label": "Mobile image",
+            "info": "Recommended dimensions: 770x960px (.jpg)"
+          },
+          {
+            "type": "image_picker",
+            "id": "promo_large_image_02",
+            "label": "Desktop image",
+            "info": "Recommended dimensions: 650x450px (.jpg)"
+          },
+          {
+            "type": "header",
+            "content": "Box 3"
+          },
+          {
+            "type": "url",
+            "id": "promo_link_03",
+            "label": "Link"
+          },
+          {
+            "type": "text",
+            "id": "promo_subtitle_03",
+            "label": "Subtitle",
+            "default": "Lorem ipsum"
+          },
+          {
+            "type": "text",
+            "id": "promo_title_03",
+            "label": "Title"
+          },
+          {
+            "type": "text",
+            "id": "promo_btn_03",
+            "label": "Button Text",
+            "default": "Discover"
+          },
+         {
+          "type": "checkbox",
+          "id": "allow_gradient_03",
+          "label": "Allow Gradient",
+          "default": true
+         },
+          {
+            "type": "image_picker",
+            "id": "promo_small_image_03",
+            "label": "Mobile image",
+            "info": "Recommended dimensions: 770x960px (.jpg)"
+          },
+          {
+            "type": "image_picker",
+            "id": "promo_large_image_03",
+            "label": "Desktop image",
+            "info": "Recommended dimensions: 650x450px (.jpg)"
+          },
+          {
+            "type": "header",
+            "content": "Box 4"
+          },
+          {
+            "type": "url",
+            "id": "promo_link_04",
+            "label": "Link"
+          },
+          {
+            "type": "text",
+            "id": "promo_subtitle_04",
+            "label": "Subtitle",
+            "default": "Lorem ipsum"
+          },
+          {
+            "type": "text",
+            "id": "promo_title_04",
+            "label": "Title"
+          },
+          {
+            "type": "text",
+            "id": "promo_btn_04",
+            "label": "Button Text",
+            "default": "Discover"
+          },
+         {
+          "type": "checkbox",
+          "id": "allow_gradient_04",
+          "label": "Allow Gradient",
+          "default": true
+         },
+          {
+            "type": "image_picker",
+            "id": "promo_small_image_04",
+            "label": "Mobile image",
+            "info": "Recommended dimensions: 770x960px (.jpg)"
+          },
+          {
+            "type": "image_picker",
+            "id": "promo_large_image_04",
+            "label": "Desktop image",
+            "info": "Recommended dimensions: 650x450px (.jpg)"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,228 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Collection Page Template
+  - Use this template for Collection Pages created using the Collection Page Builder
+  - Use the commented out code snippet below to create new blocks
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- comment -%}
+  {%- assign example_variable = block.settings.example_variable -%}
+
+  {%-if block_settings -%}
+    {%- assign block_settings_array = block_settings | replace: ',"', '##split##' | replace: '{', '' | replace: '}', '' | replace: '"', '' | split: '##split##' -%}
+    {%- for block_setting in block_settings_array -%}
+      {%- if block_setting != blank -%}
+        {%- assign block_setting_name_value = block_setting | split: '=>' -%}
+        {%- assign block_setting_name = block_setting_name_value[0] | replace: ' ', '' -%}
+        {%- assign block_setting_value = block_setting_name_value[1] -%}
+        {%- assign block_setting_value_slice = block_setting_value | slice: 0, 5 -%}
+        {%- if block_setting_value_slice == 'files' -%}
+          {%- assign block_setting_value = block_setting_value | replace: 'files/' -%}
+          {%- assign block_setting_value = images[block_setting_value] -%}
+        {%- endif -%}
+        {%- case block_setting_name -%}
+          {%- when 'example_variable' -%}
+            {%- assign example_variable = block_setting_value -%}
+        {%- endcase -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcomment -%}
+
+{% capture page_content %}
+    {{ collection.description }}
+{% endcapture %}
+
+{%- assign blocks = page_content | split: '<!--[[' | last | remove: ']]-->' | split: '||' -%}
+
+{% comment %}
+------------------------------------------------------------------------------
+  Collection
+  - Main collection template.
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{% assign designer_collection = false %}
+{% if collection.description != blank and collection.image != blank %}
+  {% render 'meet-the-designer'
+    with template_snippet: 'collection'
+  %}
+  {% assign designer_collection = true %}
+{% endif %}
+
+{% paginate collection.products by 24 %}
+  <div
+    class="critical-clear bc-sf-filter-wrapper-page"
+  >
+
+    {% if designer_collection == false %}
+      <div class="container">
+        <div class="row">
+          <div class="template-collection__header">
+            <div class="col xs12">
+              <h1 class="h2 template-collection__title">
+                {{ collection.title }}
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    <div
+      class="
+        container
+        template-collection__tools-container
+        container--full-width
+      "
+    >
+      <div
+        class="
+          container
+          template-collection__bs-tools
+          template-collection__bs-tools--desktop
+        "
+      >
+        <span class="bc-sf-filter-total-product body-2">
+          {% include 'bc-sf-filter-skeleton', width: 1 %}
+        </span>
+
+        <div
+          id="bc-sf-filter-tree-h"
+          js-filters-container
+        >
+          {% include 'bc-sf-filter-tree-placeholder-h' %}
+        </div>
+
+        <div
+          id="bc-sf-filter-top-sorting"
+          class="
+            bc-sf-filter-custom-sorting
+            bc-sf-filter-toolbar-item
+            text-right
+          "
+        >
+          {% include 'bc-sf-filter-skeleton', width: 1 %}
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="
+        container
+        template-collection__bs-tools
+        template-collection__bs-tools--mobile
+      "
+    >
+      <div class="row">
+        <div id="bc-sf-filter-tree-mobile" class="col xs6">
+          {% include 'bc-sf-filter-skeleton', type: 'button' %}
+        </div>
+
+        <div
+          id="bc-sf-filter-top-sorting-mobile"
+          class="bc-sf-filter-custom-sorting col xs6"
+        >
+          {% include 'bc-sf-filter-skeleton', type: 'button' %}
+        </div>
+
+        <div
+          id="bc-sf-filter-tree"
+          js-filters-container
+        >
+          {% include 'bc-sf-filter-tree-placeholder' %}
+        </div>
+
+        <div class="col xs12">
+          <span class="bc-sf-filter-total-product body-2">
+            {% include 'bc-sf-filter-skeleton', width: 1 %}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    {% comment %}
+    ----------------------------------------------------------------------------
+      Product cards
+    ----------------------------------------------------------------------------
+    {% endcomment %}
+    <div class="container">
+      <div class="row">
+        <div id="bc-sf-filter-btn-load-previous-page-wrapper"></div>
+        <div class="template-collection__body">
+          {% if collection.products.size <= 0 %}
+            <h2 class="text-center">
+              {{ 'collections.general.no_matches' | t }}
+            </h2>
+
+          {% else %}
+            <div
+              id="bc-sf-filter-products"
+              class="template-collection__grid products-list__grid card-grid"
+              data-bc-sort="{{ collection.default_sort_by }}"
+            >
+              {% for product in collection.products %}
+                <div class="card-grid__item">
+                  {% render 'product-card' with product: product %}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <div>
+          <div id="bc-sf-filter-bottom-pagination">
+            {% if paginate.pages > 1 %}
+              {% include 'bc-sf-filter-pagination' %}
+            {% endif %}
+          </div>
+          <div id="bc-sf-filter-load-more"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endpaginate %}
+
+{% section 'collection-promo-boxes' %}
+
+{% comment %}
+----------------------------------------------------------------------------
+  Custom content
+----------------------------------------------------------------------------
+{% endcomment %}
+<div class="container">
+  {%- for block in blocks -%}
+    {%- assign block_type = block | split: '==>' | first | replace: ' ', '' | strip_newlines -%}
+    {%- assign block_settings = block | split: '==>' | last | strip_newlines -%}
+    {%- case block_type -%}
+      {%- when 'example-block' -%}
+        {%- render 'example-block' block_settings: block_settings -%}
+      {%- when 'image-video-hero' -%}
+        {%- render 'block-image-video-hero' block_settings: block_settings -%}
+      {%- when 'text-callout' -%}
+        {%- render 'block-text-callout' block_settings: block_settings -%}
+      {%- when '50-50' -%}
+        {%- render 'block-50-50' block_settings: block_settings -%}
+      {%- when 'content-grid' -%}
+        {%- render 'block-content-grid' block_settings: block_settings -%}
+      {%- when 'spacer' -%}
+        {%- render 'block-spacer' block_settings: block_settings -%}
+      {%- when 'double-image' -%}
+        {%- render 'block-double-image' block_settings: block_settings -%}
+      {%- when 'bleed-image-text' -%}
+        {%- render 'block-bleed-image-text' block_settings: block_settings -%}
+      {%- when 'content-slider' -%}
+        {%- render 'block-content-slider' block_settings: block_settings -%}
+    {%- endcase -%}
+  {%- endfor -%}
+</div>
+
+{% comment %}
+----------------------------------------------------------------------------
+  Breadcrumb
+----------------------------------------------------------------------------
+{% endcomment %}
+<div class="template-collection__breadcrumb">
+  {% render 'breadcrumb' %}
+</div>

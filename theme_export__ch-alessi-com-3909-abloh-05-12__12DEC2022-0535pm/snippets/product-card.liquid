@@ -1,0 +1,194 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Product card
+  - Uses the card component as the base.
+  - Uses badges by default (Optional).
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{% assign modifier_classes = '' %}
+
+{% if modifier != blank %}
+  {% assign modifier_classes = ' ' | append: modifier %}
+{% endif %}
+
+{% if empty_template %}
+  {% assign product = '' %}
+{% endif %}
+
+{% unless empty_template %}
+  {% assign product_type = '' %}
+  {% assign product_has_badges = false %}
+  {% assign product_badge_list = '' %}
+  {% assign category_tag = '' %}
+  {% assign macro_category_tag = '' %}
+  {% assign product_has_color_swatches = false %}
+
+  {% for tag in product.tags %}
+    {% assign sanitized_tag = tag | downcase %}
+
+    {% assign current_locale = request.locale.iso_code | downcase | append: ':' %}
+    {% assign description_tag = 'description_' | append: current_locale %}
+    {% if sanitized_tag contains description_tag %}
+      {% assign product_type = tag | split: ':' | last | strip %}
+
+      {% if product_type == 'none' or product_type == 'None' %}
+        {% assign product_type = '' %}
+      {% endif %}
+    {% endif %}
+
+    {% if sanitized_tag contains 'badge:' %}
+      {% assign product_badge_title = tag | split: ':' | last | strip %}
+      {% if product_badge_title != 'Badge' and product_badge_title != 'None' %}
+        {% assign product_has_badges = true %}
+        {% assign product_badge_list = product_badge_list | append: product_badge_title | append: ','%}
+      {% endif %}
+    {% endif %}
+
+    {% if sanitized_tag contains 'category:' %}
+      {% assign split_tag = sanitized_tag | split: ':' %}
+
+      {% if split_tag[0] == 'macro_category' %}
+        {% assign macro_category_tag = split_tag | last | strip %}
+      {% else %}
+        {% assign category_tag = split_tag | last | strip %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+
+  {% if product.compare_at_price > product.price %}
+    {% assign product_has_badges = true %}
+  {% endif %}
+{% endunless %}
+
+{% unless product.has_only_default_variant %}
+  {% for option in product.options_with_values %}
+    {% assign sanitized_option_name = option.name | handleize %}
+    {% if sanitized_option_name contains 'color' or sanitized_option_name contains 'colour' %}
+      {% assign product_has_color_swatches = true %}
+      {% assign product_swatches = option %}
+    {% endif %}
+  {% endfor %}
+{% endunless %}
+
+{% comment %} Datalayer info {% endcomment %}
+{% if spare_parts == true %}
+  {% assign array_name = 'SpareParts' %}
+  {% assign datalayer_list = 'suggested_product' %}
+{% else %}
+  {% assign array_name = collection.handle | capitalize %}
+  {% assign datalayer_list = 'homepage' %}
+{% endif %}
+
+<div
+  class="product-card{{ modifier_classes }}"
+  data-cy="productCard"
+  data-datalayer-id="datalayer_{{ product.handle | replace: '-', '_' }}"
+  data-datalayer-list="{{ datalayer_list }}"
+  js-product-link
+  js-product-card
+>
+  {% if product.featured_image != blank or empty_template %}
+    {% if product_has_badges %}
+      {% assign product_badge_array = product_badge_list | split: ',' %}
+
+      <div class="product-card__badge-listing">
+        {% for badge in product_badge_array %}
+          <div class="product-card__badge badge badge--white">
+            <span>{{ badge }}</span>
+          </div>
+        {% endfor %}
+
+        {% if product.compare_at_price > product.price %}
+          {% liquid 
+            assign discount = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price
+            assign discount = discount | append: '%' | prepend: ' '
+          %}        
+
+          <div class="product-card__badge badge badge--secondary">
+            <span>{{ discount }} {{ 'collections.product.sale_badge' | t }}</span>
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <a
+      class="
+        product-card__thumbnail-container
+        {% unless product.images[1] %} no-hover{% endunless %}
+      "
+      href="{{ product.url }}"
+    >
+      {%- unless template == 'index' -%}
+        {% render 'responsive-card-image' with
+          image: product.featured_image,
+          responsive_image_counter: forloop.index0,
+          wrapper_class: 'product-card__thumbnail product-card__thumbnail--product'
+        %}
+      {%- endunless -%}
+      {% if product.images[1] %}
+        {% render 'responsive-card-image' with
+          image: product.images[1],
+          responsive_image_counter: forloop.index,
+          wrapper_class: 'product-card__thumbnail product-card__thumbnail--lifestyle'
+        %}
+      {% endif %}
+
+      {% unless product.available %}
+        <span class="product-card__soldout border--light color--secondary label">
+          {{ 'products.product.sold_out' | t }}
+        </span>
+      {% endunless %}
+    </a>
+  {% endif %}
+
+  <div class="product-card__footer">
+    <a
+      class="product-card__title"
+      href="{{ product.url }}"
+      js-product-link="product-title"
+    >
+      {{ product.title }}
+    </a>
+    <span class="product-card__product-type caption">{{ product_type }}</span>
+
+    
+
+    {% render 'product-price' with product: product %}
+
+    {% if product_has_color_swatches %}
+      <div class="product-card__variants">
+        {% render 'product-card-swatches'
+          with product: product,
+          option: product_swatches
+        %}
+      </div>
+    {% endif %}
+  </div>
+
+  {% assign is_collection = false %}
+  {% if template contains 'collection' or template contains 'search' %}
+    {% assign is_collection = true %}
+  {% endif %}
+  {% unless is_collection == true %}
+
+  {% assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." %}
+  {% assign integral = price_value[0] %}
+  {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
+
+    <script>
+      var datalayer_{{ product.handle | replace: '-', '_' }} = {
+        name: '{{ product.title | handleize | replace: '-', '_' }}',
+        id: '{{ product.id }}',
+        price: {{ integral }}.{{ decimal }},
+        brand: 'alessi',
+        category: '{{ category_tag | handleize | replace: '-', '_' }}',
+        list: '{{ datalayer_list }}',
+        position: {{ index }},
+        dimension15: '{{ macro_category_tag | handleize | replace: '-', '_' }}'
+      };
+
+      datalayer{{ array_name }}.push(datalayer_{{ product.handle | replace: '-', '_' }});
+    </script>
+  {% endunless %}
+</div>

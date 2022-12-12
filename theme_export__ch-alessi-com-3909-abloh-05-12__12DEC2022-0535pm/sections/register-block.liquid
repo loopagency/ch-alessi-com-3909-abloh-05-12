@@ -1,0 +1,59 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Section: Register Block
+  - This is a register form block
+----------------------------------------------------------------------------
+{% endcomment %}
+
+{% assign image = section.settings.image %}
+
+<section
+  class="login-block critical-clear"
+  data-section-id="{{ section.id }}"
+  data-section-type="login-block"
+>
+  <div class="login-block__aside">
+    <div
+      class="login-block__bg cover lazyload"
+      data-bgset="{% render 'responsive-bg-image', image: image %}"
+    ></div>
+  </div>
+
+  <div class="login-block__main">
+    <div class="login-block__main-wrapper">
+
+      {% render 'register-form' %}
+
+      <div class="login-block__create-account">
+        <span class="h3 login-block__create-account-title">
+          {{ 'customer.register.login_here_title' | t }}
+        </span>
+
+        <a
+          class="button button--secondary button--dark"
+          href="{{ routes.account_login_url }}"
+        >
+          {{ 'customer.register.login_here' | t }}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Register Block",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Content"
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image",
+        "info": "Recommended upload size at least 720 x 846px."
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,216 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Cart drawer
+  - This is a required section for the Shopify Theme Store.
+  - It is available in the "Ajax Cart" section in the theme editor.
+------------------------------------------------------------------------------
+{% endcomment %}
+{% assign enable_product_vendor = false %}
+
+{% assign modifiers = '' %}
+{% assign body_modifiers = '' %}
+{% assign cart_item_counter = cart.item_count %}
+
+{% if cart.item_count <= 0 %}
+  {% assign body_modifiers = body_modifiers | append: 'is-hidden' %}
+{% endif %}
+
+{% if settings.enable_cart_addon and settings.cart_addon_product != blank %}
+  {% assign cart_add_on = all_products[settings.cart_addon_product] %}
+  {% assign cart_has_add_on = false %}
+
+  {% for item in cart.items %}
+    {% assign product_type = item.product.type | handleize %}
+
+    {% if product_type == 'add-on'  %}
+      {% assign cart_has_add_on = true %}
+      {% assign modifiers = modifiers | append: ' has-cart-add-on' %}
+      {% assign cart_item_counter = cart_item_counter | minus: item.quantity %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+<section
+  id="cartDrawer"
+  class="cart-drawer drawer critical-hide {{ modifiers }}"
+  role="navigation"
+  data-cy="cartDrawer"
+  data-enable-vendor-title="{{ enable_product_vendor }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="cart-drawer"
+  js-cart-drawer="container"
+>
+  <div class="cart-drawer__inner">
+    <div class="container">
+      <div class="row no-margin no-gutter">
+        <div class="col xs12">
+          <div class="cart-drawer__header">
+            <div class="cart-drawer__title h2">
+              <div class="cart-drawer__title-text">
+                {{ 'cart.general.title' | t }}
+                <span class="ajax-cart__count subtitle-1">
+                  &#40;
+                  <span js-ajax-cart="cartCounter">
+                    {{ cart_item_counter }}
+                  </span>
+                  &#41;
+                </span>
+              </div>
+
+              <button
+                class="cart-drawer__close button"
+                value="Close"
+                data-cy="cartDrawerClose"
+                data-target="cartDrawer"
+                js-toggle="cartDrawer"
+              >
+                {% render 'icon-misc' with icon: 'close' %}
+                <span class="visually-hidden">{{ 'general.accessibility.close' | t }}</span>
+              </button>
+            </div>
+            {% if settings.enable_upsell_features %}
+              <div class="row">
+                <div class="col xs12">
+                  {% render 'cart-upsell-promo-item' %}
+                </div>
+              </div>
+           {% endif %}
+          </div>
+
+          <div
+            class="cart-drawer__body ajax-cart"
+            js-ajax-cart="container"
+            js-cart-drawer="body"
+          >
+            {% if cart.item_count <= 0 %}
+              <p>{{ 'cart.general.empty' | t }}</p>
+
+            {% else %}
+              {% render 'cart-drawer-line-item' for cart.items as item %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="cart-drawer__footer {{ body_modifiers }}" js-cart-drawer="footer">
+
+   {% if settings.enable_free_gift %}
+      <div class="row">
+        <div class="col xs12">
+          {% render 'cart-gift-item' %}
+        </div>
+      </div>
+   {% endif %}
+     
+    {% if settings.enable_cart_addon and settings.cart_addon_product != blank %}
+      <div
+        class="row {% unless cart_has_add_on %}is-hidden{% endunless %}"
+        js-cart-drawer="cartAddOn"
+      >
+        <div class="col xs12">
+          <div class="cart-drawer__cart-add-on">
+            <span class="meta">
+              {{ 'cart.add_on.in_cart' | t: product: cart_add_on.title | append: ' - ' }}
+
+              {% if cart_add_on.price <= 0 %}
+                <span>{{ 'cart.add_on.free' | t }}</span>
+              {% else %}
+                <span
+                  data-price="{{ cart_add_on.price }}"
+                  js-currency="price"
+                >
+                  {{ cart_add_on.price | money_without_trailing_zeros }}
+                </span>
+              {% endif %}
+            </span>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="cart-drawer__total">
+      <div class="row">
+        <div class="col xs6">
+          <span class="body-1">
+            <span js-ajax-cart="cartCounter">
+              {{ cart_item_counter }}
+            </span>
+            {% if cart_item_counter > 1 %}
+              {{ 'cart.general.items' | t | append: ':' }}
+            {% else %}
+              {{ 'cart.general.item' | t | append: ':' }}
+            {% endif %}
+          </span>
+        </div>
+
+        <div class="col xs6 text-right">
+          <span
+            class="subtitle-1 color--brand"
+            data-price="{{ cart.total_price }}"
+            js-ajax-cart="subtotal"
+            js-currency="price"
+          >
+            {{ cart.total_price | money }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col xs12">
+        {% if section.settings.show_proceed_checkout %}
+          <a 
+            class="button button--primary button--dark button--block button--large button--fill"
+            href="/checkout"
+            js-ajax-cart="goCheckout">
+            {{ 'cart.general.checkout' | t }}
+          </a>
+        {% endif %}
+        {% if section.settings.show_clear_cart %}
+          <a
+            class="button button--primary button--dark button--block button--large"
+            href="/cart/clear.js"
+            js-ajax-cart="clearCart"
+          >
+            {{ 'cart.general.clear' | t }}
+          </a>
+        {% endif %}
+
+        <a
+          class="button button--primary button--dark button--block button--large"
+          href="/cart"
+          data-cy="cartDrawerLink"
+          js-ajax-cart="cartDrawerLink"
+        >
+          {{ 'cart.general.review' | t }}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Cart Drawer",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Features"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_clear_cart",
+        "label": "Show clear cart button",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_proceed_checkout",
+        "label": "Show proceed to checkout button",
+        "default": true
+      }
+    ]
+  }
+{% endschema %}

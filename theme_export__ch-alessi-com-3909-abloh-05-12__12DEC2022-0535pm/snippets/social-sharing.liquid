@@ -1,0 +1,49 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Social sharing
+  - Article sharing.
+----------------------------------------------------------------------------
+{% endcomment %}
+<div class="social-sharing">
+  {% if settings.share_facebook %}
+    <a
+      class="social-sharing__item"
+      href="//www.facebook.com/sharer.php?u={{ shop.url | append: share_permalink }}"
+      target="_blank"
+    >
+      <span class="visually-hidden">
+        {{ 'general.social.share_on_facebook' | t }}
+      </span>
+
+      {% render 'icon-social-media' with icon: 'facebook' %}
+    </a>
+  {% endif %}
+
+  {% if settings.share_twitter %}
+    <a
+      class="social-sharing__item"
+      href="//twitter.com/share?text={{ share_title | url_param_escape }}&amp;url={{ shop.url | append: share_permalink }}"
+      target="_blank"
+    >
+      <span class="visually-hidden">
+        {{ 'general.social.share_on_twitter' | t }}
+      </span>
+
+      {% render 'icon-social-media' with icon: 'twitter' %}
+    </a>
+  {% endif %}
+
+  {% if settings.share_pinterest %}
+    <a
+      class="social-sharing__item"
+      href="//pinterest.com/pin/create/button/?url={{ shop.url | append: share_permalink }}&amp;media={{ share_image | img_url: '1024x1024' }}&amp;description={{ share_title | url_param_escape }}"
+      target="_blank"
+    >
+      <span class="visually-hidden">
+        {{ 'general.social.share_on_pinterest' | t }}
+      </span>
+
+      {% render 'icon-social-media' with icon: 'pinterest' %}
+    </a>
+  {% endif %}
+</div>

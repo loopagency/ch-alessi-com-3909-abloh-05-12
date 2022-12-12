@@ -1,0 +1,1378 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Styleguide - styles
+  - Add a conditional statement when adding new components.
+------------------------------------------------------------------------------
+{% endcomment %}
+<content-block name="Colors" status="reviewing">
+  <p slot="description">Color brings a design to life. Color is versatile; it's used to express emotion and tone, as well as place emphasis and create associations.</p>
+
+  <div class="container">
+
+    {% comment %}
+    ------------------------------------------------------------------------------
+      Brand
+    ------------------------------------------------------------------------------
+    {% endcomment %}
+    <div class="row">
+      <div class="col xs12 m6 offset-m3">
+        <spec-grid title="Brand">
+          <spec-grid-row name="Color Primary">
+            <div slot="content">
+              <span class="sg-swatch sg-swatch--primary"></span>
+              <span class="sg-label">
+                Primary
+              </span>
+            </div>
+            <div slot="meta">
+              <span class="caption">rgb(0, 0, 0)</span><br>
+              <span class="caption">$COLOR_PRIMARY</span>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Color Secondary">
+            <div slot="content">
+              <span class="sg-swatch sg-swatch--secondary"></span>
+              <span class="sg-label">
+                Secondary
+              </span>
+            </div>
+            <div slot="meta">
+              <span class="caption">rgb (237, 28, 36)</span><br>
+              <span class="caption">$COLOR_SECONDARY</span>
+            </div>
+          </spec-grid-row>
+        </spec-grid>
+
+        {% comment %}
+        ------------------------------------------------------------------------------
+          Typography
+        ------------------------------------------------------------------------------
+        {% endcomment %}
+        <spec-grid title="Typography">
+          <spec-grid-row name="Color Text Primary">
+            <div slot="content">
+              <span class="sg-swatch sg-swatch--text-primary"></span>
+              <span class="sg-label">
+                Text Primary
+              </span>
+            </div>
+            <div slot="meta">
+              <span class="caption">rgb(0, 0, 0)</span><br>
+              <span class="caption">$COLOR_TEXT_PRIMARY</span>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Color Text Secondary">
+            <div slot="content">
+              <span class="sg-swatch sg-swatch--text-secondary"></span>
+              <span class="sg-label">
+                Text Secondary
+              </span>
+            </div>
+            <div slot="meta">
+              <span class="caption">rgb(81, 81, 81)</span><br>
+              <span class="caption">$COLOR_TEXT_SECONDARY</span>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Color Light">
+            <div slot="content">
+              <span class="sg-swatch sg-swatch--text-light"></span>
+              <span class="sg-label">
+                Text Light
+              </span>
+            </div>
+            <div slot="meta">
+              <span class="caption">rgb(118, 118, 118)</span><br>
+              <span class="caption">$COLOR_TEXT_LIGHT</span>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Color Text Inverse">
+            <div slot="content">
+              <span class="sg-swatch sg-swatch--text-inverse"></span>
+              <span class="sg-label">
+                Text Inverse
+              </span>
+            </div>
+            <div slot="meta">
+              <span class="caption">rgb(255, 255, 255)</span><br>
+              <span class="caption">$COLOR_TEXT_INVERSE</span>
+            </div>
+          </spec-grid-row>
+        </spec-grid>
+
+        {% comment %}
+        ------------------------------------------------------------------------------
+          Backgrounds / Surfaces / Borders
+        ------------------------------------------------------------------------------
+        {% endcomment %}
+        <spec-grid title="Backgrounds / Surfaces / Borders">
+          <spec-grid-row name="Color Background Dark">
+            <div slot="content">
+              <span class="sg-swatch sg-swatch--background-dark"></span>
+              <span class="sg-label">
+                Background Dark
+              </span>
+            </div>
+            <div slot="meta">
+              <span class="caption">rgb(0, 0, 0)</span><br>
+              <span class="caption">$COLOR_BACKGROUND_DARK</span>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Color Background Light">
+            <div slot="content">
+              <span class="sg-swatch sg-swatch--background-light"></span>
+              <span class="sg-label">
+                Background Light
+              </span>
+            </div>
+            <div slot="meta">
+              <span class="caption">rgb(246, 246, 246)</span><br>
+              <span class="caption">$COLOR_BACKGROUND_LIGHT</span>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Color Background Medium">
+            <div slot="content">
+              <span class="sg-swatch sg-swatch--background-medium"></span>
+              <span class="sg-label">
+                Background Medium
+              </span>
+            </div>
+            <div slot="meta">
+              <span class="caption">rgb(237, 237, 232)</span><br>
+              <span class="caption">$COLOR_BACKGROUND_MEDIUM</span>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Color Background White">
+            <div slot="content">
+              <span class="sg-swatch sg-swatch--background-white"></span>
+              <span class="sg-label">
+                Background White
+              </span>
+            </div>
+            <div slot="meta">
+              <span class="caption">rgb(255, 255, 255)</span><br>
+              <span class="caption">$COLOR_BACKGROUND_WHITE</span>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Color Border Light">
+            <div slot="content">
+              <span class="sg-swatch sg-swatch--border-light"></span>
+              <span class="sg-label">
+                Border Light
+              </span>
+            </div>
+            <div slot="meta">
+              <span class="caption">rgb(239, 239, 239)</span><br>
+              <span class="caption">$COLOR_BORDER_LIGHT</span>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Color Border Dark">
+            <div slot="content">
+              <span class="sg-swatch sg-swatch--border-dark"></span>
+              <span class="sg-label">
+                Border Dark
+              </span>
+            </div>
+            <div slot="meta">
+              <span class="caption">rgb(173, 173, 173)</span><br>
+              <span class="caption">$COLOR_BORDER_DARK</span>
+            </div>
+          </spec-grid-row>
+        </spec-grid>
+
+        {% comment %}
+        ------------------------------------------------------------------------------
+          Links / Buttons
+        ------------------------------------------------------------------------------
+        {% endcomment %}
+        <spec-grid title="Links / Buttons">
+          <spec-grid-row name="Color Link">
+            <div slot="content">
+              <span class="sg-swatch sg-swatch--link"></span>
+              <span class="sg-label">
+                Link
+              </span>
+            </div>
+            <div slot="meta">
+              <span class="caption">rgb(30, 144, 255)</span><br>
+              <span class="caption">$COLOR_LINK</span>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Color Link Hover">
+            <div slot="content">
+              <span class="sg-swatch sg-swatch--link-hover"></span>
+              <span class="sg-label">
+                Link Hover
+              </span>
+            </div>
+            <div slot="meta">
+              <span class="caption">rgb(25, 120, 212)</span><br>
+              <span class="caption">$COLOR_LINK_HOVER</span>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Color Button">
+            <div slot="content">
+              <span class="sg-swatch sg-swatch--button"></span>
+              <span class="sg-label">
+                Button
+              </span>
+            </div>
+            <div slot="meta">
+              <span class="caption">rgb(30, 144, 255)</span><br>
+              <span class="caption">$COLOR_BUTTON</span>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Color Button Hover">
+            <div slot="content">
+              <span class="sg-swatch sg-swatch--button-hover"></span>
+              <span class="sg-label">
+                Button Hover
+              </span>
+            </div>
+            <div slot="meta">
+              <span class="caption">rgb(25, 120, 212)</span><br>
+              <span class="caption">$COLOR_BUTTON_HOVER</span>
+            </div>
+          </spec-grid-row>
+        </spec-grid>
+
+        {% comment %}
+        ------------------------------------------------------------------------------
+          Support
+        ------------------------------------------------------------------------------
+        {% endcomment %}
+        <spec-grid title="Support">
+          <spec-grid-row name="Color Info">
+            <div slot="content">
+              <span class="sg-swatch sg-swatch--support-info"></span>
+              <span class="sg-label">
+                Info
+              </span>
+            </div>
+            <div slot="meta">
+              <span class="caption">rgb(0, 0, 0)</span><br>
+              <span class="caption">$COLOR_SUPPORT_INFO</span>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Color Success">
+            <div slot="content">
+              <span class="sg-swatch sg-swatch--support-success"></span>
+              <span class="sg-label">
+                Success
+              </span>
+            </div>
+            <div slot="meta">
+              <span class="caption">rgb(0, 170, 0)</span><br>
+              <span class="caption">$COLOR_SUPPORT_SUCCESS</span>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Color Warning">
+            <div slot="content">
+              <span class="sg-swatch sg-swatch--support-warning"></span>
+              <span class="sg-label">
+                Warning
+              </span>
+            </div>
+            <div slot="meta">
+              <span class="caption">rgb(230, 87, 34)</span><br>
+              <span class="caption">$COLOR_SUPPORT_WARNING</span>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Color Error">
+            <div slot="content">
+              <span class="sg-swatch sg-swatch--support-error"></span>
+              <span class="sg-label">
+                Error
+              </span>
+            </div>
+            <div slot="meta">
+              <span class="caption">rgb(246, 71, 71);</span><br>
+              <span class="caption">$COLOR_SUPPORT_ERROR</span>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Color Focus">
+            <div slot="content">
+              <span class="sg-swatch sg-swatch--support-focus"></span>
+              <span class="sg-label">
+                Focus
+              </span>
+            </div>
+            <div slot="meta">
+              <span class="caption">rgb(94, 158, 214)</span><br>
+              <span class="caption">$COLOR_SUPPORT_FOCUS</span>
+            </div>
+          </spec-grid-row>
+        </spec-grid>
+      </div>
+    </div>
+  </div>
+</content-block>
+
+<content-block name="Button" status="reviewing">
+  <p slot="description">Custom button styles for actions in forms, dialogs, and more with support for multiple sizes, states, and more.</p>
+
+  <div class="container">
+    <div class="row">
+      <div class="col xs12 m6 offset-m3" style="background: #CCC;">
+        {% comment %}
+        ------------------------------------------------------------------------------
+          Button styles
+        ------------------------------------------------------------------------------
+        {% endcomment %}
+        <spec-grid title="Styles">
+          <spec-grid-row name="Primary Dark">
+            <div slot="content">
+              <a class="button button--primary button--dark">Primary Dark</a>
+            </div>
+
+            <div slot="meta">
+              .button--primary.button--dark
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Primary Light">
+            <div slot="content">
+              <a class="button button--primary button--light">Primary Light</a>
+            </div>
+
+            <div slot="meta">
+              .button--primary.button--light
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Secondary Dark">
+            <div slot="content">
+              <a class="button button--secondary button--dark">Secondary</a>
+            </div>
+
+            <div slot="meta">
+              .button--secondary.button--dark
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Secondary Light">
+            <div slot="content">
+              <a class="button button--secondary button--light">Secondary</a>
+            </div>
+
+            <div slot="meta">
+              .button--secondary.button--light
+            </div>
+          </spec-grid-row>
+        </spec-grid>
+
+        {% comment %}
+        ------------------------------------------------------------------------------
+          Button sizes
+        ------------------------------------------------------------------------------
+        {% endcomment %}
+        <spec-grid title="Sizes">
+          <spec-grid-row>
+            <div slot="content">
+              <a class="button button--primary button--dark button--small">Small</a>
+            </div>
+            <div slot="meta">.button.button--small</div>
+          </spec-grid-row>
+
+          <spec-grid-row>
+            <div slot="content">
+              <a class="button button--primary button--dark">Normal</a>
+            </div>
+            <div slot="meta">.button</div>
+          </spec-grid-row>
+
+          <spec-grid-row>
+            <div slot="content">
+              <a class="button button--primary button--dark button--large">Large</a>
+            </div>
+            <div slot="meta">.button.button--large</div>
+          </spec-grid-row>
+
+          <spec-grid-row>
+            <div slot="content">
+              <a class="button  button--primary button--dark button--large button--block">Block</a>
+            </div>
+            <div slot="meta">.button.button--block</div>
+          </spec-grid-row>
+        </spec-grid>
+
+        {% comment %}
+        ------------------------------------------------------------------------------
+          Button states
+        ------------------------------------------------------------------------------
+        {% endcomment %}
+        <spec-grid title="States">
+          <spec-grid-row>
+            <div slot="content"><a class="button button--primary button--dark is-active">Active</a></div>
+            <div slot="meta">.button.is-active</div>
+          </spec-grid-row>
+
+          <spec-grid-row>
+            <div slot="content"><a class="button button--primary button--dark is-disabled" disabled>Disabled</a></div>
+            <div slot="meta">.button.is-disabled or .button[disabled]</div>
+          </spec-grid-row>
+
+          <spec-grid-row>
+            <div slot="content">
+              <a class="button button--primary button--dark is-loading">
+                <div class="loader">
+                  <div class="ball-clip-rotate">
+                    <div></div>
+                  </div>
+                </div>
+                <span>Active</span>
+              </a>
+              <a class="button button--primary button--light is-loading">
+                <div class="loader">
+                  <div class="ball-clip-rotate">
+                    <div></div>
+                  </div>
+                </div>
+                <span>Active</span>
+              </a>
+            </div>
+            <div slot="meta">.button.is-loading</div>
+          </spec-grid-row>
+        </spec-grid>
+      </div>
+    </div>
+  </div>
+</content-block>
+
+<content-block name="Form" status="reviewing">
+  <p slot="description">Examples and usage guidelines for form control styles, layout options, and custom components for creating a wide variety of forms.</p>
+
+  <content-example no-flex>
+    <div slot="demo">
+      <form action="#">
+        <div class="form-group">
+          <label for="email" class="visually-hidden">Email address</label>
+          <input type="email" id="email" placeholder="Email address">
+          <small id="emailHelp" class="caption">We'll never share your email with anyone else.</small>
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="visually-hidden">Password</label>
+          <input type="password" id="password" placeholder="Password">
+        </div>
+
+        <div class="form-group">
+          <label for="sg-select">Multiple selection</label>
+          <select name="sg-select" id="sg-select" class="body-2">
+            <option value="1">Option 1</option>
+            <option value="2">Option 2</option>
+            <option value="3">Option 3</option>
+            <option value="4">Option 4</option>
+            <option value="5">Option 5</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <fieldset class="fieldset">
+            <legend class="fieldset__legend legend">Multiple options</legend>
+
+            <div class="checkbox__container">
+              <input id="form-checkbox-1" type="checkbox" class="checkbox__input" value="new" name="form-checkbox-1" aria-checked="false" checked>
+              <label for="form-checkbox-1" class="body-2 checkbox__label">Option 1</label>
+            </div>
+
+            <div class="checkbox__container">
+              <input id="form-checkbox-2" type="checkbox" class="checkbox__input" value="new" name="form-checkbox-2" aria-checked="false">
+              <label for="form-checkbox-2" class="body-2 checkbox__label">Option 2</label>
+            </div>
+
+            <div class="checkbox__container">
+              <input id="form-checkbox-3" type="checkbox" class="checkbox__input" value="new" name="form-checkbox-3" aria-checked="false">
+              <label for="form-checkbox-3" class="body-2 checkbox__label">Option 3</label>
+            </div>
+
+            <div class="checkbox__container">
+              <input id="form-checkbox-4" type="checkbox" class="checkbox__input" value="new" name="form-checkbox-4" aria-checked="false">
+              <label for="form-checkbox-4" class="body-2 checkbox__label">Option 4</label>
+            </div>
+
+            <div class="checkbox__container">
+              <input id="form-checkbox-5" type="checkbox" class="checkbox__input" value="new" name="form-checkbox-5" aria-checked="false">
+              <label for="form-checkbox-5" class="body-2 checkbox__label">Option 5</label>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="form-group">
+          <fieldset class="fieldset" slot="demo">
+            <legend class="fieldset__legend legend">Radio (input + label)</legend>
+
+            <div class="radio__container">
+              <input id="radio-1" type="radio" class="radio__input" value="new" name="radio-1" checked aria-checked="true">
+              <label for="radio-1" class="body-2 radio__label">Active</label>
+            </div>
+
+            <div class="radio__container">
+              <input id="radio-2" type="radio" class="radio__input" value="new" name="radio-1" aria-checked="false">
+              <label for="radio-2" class="body-2 radio__label">Inactive</label>
+            </div>
+
+            <div class="radio__container">
+              <input id="radio-3" type="radio" class="radio__input" value="new" name="radio-1" disabled>
+              <label for="radio-3" class="body-2 radio__label is-disabled">Disabled</label>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="form-group">
+          <input type="submit" class="button button--primary button--dark" value="Submit">
+        </div>
+      </form>
+    </div>
+  </content-example>
+</content-block>
+
+<content-block name="Grid" status="reviewing">
+  <p slot="description">
+    The Frame grid system provides a flexible, mobile-first, device-agnostic layout system. It has features to control alignment, order, flow, and gutters.<br><br>
+    The grid system is based off <a href="https://materializecss.com/grid.html">materialize.css</a>.
+  </p>
+
+  <div class="sg-content-block__content">
+    <div class="container">
+      <div class="row">
+        <div class="col xs12">
+          <h2>Standard columns</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="sg-grid-system">
+      <div class="container">
+        <div class="row">
+          <div class="col xs1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="col xs2">
+            <div class="sg-grid-system__item">
+              2
+            </div>
+          </div>
+
+          <div class="col xs2">
+            <div class="sg-grid-system__item">
+              2
+            </div>
+          </div>
+
+          <div class="col xs2">
+            <div class="sg-grid-system__item">
+              2
+            </div>
+          </div>
+
+          <div class="col xs2">
+            <div class="sg-grid-system__item">
+              2
+            </div>
+          </div>
+
+          <div class="col xs2">
+            <div class="sg-grid-system__item">
+              2
+            </div>
+          </div>
+
+          <div class="col xs2">
+            <div class="sg-grid-system__item">
+              2
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="col xs3">
+            <div class="sg-grid-system__item">
+              3
+            </div>
+          </div>
+
+          <div class="col xs3">
+            <div class="sg-grid-system__item">
+              3
+            </div>
+          </div>
+
+          <div class="col xs3">
+            <div class="sg-grid-system__item">
+              3
+            </div>
+          </div>
+
+          <div class="col xs3">
+            <div class="sg-grid-system__item">
+              3
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="col xs4">
+            <div class="sg-grid-system__item">
+              4
+            </div>
+          </div>
+
+          <div class="col xs4">
+            <div class="sg-grid-system__item">
+              4
+            </div>
+          </div>
+
+          <div class="col xs4">
+            <div class="sg-grid-system__item">
+              4
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col xs6">
+            <div class="sg-grid-system__item">
+              6
+            </div>
+          </div>
+
+          <div class="col xs6">
+            <div class="sg-grid-system__item">
+              6
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col xs12">
+          <h2>Desktop 12 / Tablet 6 / Mobile 4</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="sg-grid-system">
+      <div class="container">
+        <div class="row">
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col xs12">
+          <h2>Desktop 12 / Tablet 6 / Mobile 4 (No gutters)</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="sg-grid-system">
+      <div class="container">
+        <div class="row no-gutter">
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+
+          <div class="col xs3 l2 xl1">
+            <div class="sg-grid-system__item">
+              1
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</content-block>
+
+<content-block name="Iconography" status="reviewing">
+  <p slot="description">Icons are designed to be simple, modern, friendly, and sometimes quirky. Each icon is reduced to its minimal form, expressing essential characteristics to either replace or accompany labels.</p>
+
+  <icon-grid name="Media">
+    <div slot="register">
+      {% render 'icon-media' with icon: 'pause' %}
+      {% render 'icon-media' with icon: 'play' %}
+    </div>
+  </icon-grid>
+
+  <icon-grid name="Misc">
+    <div slot="register">
+      {% render 'icon-misc' with icon: 'account' %}
+      {% render 'icon-misc' with icon: 'bag' %}
+      {% render 'icon-misc' with icon: 'basket' %}
+      {% render 'icon-misc' with icon: 'cart' %}
+      {% render 'icon-misc' with icon: 'close' %}
+      {% render 'icon-misc' with icon: 'email' %}
+      {% render 'icon-misc' with icon: 'expand' %}
+      {% render 'icon-misc' with icon: 'error' %}
+      {% render 'icon-misc' with icon: 'hamburger' %}
+      {% render 'icon-misc' with icon: 'heart' %}
+      {% render 'icon-misc' with icon: 'minus' %}
+      {% render 'icon-misc' with icon: 'plus' %}
+      {% render 'icon-misc' with icon: 'phone' %}
+      {% render 'icon-misc' with icon: 'pin' %}
+      {% render 'icon-misc' with icon: 'preview' %}
+      {% render 'icon-misc' with icon: 'search' %}
+      {% render 'icon-misc' with icon: 'sort' %}
+      {% render 'icon-misc' with icon: 'star' %}
+      {% render 'icon-misc' with icon: 'star-filled' %}
+      {% render 'icon-misc' with icon: 'tick' %}
+      {% render 'icon-misc' with icon: 'zoom-in' %}
+      {% render 'icon-misc' with icon: 'zoom-out' %}
+    </div>
+  </icon-grid>
+
+  <icon-grid name="Direction">
+    <div slot="register">
+      {% render 'icon-direction' with icon: 'arrow-up' %}
+      {% render 'icon-direction' with icon: 'arrow-right' %}
+      {% render 'icon-direction' with icon: 'arrow-down' %}
+      {% render 'icon-direction' with icon: 'arrow-left' %}
+      {% render 'icon-direction' with icon: 'arrow-right-long' %}
+      {% render 'icon-direction' with icon: 'caret-up' %}
+      {% render 'icon-direction' with icon: 'caret-right' %}
+      {% render 'icon-direction' with icon: 'caret-down' %}
+      {% render 'icon-direction' with icon: 'caret-left' %}
+      {% render 'icon-direction' with icon: 'chevron-up' %}
+      {% render 'icon-direction' with icon: 'chevron-right' %}
+      {% render 'icon-direction' with icon: 'chevron-down' %}
+      {% render 'icon-direction' with icon: 'chevron-left' %}
+    </div>
+  </icon-grid>
+
+  <icon-grid name="Social media">
+    <div slot="register">
+      {% render 'icon-social-media' with icon: 'facebook' %}
+      {% render 'icon-social-media' with icon: 'gplus' %}
+      {% render 'icon-social-media' with icon: 'instagram' %}
+      {% render 'icon-social-media' with icon: 'pinterest' %}
+      {% render 'icon-social-media' with icon: 'twitter' %}
+      {% render 'icon-social-media' with icon: 'youtube' %}
+    </div>
+  </icon-grid>
+</content-block>
+
+<content-block name="Spacing" status="reviewing">
+  <p slot="description">Spacing variables are used to consistently apply margin and padding across components and UIs. Having a set spacing scale brings a rhythm to the product and creates a natural and familiar flow from page to page.</p>
+
+  <div class="container">
+    <div class="row">
+      <div class="col xs12 m6 offset-m3">
+        {% comment %}
+        ------------------------------------------------------------------------------
+          Spacing scale
+        ------------------------------------------------------------------------------
+        {% endcomment %}
+        <spec-grid title="Spacing scale" title2="rem" title3="px">
+          <spec-grid-row name="Spacing 3XS" content2="0.125" content3="2">
+            <div slot="content">
+              <p class="caption">$SPACING_3XS</p>
+            </div>
+            <div slot="meta">
+              <div class="sg-spacing sg-spacing--3xs">
+              </div>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Spacing 2XS" content2="0.25" content3="4">
+            <div slot="content">
+              <p class="caption">$SPACING_2XS</p>
+            </div>
+            <div slot="meta">
+              <div class="sg-spacing sg-spacing--2xs">
+              </div>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Spacing XS" content2="0.5" content3="8">
+            <div slot="content">
+              <p class="caption">$SPACING_XS</p>
+            </div>
+            <div slot="meta">
+              <div class="sg-spacing sg-spacing--xs">
+              </div>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Spacing S" content2="0.75" content3="12">
+            <div slot="content">
+              <p class="caption">$SPACING_S</p>
+            </div>
+            <div slot="meta">
+              <div class="sg-spacing sg-spacing--s">
+              </div>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Spacing M" content2="1" content3="16">
+            <div slot="content">
+              <p class="caption">$SPACING_M</p>
+            </div>
+            <div slot="meta">
+              <div class="sg-spacing sg-spacing--m">
+              </div>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Spacing L" content2="1.5" content3="24">
+            <div slot="content">
+              <p class="caption">$SPACING_L</p>
+            </div>
+            <div slot="meta">
+              <div class="sg-spacing sg-spacing--l">
+              </div>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Spacing XL" content2="2" content3="32">
+            <div slot="content">
+              <p class="caption">$SPACING_XL</p>
+            </div>
+            <div slot="meta">
+              <div class="sg-spacing sg-spacing--xl">
+              </div>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Spacing 2XL" content2="2.5" content3="40">
+            <div slot="content">
+              <p class="caption">$SPACING_2XL</p>
+            </div>
+            <div slot="meta">
+              <div class="sg-spacing sg-spacing--2xl">
+              </div>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Spacing 3XL" content2="3" content3="48">
+            <div slot="content">
+              <p class="caption">$SPACING_3XL</p>
+            </div>
+            <div slot="meta">
+              <div class="sg-spacing sg-spacing--3xl">
+              </div>
+            </div>
+          </spec-grid-row>
+        </spec-grid>
+
+        {% comment %}
+        ------------------------------------------------------------------------------
+          Layout scale
+        ------------------------------------------------------------------------------
+        {% endcomment %}
+        <spec-grid title="Layout scale" title2="rem" title3="px">
+          <spec-grid-row name="Layout S" content2="4" content3="64">
+            <div slot="content">
+              <p class="caption">$LAYOUT_S</p>
+            </div>
+            <div slot="meta">
+              <div class="sg-layout sg-layout--s">
+              </div>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Layout M" content2="6" content3="96">
+            <div slot="content">
+              <p class="caption">$LAYOUT_M</p>
+            </div>
+            <div slot="meta">
+              <div class="sg-layout sg-layout--m">
+              </div>
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Layout L" content2="10" content3="160">
+            <div slot="content">
+              <p class="caption">$LAYOUT_L</p>
+            </div>
+            <div slot="meta">
+              <div class="sg-layout sg-layout--l">
+              </div>
+            </div>
+          </spec-grid-row>
+        </spec-grid>
+      </div>
+    </div>
+  </div>
+</content-block>
+
+<content-block name="Typography" status="reviewing">
+  <p slot="description">Typography is used to create clear hierarchies, useful organizations, and purposeful alignments that guide users through the product and experience. It is the core structure of any well designed interface.</p>
+
+  <div class="container">
+    <div class="row">
+      <div class="col xs12 m6 offset-m3">
+        {% comment %}
+        ------------------------------------------------------------------------------
+          Display sizes
+        ------------------------------------------------------------------------------
+        {% endcomment %}
+        <spec-grid title="Display sizes">
+          <spec-grid-row name="Display 1">
+            <div slot="content">
+              <h1 class="d1">Display 1</h1>
+            </div>
+            <div slot="meta">.d1</div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Display 2">
+            <div slot="content">
+              <h1 class="d2">Display 2</h1>
+            </div>
+            <div slot="meta">.d2</div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Display 3">
+            <div slot="content">
+              <h1 class="d3">Display 3</h1>
+            </div>
+            <div slot="meta">.d3</div>
+          </spec-grid-row>
+        </spec-grid>
+
+        {% comment %}
+        ------------------------------------------------------------------------------
+          Basic headers
+        ------------------------------------------------------------------------------
+        {% endcomment %}
+        <spec-grid title="Basic headers">
+          <spec-grid-row name="Heading 1">
+            <div slot="content">
+              <h1 class="h1">Heading 1</h1>
+            </div>
+            <div slot="meta">h1, .h1</div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Heading 2">
+            <div slot="content">
+              <h2 class="h2">Heading 2</h2>
+            </div>
+            <div slot="meta">h2, .h2</div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Heading 3">
+            <div slot="content">
+              <h3 class="h3">Heading 3</h3>
+            </div>
+            <div slot="meta">h3, .h3</div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Heading 4">
+            <div slot="content">
+              <h4 class="d4">Heading 4</h4>
+            </div>
+            <div slot="meta">h4, .h4</div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Heading 5">
+            <div slot="content">
+              <h5 class="h5">Heading 5</h5>
+            </div>
+            <div slot="meta">h5, .h5</div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Heading 6">
+            <div slot="content">
+              <h6 class="h6">Heading 6</h6>
+            </div>
+            <div slot="meta">h6, .h6</div>
+          </spec-grid-row>
+        </spec-grid>
+
+        {% comment %}
+        ------------------------------------------------------------------------------
+          Body styles
+        ------------------------------------------------------------------------------
+        {% endcomment %}
+        <spec-grid title="Body styles">
+          <spec-grid-row name="Subtitle 1">
+            <div slot="content">
+              <h3 class="subtitle-1">Subtitle 1</h3>
+            </div>
+            <div slot="meta">.subtitle-1</div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Subtitle 2">
+            <div slot="content">
+              <h3 class="subtitle-2">Subtitle 2</h3>
+            </div>
+            <div slot="meta">.subtitle-2</div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Body 1">
+            <div slot="content">
+              <p class="body-1">Body 1</p>
+            </div>
+            <div slot="meta">p, .body-1</div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Body 2">
+            <div slot="content">
+              <p class="body-2">Body 2</p>
+            </div>
+            <div slot="meta">.body-2</div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Caption">
+            <div slot="content">
+              <span class="caption">Caption</span>
+            </div>
+            <div slot="meta">.caption</div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Label">
+            <div slot="content">
+              <span class="label">Label</span>
+            </div>
+            <div slot="meta">.label</div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Text link">
+            <div slot="content">
+              <a class="text-link" href="#">Text link</a>
+            </div>
+            <div slot="meta">.text-link</div>
+          </spec-grid-row>
+        </spec-grid>
+
+        {% comment %}
+        ------------------------------------------------------------------------------
+          Block styles
+        ------------------------------------------------------------------------------
+        {% endcomment %}
+        <spec-grid title="Block styles">
+          <spec-grid-row name="Blockquote">
+            <div slot="content">
+              <blockquote class="blockquote">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</blockquote>
+            </div>
+            <div slot="meta">blockquote, .blockquote</div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Ordered List">
+            <div slot="content">
+              <ol>
+                <li>Ordered List level 1
+                  <ol>
+                    <li>Ordered List level 2</li>
+                    <li>Ordered List level 2</li>
+                  </ol>
+                </li>
+                <li>Ordered List level 1</li>
+                <li>Ordered List level 1</li>
+              </ol>
+            </div>
+            <div slot="meta">
+              ol, .ol
+            </div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Unordered List">
+            <div slot="content">
+              <ul>
+                <li>Unordered List level 1
+                  <ul>
+                    <li>Unordered List level 2</li>
+                    <li>Unordered List level 2</li>
+                  </ul>
+                </li>
+                <li>Unordered List level 1</li>
+                <li>Unordered List level 1</li>
+              </ul>
+            </div>
+            <div slot="meta">
+              ul, .ul
+            </div>
+          </spec-grid-row>
+        </spec-grid>
+
+        {% comment %}
+        ------------------------------------------------------------------------------
+          Inline styles
+        ------------------------------------------------------------------------------
+        {% endcomment %}
+        <spec-grid title="Inline styles">
+          <spec-grid-row name="Mark">
+            <div slot="content">
+              <p>You can use the mark tag to <mark>highlight</mark> text.</p>
+            </div>
+            <div slot="meta">mark</div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Delete">
+            <div slot="content">
+              <p><del>This line of text is meant to be treated as deleted text.</del></p>
+            </div>
+            <div slot="meta">del</div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Strikethrough">
+            <div slot="content">
+              <p><s>This line of text is meant to be treated as no longer accurate.</s></p>
+            </div>
+            <div slot="meta">s</div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Inserted">
+            <div slot="content">
+              <p><ins>This line of text is meant to be treated as an addition to the document.</ins></p>
+            </div>
+            <div slot="meta">ins</div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Underlined">
+            <div slot="content">
+              <p><u>This line of text will render as underlined</u></p>
+            </div>
+            <div slot="meta">u</div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Small">
+            <div slot="content">
+              <p><small>This line of text is meant to be treated as fine print.</small></p>
+            </div>
+            <div slot="meta">small</div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Strong">
+            <div slot="content">
+              <p><strong>This line rendered as bold text.</strong></p>
+            </div>
+            <div slot="meta">strong</div>
+          </spec-grid-row>
+
+          <spec-grid-row name="Emphasise">
+            <div slot="content">
+              <p><em>This line rendered as italicized text.</em></p>
+            </div>
+            <div slot="meta">em</div>
+          </spec-grid-row>
+        </spec-grid>
+      </div>
+    </div>
+  </div>
+</content-block>

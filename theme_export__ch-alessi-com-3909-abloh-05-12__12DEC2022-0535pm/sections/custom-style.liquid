@@ -1,0 +1,56 @@
+{% if section.settings.style_html != blank %}
+  {% style %}
+    {{ section.settings.style_html }}
+  {% endstyle %}
+{% endif %}
+
+{% if section.settings.allow_transparent_header %}
+  {% style %}
+    #shopify-section-site-header:not(.inverse-bg-colourway) .site-nav a,
+    #shopify-section-site-header:not(.inverse-bg-colourway) .site-header__search-toggle,
+    #shopify-section-site-header:not(.inverse-bg-colourway) .site-header__icon { 
+      color: white
+    }
+  {% endstyle %}
+{% endif %}
+
+{% style %}
+#shopify-section-{{ section.id }} {
+  display: none;
+}
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "BETA - Custom stylesheet",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Pro Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "allow_transparent_header",
+      "label": "Allow transparent header",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Custom stylesheet css"
+    },
+    {
+      "type": "html",
+      "id": "style_html",
+      "label": "Custom code in page"
+    }
+  ],
+    
+  "presets": [
+    {
+      "name": "BETA - Custom stylesheet",
+      "category": "BETA"
+    }
+  ]
+}
+{% endschema %}

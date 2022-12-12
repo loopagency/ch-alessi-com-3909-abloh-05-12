@@ -1,0 +1,53 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Component: Professionals page logos
+------------------------------------------------------------------------------
+{% endcomment %}
+
+<section class="template-professionals__logos">
+<div class="container">
+  <div class="row">
+    <div class="col xs12 template-professionals__logos-container">
+      {% for block in section.blocks %}
+        {% if block.settings.url %}
+          <a
+            href="{{ block.settings.url }}"
+            target="_blank"
+          >
+        {% endif %}
+
+        <img src="{{ block.settings.logo | img_url: 'large' }}" />
+
+        {% if block.settings.url %}
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+</section>
+
+{% schema %}
+  {
+    "name": "Logos",
+    "settings": [],
+    "blocks": [
+      {
+        "type": "logos",
+        "name": "Logos",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "logo",
+            "label": "Logo"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "URL"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

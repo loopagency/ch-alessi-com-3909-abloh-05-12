@@ -1,0 +1,36 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Styleguide - sections
+------------------------------------------------------------------------------
+{% endcomment %}
+{% assign current_collection = collections['womens-all'] %}
+
+<content-block status="WIP" name="Cover listing" is-synced>
+  <div slot="description">A cover listing is an extensible section that contains large visual blocks of content that can be used for a single promotion without being obvious with the call to action.</div>
+
+  {% section 'cover-listing' %}
+</content-block>
+
+<content-block status="WIP" name="Featured blog" is-synced>
+  <div slot="description">A grid of article cards containing the most recent articles of a single blog.</div>
+
+  {% section 'featured-blog' %}
+</content-block>
+
+<content-block status="WIP" name="Featured collection" is-synced>
+  <div slot="description">A grid of product cards from a single collection that can be displayed in a static grid or within a carousel if there are more than 5 products.</div>
+
+  {% section 'featured-collection' %}
+</content-block>
+
+<content-block status="WIP" name="Image slider" is-synced>
+  <div slot="description">A flexible content slider using background images. This section has several content and text alignment options as well as settings for text and background colours.</div>
+
+  {% section 'image-slider' %}
+</content-block>
+
+<content-block status="WIP" name="Video hero" is-synced>
+  <div slot="description">A muted and repeating background video accompanied by short titles that is used to create a visually compelling narrative that draws the attention of users towards a specific promotion.</div>
+
+  {% section 'image-video-hero' %}
+</content-block>

@@ -1,0 +1,25 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Section Placeholder
+  - This is an a section placeholder used by the page builders only
+------------------------------------------------------------------------------
+{% endcomment %}
+<style>
+  .section_placeholder {
+    background-color: rgb(211, 211, 211);
+    border: 5px solid rgb(128, 128, 128);
+    height: 250px;
+    padding-top: 40px;
+    text-align: center;
+  }
+</style>
+
+<section
+  class="example-block"
+  data-section-id="{{ block_id }}"
+  data-section-type="example-block"
+>
+  <div class="section_placeholder">
+    <h2>{{ section_title }}</h2>  
+  </div>
+</section>

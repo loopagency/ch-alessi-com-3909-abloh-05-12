@@ -1,0 +1,201 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Cart drawer
+  - This is a required section for the Shopify Theme Store.
+  - It is available in the "Ajax Cart" section in the theme editor.
+------------------------------------------------------------------------------
+{% endcomment %}
+{% assign modifiers = '' %}
+
+{% unless shop.customer_accounts_enabled %}
+  {% assign modifiers = modifiers | append: 'is-hidden' %}
+{% endunless %}
+
+<section
+  id="menuDrawer"
+  class="menu-drawer drawer drawer--left critical-hide"
+  role="navigation"
+  data-section-id="{{ section.id }}"
+  data-section-type="menu-drawer"
+  js-menu-drawer="container"
+>
+  <button
+    class="menu-drawer__close button"
+    tabindex="0"
+    value="{{ 'general.accessibility.close' | t }}"
+    data-target="menuDrawer"
+    js-toggle="menuDrawer"
+  >
+    <span class="visually-hidden">{{ 'general.accessibility.close' | t }}</span>
+    {% render 'icon-misc' with icon: 'close' %}
+  </button>
+
+  <div class="menu-drawer__body" js-menu-drawer="body">
+    <div class="menu-drawer__top">
+      <ul class="menu-drawer__menu">
+        {% for tier_1 in linklists[section.settings.primary_menu].links %}
+
+          {% comment %}
+          ------------------------------------------------------------------------------
+            Menu Level: 1
+          ------------------------------------------------------------------------------
+          {% endcomment %}
+          {% if tier_1.links == blank %}
+            <li class="menu-drawer__item">
+                <a
+                  class="menu-drawer__link"
+                  href="{{ tier_1.url }}"
+                  tabindex="0"
+                >
+                <span class="menu-drawer__primary-label h2">{{ tier_1.title }}</span>
+                </a>
+            </li>
+
+          {% comment %}
+          ------------------------------------------------------------------------------
+            Menu Level: 2
+          ------------------------------------------------------------------------------
+          {% endcomment %}
+          {% else %}
+            <li class="menu-drawer__item">
+              <button
+                class="menu-drawer__button menu-drawer__button--primary"
+                tabindex="0"
+                js-menu-drawer="tier2MenuToggle"
+              >
+                <span class="menu-drawer__primary-label h2">
+                  {{ tier_1.title }}
+                </span>
+              </button>
+
+              <div class="menu-drawer__sub-nav" js-menu-drawer="tier2Menu">
+                <button
+                  class="menu-drawer__close"
+                  tabindex="0"
+                  js-menu-drawer="close"
+                >
+                  {% render 'icon-direction' with icon: 'arrow-right-long' %}
+
+                  <span class="visually-hidden">
+                    {{ 'general.accessibility.close' | t }}
+                  </span>
+                </button>
+
+                <span class="menu-drawer__secondary-label h2">
+                  {{ tier_1.title }}
+                </span>
+                <ul>
+                  {% assign has_image = false %}
+
+                  {% for tier_2 in tier_1.links %}
+                    {% for sub_link in tier_2.links %}
+                      {% if sub_link.title contains 'https' %}
+                        {% assign has_image = true %}
+                        {% break %}
+                      {% endif %}
+                    {% endfor %}
+                  {% endfor %}
+
+                  {% for tier_2 in tier_1.links %}
+                    {% if tier_2.links == blank or has_image %}
+                      <li class="menu-drawer__item">
+                        <a
+                          href="{{ tier_2.url }}"
+                          class="menu-drawer__link body-1"
+                        >
+                          {{ tier_2.title | split: '_' | first }}
+                        </a>
+                      </li>
+                    {% else %}
+
+                      {% comment %}
+                      ------------------------------------------------------------------------------
+                        Menu Level: 3
+                      ------------------------------------------------------------------------------
+                      {% endcomment %}
+                      
+                      <li class="menu-drawer__item menu-drawer__item--secondary">
+                        <button
+                          class="menu-drawer__button text-link"
+                          tabindex="0"
+                          js-menu-drawer="tier3MenuToggle"
+                        >
+                          {{ tier_2.title }}
+                        </button>
+
+                        <ul js-menu-drawer="tier3Menu">
+                          {% for tier_3 in tier_2.links %}
+                            <li class="menu-drawer__item">
+                              <a
+                                href="{{ tier_3.url }}"
+                                class="menu-drawer__link"
+                              >
+                                {{ tier_3.title | split: '_' | first }}
+                              </a>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      </li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="menu-drawer__bottom">
+      <ul class="menu-drawer__menu menu-drawer__menu--secondary">
+        {% comment %}
+        ------------------------------------------------------------------------
+          Store finder menu item
+        ------------------------------------------------------------------------
+        {% endcomment %}
+
+        {% for link in linklists[section.settings.secondary_menu].links %}
+          <li class="menu-drawer__item">
+            <a class="menu-drawer__link body-1" href="{{ link.url }}">
+              {{ link.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <ul class="menu-drawer__menu menu-drawer__menu--footer">
+        {% if shop.customer_accounts_enabled %}
+          <li class="menu-drawer__item">
+            <a class="menu-drawer__link h4" href="{{ routes.account_url }}">
+              {% if customer %}
+                {{ 'customer.account.welcome' | t: name: customer.first_name }}
+              {% else %}
+                {{ 'layout.customer.account' | t }}
+              {% endif %}
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Menu Drawer",
+    "settings": [
+      {
+        "type": "link_list",
+        "id": "primary_menu",
+        "label": "Primary menu",
+        "default": "footer"
+      },
+      {
+        "type": "link_list",
+        "id": "secondary_menu",
+        "label": "Secondary menu",
+        "default": "footer"
+      }
+    ]
+  }
+{% endschema %}

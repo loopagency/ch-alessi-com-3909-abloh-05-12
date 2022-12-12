@@ -1,0 +1,474 @@
+
+{% comment %}
+------------------------------------------------------------------------------
+  Collection Page Builder
+  - Use this template for the Collection Page Builder Tool Only!
+------------------------------------------------------------------------------
+{% endcomment %}
+{% section 'collection-page-builder' %}
+
+{%- if request.design_mode -%}
+  {%- assign design_mode = true -%}
+{%- endif -%}
+
+{%- if design_mode == true -%}
+  <div class="design-mode-toolbar">
+    <p class="design-mode-toolbar__editing-page">You're editing page: <strong js-design-mode-form="editingPage"></strong></p>
+    <form js-design-mode-form="toolbar" class="design-mode-toolbar__form">
+      <div class="design-mode-toolbar__polaris-select-wrapper">
+        <select js-design-mode-form="page-select" class="design-mode-toolbar__polaris-select" aria-invalid="false">
+          <option value="">Select Collection Page</option>
+        </select>
+        <svg class="design-mode-toolbar__polaris-select-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 8l5 5 5-5H5z"></path></svg></svg>
+      </div>
+      <button js-design-mode-form="edit" class="design-mode-toolbar__polaris-secondary-button"> Edit Page </button>
+      <button js-design-mode-form="publish" class="design-mode-toolbar__polaris-primary-button"> Publish Page </button>
+    </form>
+  </div>
+  <div class="design-mode-toolbar__polaris-toast" js-design-mode-form="toast"></div>
+{%- endif -%}
+  
+<style>
+  .design-mode-toolbar {
+    background-color: rgba(255, 255, 255, 0.9);
+    bottom: 0;
+    box-shadow: 0 0 0 1px rgba(63, 63, 68, 0.05), 0 -1px 3px 0 rgba(63, 63, 68, 0.15);
+    height: 60px;
+    left: 0;
+    padding: 12px;
+    position: fixed;
+    right: 0;
+    z-index: 10000;
+  }
+
+  .design-mode-toolbar__editing-page {
+    float: left;
+    font-size: 0.9rem;
+    line-height: normal;
+    margin: 0;
+    padding: 0;
+  }
+
+  .design-mode-toolbar__form {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .design-mode-toolbar__polaris-select-wrapper {
+    max-width: 200px;
+    position: relative;
+    width: 25%;
+  }
+
+  .design-mode-toolbar__polaris-select {
+    background: rgba(255, 255, 255, 1);
+    border: 1px solid rgba(186, 191, 195, 1);
+    border-bottom-color: rgba(186, 191, 196, 1);
+    border-radius: 0.3rem;
+    border-top-color: rgba(201, 204, 207, 1);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+    color: rgb(32, 34, 35, 1);
+    cursor: pointer;
+    font-size: 0.9rem;
+    height: 36px;
+    letter-spacing: initial;
+    min-height: auto;
+    padding: 0.4rem 0.8rem;
+    padding-right: 2rem;
+    width: 100%;
+  }
+
+  .design-mode-toolbar__polaris-select:focus {
+    border: 2px solid rgba(69, 143, 255, 1);
+  }
+
+  .design-mode-toolbar__polaris-select-icon {
+    height: 16px;
+    pointer-events: none;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 16px;
+  }
+
+  .design-mode-toolbar__polaris-primary-button {
+    background: rgb(0 128 96);
+    border-color: transparent;
+    border-radius: 0.3rem;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05), inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    color: rgb(255, 255, 255);
+    font-size: 0.9rem;
+    height: 36px;
+    margin-left: 0.8rem;
+    max-width: 125px;
+    min-height: auto;
+    padding: 0 15px;
+  }
+
+  .design-mode-toolbar__polaris-primary-button:hover {
+    background: rgb(0 110 82);
+  }
+
+  .design-mode-toolbar__polaris-secondary-button {
+    background: rgba(255, 255, 255, 1);
+    border: 1px solid rgba(186, 191, 195, 1);
+    border-bottom-color: rgba(186, 191, 196, 1);
+    border-radius: 0.3rem;
+    border-top-color: rgba(201, 204, 207, 1);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+    color: rgb(32, 34, 35, 1);
+    font-size: 0.9rem;
+    height: 36px;
+    margin-left: 0.8rem;
+    max-width: 125px;
+    min-height: auto;
+    padding: 0 15px;
+  }
+
+  .design-mode-toolbar__polaris-secondary-button:hover {
+    background: rgba(246, 246, 247, 1);
+  }
+
+  .design-mode-toolbar__polaris-toast {
+    background: rgba(0, 0, 0, 0.88);
+    border-radius: 3px;
+    bottom: -150px;
+    box-shadow: 0 0 0 1px rgba(63, 63, 68, 0.05), 0 1px 3px 0 rgba(63, 63, 68, 0.15);
+    color: rgb(255, 255, 255);
+    font-size: 1.1rem;
+    font-weight: 400;
+    left: 0;
+    line-height: 2.4;
+    margin: 0 auto;
+    max-width: 14rem;
+    padding: 0.8rem 1.6rem;
+    position: fixed;
+    right: 0;
+    text-align: center;
+    transition: all 0.3s ease-out;
+    z-index: 10001;
+  }
+
+  .design-mode-toolbar__polaris-toast--show {
+    bottom: 80px;
+    transition: all 0.3s ease-out;
+  }
+</style>
+
+<script>
+  /**
+   * DOM selectors.
+   */
+  const selectors = {
+    apiCredentialsForm: '[js-design-mode-form="api_credentials"]',
+    apiCredentials: '[js-design-mode-input="api_credentials"]',
+    editingPage: '[js-design-mode-form="editingPage"]',
+    pageSelect: '[js-design-mode-form="page-select"]',
+    editPageButton: '[js-design-mode-form="edit"]',
+    publishPageButton: '[js-design-mode-form="publish"]',
+    pageSchema: '[js-design-mode-form="schema"]',
+    formToast: '[js-design-mode-form="toast"]'
+  };
+
+  /**
+   * DOM node selectors.
+   */
+  const nodeSelectors = {
+    apiCredentialsForm: document.querySelector(selectors.apiCredentialsForm),
+    apiCredentials: document.querySelector(selectors.apiCredentials),
+    editingPage: document.querySelector(selectors.editingPage),
+    pageSelect: document.querySelector(selectors.pageSelect),
+    editPageButton: document.querySelector(selectors.editPageButton),
+    publishPageButton: document.querySelector(selectors.publishPageButton),
+    formToast: document.querySelector(selectors.formToast)
+  };
+
+  /**
+   * Conditional init
+   */
+  let apiCredentials = '';
+  let themeId = '';
+  if(nodeSelectors.apiCredentialsForm != undefined) {
+    themeId = '{{ theme.id }}';
+    const designMode = true;
+    apiCredentials = nodeSelectors.apiCredentials.value;
+    initDesignMode();
+  }
+
+  /**
+   * Init
+   */
+  function initDesignMode() {
+    setEventListeners();
+    setPages();
+  }
+
+  /**
+   * Set event listeners
+   */
+  function setEventListeners() {
+    nodeSelectors.publishPageButton.addEventListener("click", (event) => {
+      event.preventDefault();
+      const option = nodeSelectors.pageSelect[nodeSelectors.pageSelect.selectedIndex];
+      if(option.value == '') {
+        showToast('Please Select a page');
+        return;
+      }
+      const pageSchema = document.querySelector(selectors.pageSchema);
+      updatePage(nodeSelectors.pageSelect.value, pageSchema.value, option.dataset.type);
+    });
+
+    nodeSelectors.editPageButton.addEventListener("click", (event) => {
+      event.preventDefault();
+      const option = nodeSelectors.pageSelect[nodeSelectors.pageSelect.selectedIndex];
+      if(option.value == '') {
+        showToast('Please Select a page');
+        return;
+      }
+      openPage(nodeSelectors.pageSelect.value, option.dataset.bodyHtml, option.dataset.handle);
+    });
+  }
+
+  /**
+   * Ajax post
+   */
+  async function ajaxPostPut(url = '', data = {}, method) {
+    const response = await fetch(url, {
+      method: method,
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Basic ${btoa(apiCredentials)}`
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(data)
+    });
+    return response.json(); 
+  }
+
+  /**
+   * Ajax get
+   */
+    async function ajaxGet(url = '') {
+    let linkHeader = '';
+    const data = await fetch(url, {
+      method: 'GET',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Basic ${btoa(apiCredentials)}`
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    }).then(response => {
+      linkHeader = response.headers.get('Link');
+      return response.json();
+    }).then(response => {
+      return response;
+    });
+    return {data, linkHeader}; 
+  }
+
+  /**
+   * Open page 
+   */
+  function openPage(pageId, bodyHtml, handle) {
+    ajaxGet(`/admin/api/2020-04/themes/${themeId}/assets.json?asset[key]=config/settings_data.json`)
+    .then(response => {
+      const settingsData = JSON.parse(response.data.asset.value);
+      const newJsonSettings = buildNewJsonSettings(bodyHtml, settingsData.current.sections['collection-page-builder'], handle);
+      settingsData.current.sections['collection-page-builder'] = newJsonSettings;
+      updateSchema(settingsData, pageId);
+    });
+  }
+
+  /**
+   * Update schema
+   */
+  function updateSchema(settingsData, pageId) {
+    ajaxPostPut(`/admin/api/2020-04/themes/${themeId}/assets.json`, {
+      asset: {
+        key: 'config/settings_data.json',
+        value: JSON.stringify(settingsData)
+      }}, 'PUT')
+    .then(data => {
+      localStorage.setItem('selectedPage', pageId);
+      if(data != undefined) {
+        showToast('Page Loading')
+      }
+      setTimeout(() => { top.frames.location.reload(false); }, 2000);
+    });
+  }
+  
+  /**
+   * Build new json markup
+   */
+   function buildNewJsonSettings(bodyHtml, currentSettings, handle) {
+    let blockOrder = [];
+    let blocks = {};
+    let blockSchema = decodeURI(bodyHtml);
+    let count = 10;
+
+    if(blockSchema != '' && blockSchema.includes('<!--[[') && blockSchema.includes(']]-->')) {
+      blockSchema = blockSchema.replace(/(\r\n|\n|\r)/gm,"");
+      blockSchema = replaceAll(blockSchema, '"files/', '"shopify://shop_images/');
+      blockSchema = blockSchema.split('<!--[[').pop();
+      blockSchema = blockSchema.split(']]-->').shift();
+      blockSchema = blockSchema.replace(/==>/g, () => {
+        return `${++count}":`;
+      });
+      blockSchema = replaceAll(blockSchema, '\"=>\"', '":"');
+      blockSchema = replaceAll(blockSchema, '}||', '},"');
+      blockSchema = `{"${blockSchema}}`;
+      blockSchema = JSON.parse(blockSchema);
+      let blockId = Math.floor((Math.random() * 2000000000000 ) + 1000000000000);
+      Object.keys(blockSchema).map((key, index) => {
+        blockOrder.push(`${blockId}`);
+        const settingsType = {
+          settings: blockSchema[key],
+          type: key.slice(0, -2)
+        }
+        blocks[blockId] = settingsType;
+        blockId++;
+      });
+    }
+
+    currentSettings.settings.default_collection = handle;
+    const newSettings = {
+      block_order: blockOrder,
+      blocks: blocks,
+      settings: currentSettings.settings,
+      type: currentSettings.type
+    }
+    return newSettings;
+  }
+
+  /**
+   * Get existing body html
+   */
+  function getExistingBodyHtml() {
+    const option = nodeSelectors.pageSelect[nodeSelectors.pageSelect.selectedIndex];
+    allExistingBodyHtml= unescape(option.dataset.bodyHtml);
+    existingBodyHtml = allExistingBodyHtml;
+    if(allExistingBodyHtml != '' && allExistingBodyHtml.includes('<!--[[') && allExistingBodyHtml.includes(']]-->')) {
+      existingBodyHtml = allExistingBodyHtml.split('<!--[[').shift();
+      existingBodyHtml += allExistingBodyHtml.split(']]-->').pop();
+    }
+    return existingBodyHtml;
+  }
+
+  /**
+   * Replace all 
+   */
+  function replaceAll(string, search, replace) {
+    return string.split(search).join(replace);
+  }
+
+  /**
+   * Update page and open for veiwing
+   */
+  function updatePage(pageId, bodyHtml, type) {
+    const existingBodyHtml = getExistingBodyHtml();
+    ajaxPostPut(`/admin/api/2020-04/${type}/${pageId}.json`, {
+      [type.slice(0, -1)]: {
+          id: Number(pageId),
+          body_html: `${existingBodyHtml}${bodyHtml}`
+        }}, 'PUT')
+      .then(data => {
+        if(data.page != undefined) {
+          showToast('Page Updated')
+        }
+        const option = nodeSelectors.pageSelect[nodeSelectors.pageSelect.selectedIndex];
+        const handle = option.dataset.handle;
+        const url = `/collections/${handle}?preview_theme_id=${themeId}`;
+        window.open(url, pageId);
+      });
+  }
+
+  /**
+   * Set pages in select
+   */
+  async function setPages() {
+    let data = await getAllPages([], '', 'smart_collections');
+    addOptions(data, 'smart_collections');
+    data = await getAllPages([], '', 'custom_collections');
+    addOptions(data, 'custom_collections');
+  }
+
+  /**
+   * Add page option to the page select
+   */
+  function addOptions(data, optionType) {
+    data.map((item, index) => {
+      if(item.template_suffix !== 'collection-page-template') {
+        return;
+      }
+      const option = document.createElement("option");
+      const selectedPage = localStorage.getItem('selectedPage');
+      if (selectedPage === item.id.toString()) {
+        option.selected = true;
+        nodeSelectors.editingPage.innerHTML = item.title;
+      }
+      option.text = item.title;
+      option.value = item.id;
+      option.dataset.handle = item.handle;
+      option.dataset.type = optionType;
+      option.dataset.bodyHtml = encodeURI(item.body_html);
+      nodeSelectors.pageSelect.appendChild(option);
+    });
+  }
+
+  /**
+   * Get all pages
+   */
+  async function getAllPages(data = [], pageInfo = '', collectionType) {
+    let loopData = await ajaxGet(`/admin/api/2020-04/${collectionType}.json?limit=250&page_info=${pageInfo}`)
+    .then(data => {
+      return data;
+    });
+    const nextPage = parsePaginationLinkHeader(loopData.linkHeader);
+    data = data.concat(loopData.data[collectionType]);
+    if (nextPage !== '') {
+      data = await getAllPages(data, nextPage, collectionType);
+    }
+    return data;
+  }
+  
+  /**
+   * Parse pagination link header
+   */
+  function parsePaginationLinkHeader (headerLink) {
+    let nextPage = '';
+    if(headerLink === null) {
+      return nextPage;
+    }
+    const available_links = [];
+    const links = headerLink.split(',');
+    links.map(link => {
+      if (link.match(/<(.*)>;\srel="(.*)"/)) {
+        const matches = link.match(/<(.*)>;\srel="(.*)"/);
+        if(matches[2] === 'next') {
+          const params = new URLSearchParams(matches[1]);
+          const pageInfo = params.get('page_info');
+          nextPage = pageInfo;
+        }
+      }
+    });
+    return nextPage;
+  }
+
+  /**
+   * Show toast
+   */
+  function showToast(message) {
+    nodeSelectors.formToast.innerHTML = message;
+    nodeSelectors.formToast.classList.add('design-mode-toolbar__polaris-toast--show');
+    setTimeout(() => { nodeSelectors.formToast.classList.remove('design-mode-toolbar__polaris-toast--show'); }, 2000);
+  }
+</script>
+  

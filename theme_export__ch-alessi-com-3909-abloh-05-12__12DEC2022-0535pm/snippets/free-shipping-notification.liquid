@@ -1,0 +1,98 @@
+{% comment %}
+------------------------------------------------------------------------------
+Free Shipping Threshold
+- A re-usable snippet to display the amount left to spend for free shipping.
+- This is purely cosmetic and does not control the shipping rates in the admin.
+
+- Notification value template.
+-- This template is used for currency conversion support.
+-- Includes data attributes for conversion.
+
+- Current value.
+-- This value is used to get the difference in 0-100 range.
+-- Used in progress bar.
+------------------------------------------------------------------------------
+{% endcomment %}
+{% assign shipping_threshold_value = settings.free_shipping_threshold_value | plus: 0 %}
+{% assign shipping_threshold_difference = shipping_threshold_value | minus: cart.total_price %}
+
+
+{% comment %}
+------------------------------------------------------------------------------
+  Add additional liquid whitespace control here to remove
+  unecessary whitespace that is added after the span element.
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- capture notification_value_template -%}
+  {%- if shipping_threshold_difference -%}
+    <span
+      data-price="{{ shipping_threshold_difference }}"
+      js-currency="price">
+      {{ shipping_threshold_value | money
+        | replace: ',00', ''
+        | replace: '.00', ''
+      }}
+    </span>
+  {%- else -%}
+    <span
+      data-price="{{ shipping_threshold_value }}"
+      js-currency="price">
+        {{ shipping_threshold_value | money
+          | replace: ',00', ''
+          | replace: '.00', ''
+        }}
+    </span>
+  {%- endif -%}
+{%- endcapture -%}
+
+{% capture current_value %}
+  {% if cart.total_price > 0 %}
+    {% if cart.total_price < shipping_threshold_value %}
+      {% assign shipping_threshold_value_float = shipping_threshold_value | times: 1.0 %}
+
+      {% assign remaining_value = shipping_threshold_difference |
+        divided_by: shipping_threshold_value_float |
+        times: 100
+      %}
+
+      {{ 100 | minus: remaining_value }}
+    {% else %}
+      100
+    {% endif %}
+  {% else %}
+    0
+  {% endif %}
+{% endcapture %}
+
+<div
+  class="
+    {% if class %}{{ class }}__free-shipping-notification{% endif %}
+    free-shipping-notification
+  "
+  js-free-shipping-notification="container"
+>
+  <div class="free-shipping-notification__text-wrapper">
+    {% if template.name == 'product' %}
+      <p class="free-shipping-notification__text label"> 
+        {{ 'cart.free_shipping.partial' | t | replace: '#value#', notification_value_template }}
+      </p>
+
+    {% else %}
+      <p class="free-shipping-notification__text label"
+        js-free-shipping-notification="text"
+      >
+        {% if cart.total_price > 0 %}
+          {% if cart.total_price < shipping_threshold_value %}
+            {{ 'cart.free_shipping.partial' | t | replace: '#value#', notification_value_template }}
+          {% else %}
+            {{ 'cart.free_shipping.ideal' | t }}
+          {% endif %}
+
+        {% else %}
+          {{ 'cart.free_shipping.blank' | t | replace: '#value#', notification_value_template }}
+        {% endif %}
+      </p>
+    {% endif %}
+  </div>
+</div>

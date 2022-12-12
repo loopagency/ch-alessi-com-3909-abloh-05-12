@@ -1,0 +1,134 @@
+<script src="https://a.klaviyo.com/media/js/onsite/onsite.js"></script>
+{% liquid
+  assign klaviyo_api = settings.klaviyo_api 
+  assign klaviyo_list = section.settings.klaviyo_list 
+  assign klaviyo_tags = section.settings.klaviyo_tags
+
+  assign class_btn = section.settings.klaviyo_triggerBtn
+  assign trigger_txt = section.settings.klaviyo_triggerTxt
+
+  assign body_txt = section.settings.klaviyo_bodyTxt
+  assign btn_txt = section.settings.klaviyo_btnTxt 
+  assign success_txt = section.settings.klaviyo_successTxt
+  assign privacy_txt = section.settings.klaviyo_privacyTxt
+  %}
+<script>
+    var klaviyoApi = `{{ klaviyo_api }}`;
+    var klaviyoList = `{{ klaviyo_list }}`;
+    var klaviyoTags = `{{ klaviyo_tags }}`;
+    var klaviyoBtnClass = `{{ class_btn }}`;
+    var triggerTxt = `{{ trigger_txt }}`;
+    var bodyTxt = `{{ body_txt }}`;
+    var btnTxt = `{{ btn_txt }}`;
+    var successTxt = `{{ success_txt }}`;
+    var privacyTxt = `{{ privacy_txt }}`;
+
+
+    var klaviyo = klaviyo || [];
+    klaviyo.init({
+      account: klaviyoApi,
+      platform: "shopify",
+      list: klaviyoList,
+      include_on_tags: klaviyoTags
+    });
+    klaviyo.enable("backinstock",{ 
+    trigger: {
+      product_page_text: triggerTxt,
+      product_page_class: klaviyoBtnClass,
+      product_page_text_align: "center",
+      product_page_margin: "0px",
+      replace_anchor: true
+    },
+    modal: {
+     headline: "{product_name}",
+     body_content: bodyTxt,
+     email_field_label: "Email",
+     button_label: btnTxt,
+     subscription_success_label: successTxt,
+     newsletter_subscribe_label: privacyTxt,
+     footer_content: '',
+     font_family: "'BasicGrotesque', 'Helvetica', sans-serif;",
+     drop_background_color: "#000",
+     background_color: "#fff",
+     text_color: "#515151",
+     button_text_color: "#fff",
+     button_background_color: "#000000",
+     close_button_color: "#ccc",
+     error_background_color: "#000000",
+     error_text_color: "#C72E2F",
+     success_background_color: "#edede8",
+     success_text_color: "#515151",
+     additional_styles: "@import url({{ 'basicgrotesque-light.ttf' | asset_url }});body.fadein {background: rgba(0, 0, 0, 0.19)!important}.close {font-weight:100!important; color:black!Important;}#newsletter_subscription {position:relative;display:flex;font-size: 10px!important;letter-spacing: 0.55px!important;}@media only screen and (min-width: 992px) {#container {margin-top:150px!important}}#container {margin-top: 150px;border-radius: 0!important}.modal-title {color:black!important;}.btn {border-radius: 0!important;letter-spacing: 0.75px!important;}.form-control {border-color:#ADADAD!important; border-radius: 0!important;box-shadow: none!important;} #subscribe_for_newsletter {background: red!important}  [type='checkbox']:not(:checked),[type='checkbox']:checked {position: absolute;left: 0;opacity: 0.01;}#subscribe_for_newsletter ~ label {margin-right:24px; margin-left:0!important} #subscribe_for_newsletter ~ label::after {content: '';position:absolute; width:18px; height: 18px;border:1px solid #ADADAD}#subscribe_for_newsletter:checked ~ label::after {background: black;border: 1px solid black}#subscribe_for_newsletter:hover:not(:checked) ~ label::after {border: 1px solid black}#subscribe_for_newsletter:checked ~ label::before {content:'';position:absolute;background-image: url(//cdn.shopify.com/s/files/1/0324/8101/7915/t/57/assets/icon-tick.svg); left: 3px;top: 14px;width: 12px;height: 9px;    z-index: 11;}a.klaviyo-bis-close{display:none!important} .selectpicker {-moz-appearance: none;-webkit-appearance: none;appearance: none;     background-image: url(//cdn.shopify.com/s/files/1/0324/8101/7915/t/57/assets/icon-caret-down.svg?v=33670933299523158081653054053);    background-position: right 10px center;background-size: 1rem;background-repeat: no-repeat;}"}
+  });
+</script>
+
+
+
+{% schema %}
+{
+ "name": "Klaviyo notify me",
+"settings": [
+  {
+    "type": "header",
+    "content": "General Settings",
+    "info": "For klaviyo api use general settings"
+  },
+  {
+   "type": "text",
+   "id": "klaviyo_list",
+   "label": "id list klaviyo",
+   "default": "RgRJsp"
+  },
+  {
+   "type": "text",
+   "id": "klaviyo_tags",
+   "default": "virginNotify",
+   "label": "Insert tags separate with ','"
+  },
+  {
+    "type": "header",
+    "content": "Trigger Button"
+  },
+  {
+   "type": "text",
+   "id": "klaviyo_triggerTxt",
+   "default": "NOTIFY ME WHEN AVAILABLE",
+   "label": "Button text"
+  },
+  {
+    "type": "text",
+    "id": "klaviyo_triggerBtn",
+   "default": "button button--primary button--dark button--block button--large darkest--notifyMe",
+   "label": "Class for btn"
+  },
+ {
+   "type": "header",
+   "content": "Popup content"
+ },
+ {
+  "type": "richtext",
+  "id": "klaviyo_bodyTxt",
+ "default": "<p>Subscribe to receive a notification when this item comes back in stock.</p>",
+ "label": "Popup body text"
+ },
+ {
+  "type": "text",
+  "id": "klaviyo_btnTxt",
+  "default": "NOTIFY ME WHEN AVAILABLE",
+  "label": "Button text"
+ },
+ {
+  "type": "richtext",
+  "id": "klaviyo_successTxt",
+ "default": "<p>Subscription confirmed. We'll let you know when it will be available.</p>",
+ "label": "Success text popup"
+ },
+ {
+   "type": "richtext",
+   "id": "klaviyo_privacyTxt",
+   "label": "Text for privacy checkbox",
+   "default": "<p>Read and understood the privacy policy, I authorize the use of my data for marketing purposes by Alessi S.p.A.</p>"
+ }
+]
+}
+{% endschema %}

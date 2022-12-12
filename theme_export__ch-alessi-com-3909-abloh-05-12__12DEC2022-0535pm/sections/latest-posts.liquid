@@ -1,0 +1,92 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Section: Latest Posts
+  - Showing the latest posts from the blogs in the chose navigation menu
+----------------------------------------------------------------------------
+{% endcomment %}
+
+{% assign blog_articles = '' | split: '' %}
+
+{% for link in linklists[section.settings.menu].links %}
+  {% assign site_blog = link.object %}
+
+  {% assign blog_articles = blog_articles
+    | concat: site_blog.articles
+    | sort: "created_at"
+  %}
+{% endfor %}
+
+{% if blog_articles.size > 0 %}
+  <section class="latest-posts background--medium">
+    <div class="container">
+      <div class="row">
+        <div class="col xs12">
+          <h2 class="latest-posts__title">
+            {{ section.settings.title }}
+          </h2>
+        </div>
+      </div>
+      <div class="row">
+        {% for article in blog_articles limit: 2 %}
+          {% assign blog_handle = article.handle | split: '/' | first %}
+
+          <article class="col xs12 l6 latest-posts__article">
+            <header class="latest-posts__header">
+              <a
+                class="latest-posts__image lazyload"
+                href="{{ article.url }}"
+                data-bgset="{% render 'responsive-bg-image', image: article.image %}"
+              >
+              </a>
+
+              <div class="latest-posts__meta">
+                <a class="latest-posts__meta-blog subtitle-1" href="{{ blogs[blog_handle].url }}">
+                  {{ blogs[blog_handle].title }}
+                </a>
+
+                <time
+                  class="latest-posts__date body-2 color--secondary"
+                  datetime="{{ article.published_at | date: '%Y-%m-%d' }}"
+                >
+                  {{ article.published_at | time_tag: format: 'month_day_year' }}
+                </time>
+              </div>
+            </header>
+
+            <div class="latest-posts__content">
+              <a href="{{ article.url }}">
+                <h3 class="latest-posts__post-title">{{ article.title }}</h3>
+              </a>
+
+              {{ article.excerpt }}
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+{% schema %}
+  {
+    "name": "Two latest Blog posts",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Blogs List"
+      },
+      {
+        "type": "link_list",
+        "id": "menu",
+        "label": "Blogs List",
+        "info": "To get the latest posts, we need to go through a list of blogs so we can go through them and collect all blogs together"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Section title",
+        "default": "News & Events"
+      }
+    ]
+  }
+{% endschema %}

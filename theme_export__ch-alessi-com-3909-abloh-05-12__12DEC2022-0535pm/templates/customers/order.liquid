@@ -1,0 +1,40 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Template: Order
+  - Single order page.
+----------------------------------------------------------------------------
+{% endcomment %}
+
+<div class="template-account">
+  <div class="template-account__container">
+    <div class="template-account__wrapper">
+
+      <div class="template-account__content">
+        <div class="template-account__content-wrapper">
+
+          <div class="row template-account__row">
+            <div class="col xs12 m4 template-account__col">
+              {% render 'account-nav' %}
+            </div>
+
+            <div class="col xs12 m7 template-account__col">
+              <div class="panel panel--padding-bottom-2xl">
+                {% render 'order-header' %}
+              </div>
+
+              <div class="panel">
+                {% render 'order-overview' %}
+              </div>
+
+              <div class="panel panel--padding-bottom-2xl">
+                {% render 'order-items' %}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

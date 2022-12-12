@@ -1,0 +1,100 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Responsive image.
+  - Creates a style tag and it restricts an image from growing larger than
+  its max resolution.
+
+  - Dependencies:
+  -- Lazysizes plugin (https://github.com/aFarkas/lazysizes) which enable
+  responsive image with faster load time and better performance.
+  -- Lazysizes Responsive Images as a Service (https://github.com/aFarkas/lazysizes/tree/gh-pages/plugins/rias)
+  to load the correct image size with our CDN.
+  -- Lazysizes Bgset (https://github.com/aFarkas/lazysizes/tree/gh-pages/plugins/bgset)
+  to use responsive images on background-image (CSS).
+
+  - Accepts:
+  -- max_width: {Number} Max width of the image container.
+  -- max_height: {Number} Max height of the image container.
+  -- image: {Object} Image object.
+  -- image_class: {String} class name of the <img>.
+  -- image_attributes: {String}  additional HTML attributes of the <img>.
+  -- wrapper_class: {String} class name of the <div> wrapper.
+  -- wrapper_attributes: {String} additional HTML attributes of the <div> wrapper.
+
+  - Usage:
+  -- In your liquid template file, copy the following line:
+  {% render 'responsive-image' with
+    image: featured_image,
+    image_class: 'css-class',
+    wrapper_class: 'wrapper-css-class',
+    max_width: 700,
+    max_height: 800,
+  %}
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{% comment %}
+----------------------------------------------------------------------------
+  Added incremental number to avoid conflict styling code when the same
+  images are using this snippet.
+----------------------------------------------------------------------------
+{% endcomment %}
+{% if image.aspect_ratio <= 1 %}
+  {% assign max_height_image = image.height | at_most: max_height %}
+  {% assign max_width_image = max_height_image | times: image.aspect_ratio %}
+
+{% else %}
+  {% assign max_width_image = image.width | at_most: max_width %}
+  {% assign max_height_image = max_width_image | divided_by: image.aspect_ratio %}
+{% endif %}
+
+{% comment %}
+----------------------------------------------------------------------------
+  Serve the smallest possible image on load, lazysizes will replace using
+  images defined in data-src.
+  - Image spacer will size the image based on ratio
+----------------------------------------------------------------------------
+{% endcomment %}
+{% assign img_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+
+{% capture image_spacer %}
+  <span
+    style="display: block; padding-top:{{ max_height_image | divided_by: max_width_image | times: 100 }}%;"
+    aria-hidden="true"
+  >
+  </span>
+{% endcapture %}
+
+{% comment %}
+------------------------------------------------------------------------------
+  Template.
+------------------------------------------------------------------------------
+{% endcomment %}
+<div
+  class="responsive-image__wrapper {{ wrapper_class }}"
+  {{ wrapper_attributes }}
+  style="max-width: {{ max_width_image }}px;"
+  data-image-id="{{ image.id }}"
+>
+  {{ image_spacer }}
+  <img
+    class="responsive-image__image lazyload blur-up {{ image_class }}"
+    {{ image_attributes }}
+    alt="{{ image.alt | escape }}"
+    src="{{ image | img_url: '300x' }}"
+    style="max-width: {{ max_width_image }}px; max-height: {{ max_height_image }}px;"
+    tabindex="-1"
+    data-aspectratio="{{ image.aspect_ratio }}"
+    data-sizes="auto"
+    data-src="{{ img_url }}"
+    data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2160, 2376, 2592, 2808, 3024]"
+  >
+</div>
+
+<noscript>
+  <img
+    class="{{ image_class }}"
+    alt="{{ image.alt | escape }}"
+    src="{{ image | img_url: '2048x2048' }}"
+  >
+</noscript>

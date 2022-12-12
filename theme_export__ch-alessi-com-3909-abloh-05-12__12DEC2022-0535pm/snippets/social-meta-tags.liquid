@@ -1,0 +1,99 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Social meta tags
+  - OpenGraph tags used by social media services to generate preview content.
+----------------------------------------------------------------------------
+{% endcomment %}
+{% assign og_title = page_title %}
+{% assign og_url = canonical_url %}
+{% assign og_type = 'website' %}
+{% assign og_description = page_description | default: shop.description | default: shop.name %}
+
+{% if settings.share_image %}
+  {% capture og_image_tags %}
+    <meta content="http:{{ settings.share_image | img_url: 'master' }}" property="og:image">
+    <meta content="https:{{ settings.share_image | img_url: 'master' }}" property="og:image:secure_url">
+    <meta content="{{ settings.share_image.width }}" property="og:image:width">
+    <meta content="{{ settings.share_image.height }}" property="og:image:height">
+    <meta content="{{ settings.share_image.alt | escape }}" property="og:image:alt">
+  {% endcapture %}
+{% endif %}
+
+{% comment %}
+------------------------------------------------------------------------------
+  Template specific overrides
+------------------------------------------------------------------------------
+{% endcomment %}
+{% if request.page_type == 'product' %}
+  {% assign og_title = product.title | strip_html %}
+  {% assign og_type = 'product' %}
+
+  {% capture og_image_tags %}
+    {% for image in product.images limit: 3 %}
+      <meta content="http:{{ image | product_img_url: 'master' }}" property="og:image">
+      <meta content="https:{{ image | product_img_url: 'master' }}" property="og:image:secure_url">
+      <meta content="{{ image.width }}" property="og:image:width">
+      <meta content="{{ image.height }}" property="og:image:height">
+      <meta content="{{ image.alt | escape }}" property="og:image:alt">
+    {% endfor %}
+  {% endcapture %}
+
+{% elsif request.page_type == 'article' %}
+  {% assign og_title = article.title | strip_html %}
+  {% assign og_type = 'article' %}
+  {% assign og_description = article.excerpt_or_content | strip_html %}
+
+  {% if article.image %}
+    {% capture og_image_tags %}
+      <meta content="http:{{ article.image | img_url: 'master' }}" property="og:image">
+      <meta content="https:{{ article.image | img_url: 'master' }}" property="og:image:secure_url">
+      <meta content="{{ article.image.width }}" property="og:image:width">
+      <meta content="{{ article.image.height }}" property="og:image:height">
+      <meta content="{{ article.image.alt | escape }}" property="og:image:alt">
+    {% endcapture %}
+  {% endif %}
+
+{% elsif request.page_type == 'collection' %}
+  {% assign og_title = collection.title | strip_html %}
+  {% assign og_type = 'product.group' %}
+
+  {% if collection.image %}
+    {% capture og_image_tags %}
+      <meta content="http:{{ collection.image | img_url: 'master' }}" property="og:image">
+      <meta content="https:{{ collection.image | img_url: 'master' }}" property="og:image:secure_url">
+      <meta content="{{ collection.image.width }}" property="og:image:width">
+      <meta content="{{ collection.image.height }}" property="og:image:height">
+      <meta content="{{ collection.image.alt | escape }}" property="og:image:alt">
+    {% endcapture %}
+  {% endif %}
+
+{% elsif request.page_type == 'password' %}
+  {% assign og_title = shop.name %}
+  {% assign og_url = shop.url %}
+  {% assign og_description = shop.description | default: shop.name %}
+{% endif %}
+
+<meta content="{{ shop.name }}" property="og:site_name">
+<meta content="{{ og_url }}" property="og:url">
+<meta content="{{ og_title }}" property="og:title">
+<meta content="{{ og_type }}" property="og:type">
+<meta content="{{ og_description }}" property="og:description">
+
+{% if request.page_type == 'product' %}
+  {% if product.available %}
+    {% assign og_product_availability = 'instock' %}
+  {% else %}
+    {% assign og_product_availability = 'oos' %}
+  {% endif %}
+
+  <meta content="{{ og_product_availability }}" property="product:availability">
+  <meta content="{{ product.price | money_without_currency | strip_html }}" property="product:price:amount">
+  <meta content="{{ cart.currency.iso_code }}" property="product:price:currency">
+{% endif %}
+
+{{ og_image_tags }}
+
+<meta content="{{ settings.social_twitter_link | split: 'twitter.com/' | last | prepend: '@' }}" name="twitter:site">
+<meta content="summary_large_image" name="twitter:card">
+<meta content="{{ og_title }}" name="twitter:title">
+<meta content="{{ og_description }}" name="twitter:description">

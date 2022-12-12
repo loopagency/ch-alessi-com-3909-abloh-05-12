@@ -1,0 +1,68 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Card Upsell Promo
+    - Display the upsell promo Features
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{% liquid 
+    capture styles_inital
+      assign bg_color = settings.bg_color
+      assign txt_color = settings.txt_color
+      echo 'background-color:' | append: bg_color
+      echo '; color:' | append: txt_color
+    endcapture
+
+    capture styles_ideal
+      assign bg_color = settings.bg_color_ideal
+      assign txt_color = settings.txt_color_ideal
+      echo 'background-color:' | append: bg_color
+      echo '; color:' | append: txt_color
+    endcapture
+
+    assign linkTitle = settings.link_title
+    assign linkUrl = settings.link_link
+    assign initial_text = settings.initial_text_promo
+    assign ideal_text = settings.ideal_text_promo
+%}
+
+{% liquid
+  for item in cart.items
+    unless item.properties == empty 
+      for property in item.properties
+        if property.first contains 'Bundle'
+          assign isBundle = true
+        endif
+      endfor
+    endunless
+  endfor 
+%}
+
+<div class="cart-upsell-item bg-medium">
+  <p class="cart-upsell-item__text caption {% if isBundle %}promo-ideal{% endif %}" js-upsell-promo="message" style="{{ styles }}">
+      {% unless isBundle %}
+        {{ initial_text }}
+      {% else %}
+        {{ ideal_text }}
+      {% endunless %}
+  </p>
+</div>
+
+<style>
+.cart-upsell-item__text {
+  {{ styles_initial }};
+  transition: all .5s ease-in-out;
+}
+
+.cart-upsell-item__text.promo-ideal {
+  {{ styles_ideal }};
+}
+.cart-upsell-item__text a {
+  margin-left: 5px;
+}
+
+.cart-upsell-item__text b, 
+.cart-upsell-item__text strong {
+  font-weight: 600;
+}
+</style>

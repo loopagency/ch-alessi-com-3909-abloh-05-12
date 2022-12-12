@@ -1,0 +1,100 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Addresses view
+  - Addresses view displayed on account page.
+----------------------------------------------------------------------------
+{% endcomment %}
+
+<div class="addresses-view">
+  <div
+    class="addresses-view__default"
+    js-addresses="contentToggle"
+  >
+    {% for address in customer.addresses %}
+      {% if address == customer.default_address %}
+        <div class="addresses-view__panel addresses-view__panel--default">
+          {% if address == customer.default_address %}
+            <h3 class="caption panel__label">
+              {{ 'customer.addresses.default' | t }}
+            </h3>
+          {% endif %}
+
+          <div class="addresses-view__body">
+            <div class="body-2">
+              {{ address | format_address }}
+            </div>
+
+            <div class="addresses-view__button-group">
+              <button
+                class="caption addresses-view__text-link"
+                type="button"
+                data-form-id="{{ address.id }}"
+                js-addresses="editAddress"
+              >
+                {{ 'customer.addresses.edit' | t }}
+              </button>
+
+              <button
+                class="caption addresses-view__text-link"
+                type="button"
+                data-form-id="{{ address.id }}"
+                data-confirm-message="{{ 'customer.addresses.delete_confirm' | t }}"
+                js-addresses="deleteAddress"
+              >
+                {{ 'customer.addresses.delete' | t }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {% break %}
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  {% if customer.addresses.size > 1 %}
+    <div
+      class="addresses-view__aside"
+      js-addresses="contentToggle"
+    >
+      {% for address in customer.addresses %}
+        {% if address != customer.default_address %}
+          <div class="addresses-view__panel">
+            {% if forloop.index == 2 %}
+              <h3 class="caption panel__label">
+                {{ 'customer.addresses.additional' | t }}
+              </h3>
+            {% endif %}
+
+            <div class="addresses-view__body">
+              <div class="body-2">
+                {{ address | format_address }}
+              </div>
+
+              <div class="addresses-view__button-group">
+                <button
+                  class="caption addresses-view__text-link"
+                  type="button"
+                  data-form-id="{{ address.id }}"
+                  js-addresses="editAddress"
+                >
+                  {{ 'customer.addresses.edit' | t }}
+                </button>
+
+                <button
+                  class="caption addresses-view__text-link"
+                  type="button"
+                  data-confirm-message="{{ 'customer.addresses.delete_confirm' | t }}"
+                  data-form-id="{{ address.id }}"
+                  js-addresses="deleteAddress"
+                >
+                  {{ 'customer.addresses.delete' | t }}
+                </button>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>

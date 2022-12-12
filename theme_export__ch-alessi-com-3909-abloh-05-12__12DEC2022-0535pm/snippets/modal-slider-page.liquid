@@ -1,0 +1,37 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Modal - Slider Page
+------------------------------------------------------------------------------
+{% endcomment %}
+<div
+  class="modal slider-page__modal"
+  role="dialog"
+  tabindex="-1"
+  js-slider-page="modal"
+>
+  <div class="modal__card slider-page__modal__card">
+    <div class="modal__header slider-page__modal__header">
+      <button class="button" js-modal="closeModal">
+        <span class="visually-hidden">
+          {{ 'general.accessibility.close' | t }}
+        </span>
+        {% render 'icon-misc' with icon: 'close' %}
+      </button>
+    </div>
+
+    <div class="modal__body slider-page__modal__body">
+      <span 
+        class="slider-page__modal__image"
+        role="img"
+        aria-label="{{ image.alt }}"
+        js-slider-page="modal-image"
+      >
+      </span>
+      <div 
+        class="slider-page__modal__content"
+        js-slider-page="modal-content"
+      >
+      </div>
+    </div>
+  </div>
+</div>
