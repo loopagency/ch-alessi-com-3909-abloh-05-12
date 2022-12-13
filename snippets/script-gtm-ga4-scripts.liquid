@@ -41,8 +41,9 @@ console.log("OK");
                       item_brand:'alessi',
                       item_category:'{{ category_tag | handleize | replace: '-', '_' }}',
                       item_variant:"{{ variant }}",
-                      price:{{ integral }}.{{ decimal }}},
-                      discount:{{ integral_discount }}.{{ decimal_discount }}},
+                      price:{{ integral }}.{{ decimal }},
+                      discount:{{ integral_discount }}.{{ decimal_discount }},
+                     }
                   {% endfor %}
              ],
            });
