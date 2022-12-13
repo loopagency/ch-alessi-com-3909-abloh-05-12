@@ -24,14 +24,16 @@
                     {%- assign variant = '' -%}
 
                     {% assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." %}
-                    {% assign compare_at_price_value = [0,0] %}
+                    {% assign compare_at_price_value = 0,0 %}
                     {%- if product.selected_or_first_available_variant -%}
                       {%- assign variant = product.selected_or_first_available_variant.id -%}
                       {% assign price_value = product.selected_or_first_available_variant.price | divided_by: 100.00 | round: 2 | split: "." %}
-                   {%- endif -%}
+                      {% assign temp = product.selected_or_first_available_variant.compareAtPrice | minus: price_value %}
+                      {% assign compare_at_price_value = temp | divided_by: 100.00 | round: 2 | split: "." %}
+                  {%- endif -%}
                     {% assign integral = price_value[0] %}
                     {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
-                    {% assign integral_discount = compare_at_price_value[0] %}
+                   {% assign integral_discount = compare_at_price_value[0] %}
                     {% assign decimal_discount = compare_at_price_value[1] | append: "00" | truncate: 2, "" %}
                 
 
