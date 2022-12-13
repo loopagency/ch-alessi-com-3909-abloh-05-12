@@ -23,12 +23,10 @@
               {%- endfor -%}
               {%- assign variant = '' -%}
               {%- assign dimension16 = '' -%}
-              {%- if line_item.variant.option1 -%}
-                {%- assign variant = line_item.variant.option1 -%}
+              {%- if product.selected_or_first_available_variant -%}
+                {%- assign variant = product.selected_or_first_available_variant.id -%}
               {%- endif -%}
-              {%- if line_item.variant.option2 -%}
-                {%- assign dimension16 = line_item.variant.option2 -%}
-              {%- endif -%}
+          
 
               {% assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." %}
               {% assign integral = price_value[0] %}
