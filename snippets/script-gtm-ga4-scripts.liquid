@@ -60,7 +60,7 @@
     dataLayer = dataLayer || [];
       dataLayer.push({
          event: 'view_item',
-        currency: {{ shop.currency | json }},,
+        currency: {{ shop.currency | json }},
          item_list_name : {{ collection.title | json }},
          items : [
                 {%- assign category_tag = '' -%}
