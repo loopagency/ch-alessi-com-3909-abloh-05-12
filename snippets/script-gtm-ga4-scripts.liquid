@@ -4,7 +4,44 @@
     window.productDataLayer = {
        event: 'view_item_list',
        item_list_name : {{ collection.title | json }},
-       items : '',
+       items : [
+          {%- for line_item in collection.products -%}
+              {%- assign product = line_item.product -%}
+              {%- assign category_tag = '' -%}
+              {%- assign macro_category_tag = '' -%}
+              {%- for tag in product.tags -%}
+                {% assign sanitized_tag = tag | downcase %}
+                {%- if sanitized_tag contains 'category:' -%}
+                  {%- assign split_tag = sanitized_tag | split: ':' -%}
+                  {%- if split_tag[0] == 'macro_category' -%}
+                    {%- assign macro_category_tag = split_tag | last | strip -%}
+                  {%- else -%}
+                    {%- assign category_tag = split_tag | last | strip -%}
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+              {%- assign variant = '' -%}
+              {%- assign dimension16 = '' -%}
+              {%- if line_item.variant.option1 -%}
+                {%- assign variant = line_item.variant.option1 -%}
+              {%- endif -%}
+              {%- if line_item.variant.option2 -%}
+                {%- assign dimension16 = line_item.variant.option2 -%}
+              {%- endif -%}
+
+              {% assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." %}
+              {% assign integral = price_value[0] %}
+              {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
+
+               {item_id:'{{ product.id }}',
+                item_name:'{{ product.title | handleize | replace: '-', '_' }}',
+                discount:'{{ product.id }}',
+                item_brand:'alessi',
+                item_category:'{{ category_tag | handleize | replace: '-', '_' }}',
+                item_variant:"{{ variant }}",
+                price:{{ integral }}.{{ decimal }}},
+            {% endfor %}
+       ],
      };
   </script>
 {% endif %}
