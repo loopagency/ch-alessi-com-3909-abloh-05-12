@@ -24,7 +24,7 @@
                     {%- assign variant = '' -%}
 
                     {% assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." %}
-                    {% assign compare_at_price_value = 0,0 %}
+                    {% assign compare_at_price_value = "0,0" | split ',' %}
                     {%- if product.selected_or_first_available_variant -%}
                       {%- assign variant = product.selected_or_first_available_variant.id -%}
                       {% assign price_value = product.selected_or_first_available_variant.price | divided_by: 100.00 | round: 2 | split: "." %}
