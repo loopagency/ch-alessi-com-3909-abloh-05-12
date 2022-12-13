@@ -1,8 +1,8 @@
 <!-- view_item_list -->
 <script>console.log("????");
-  console.log({{pageCat | json}})
+  console.log({{template | json}})
 </script>
-{% if pageCat == 'collections' %}
+{% if template == 'collections' %}
   <script>
   console.log("OK");
   dataLayer = dataLayer || [];
