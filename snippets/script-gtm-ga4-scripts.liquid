@@ -1,10 +1,7 @@
 <!-- view_item_list -->
-<script>console.log("????");
-  console.log({{template | json}})
-</script>
 {% if template == 'collection' %}
   <script>
-  console.log("OK");
+  console.log({{ collection.products.length }});
   dataLayer = dataLayer || [];
 
     dataLayer.push({
