@@ -2,7 +2,7 @@
 {% if template == 'collection' %}
   <script>
         dataLayer = dataLayer || [];
-
+console.log("OK");
           dataLayer.push({
              event: 'view_item_list',
              item_list_name : {{ collection.title | json }},
