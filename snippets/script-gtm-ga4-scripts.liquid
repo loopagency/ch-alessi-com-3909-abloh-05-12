@@ -22,13 +22,16 @@
                 {%- endif -%}
               {%- endfor -%}
               {%- assign variant = '' -%}
-              {%- assign dimension16 = '' -%}
+
+                    {% assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." %}
               {%- if product.selected_or_first_available_variant -%}
                 {%- assign variant = product.selected_or_first_available_variant.id -%}
+                {% assign price_value = product.selected_or_first_available_variant.price | divided_by: 100.00 | round: 2 | split: "." %}
               {%- endif -%}
           
 
-              {% assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." %}
+             
+            
               {% assign integral = price_value[0] %}
               {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
 
