@@ -56,65 +56,65 @@
 <!-- view_item + add_to_cart -->
 {% if template == 'product' %}
   <script defer="defer">
-        window.onload = function() {
-             dataLayer = dataLayer || [];
-             var data = {
-                  event: 'view_item',
-                 currency: {{ shop.currency | json }},
-                  items : [
-                         {%- assign category_tag = '' -%}
-                         {%- assign macro_category_tag = '' -%}
-                         {%- for tag in product.tags -%}
-                           {% assign sanitized_tag = tag | downcase %}
-                           {%- if sanitized_tag contains 'category:' -%}
-                             {%- assign split_tag = sanitized_tag | split: ':' -%}
-                             {%- if split_tag[0] == 'macro_category' -%}
-                               {%- assign macro_category_tag = split_tag | last | strip -%}
-                             {%- else -%}
-                               {%- assign category_tag = split_tag | last | strip -%}
-                             {%- endif -%}
+            window.onload = function() {
+                 dataLayer = dataLayer || [];
+                 var data = {
+                      event: 'view_item',
+                     currency: {{ shop.currency | json }},
+                      items : [
+                             {%- assign category_tag = '' -%}
+                             {%- assign macro_category_tag = '' -%}
+                             {%- for tag in product.tags -%}
+                               {% assign sanitized_tag = tag | downcase %}
+                               {%- if sanitized_tag contains 'category:' -%}
+                                 {%- assign split_tag = sanitized_tag | split: ':' -%}
+                                 {%- if split_tag[0] == 'macro_category' -%}
+                                   {%- assign macro_category_tag = split_tag | last | strip -%}
+                                 {%- else -%}
+                                   {%- assign category_tag = split_tag | last | strip -%}
+                                 {%- endif -%}
+                               {%- endif -%}
+                             {%- endfor -%}
+                             {%- assign variant = '' -%}
+
+                             {% assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." %}
+                             {% assign compare_at_price_value = "0,0" | split: ',' %}
+                             {%- if product.selected_or_first_available_variant -%}
+                               {%- assign variant = product.selected_or_first_available_variant.id -%}
+                               {% assign price_value = product.selected_or_first_available_variant.price | divided_by: 100.00 | round: 2 | split: "." %}
+                              {% assign temp = product.selected_or_first_available_variant.compareAtPrice | minus: price_value %}
+                               {% assign compare_at_price_value = temp | divided_by: 100.00 | round: 2 | split: "." %}
+
                            {%- endif -%}
-                         {%- endfor -%}
-                         {%- assign variant = '' -%}
+                             {% assign integral = price_value[0] %}
+                             {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
+                            {% assign integral_discount = compare_at_price_value[0] %}
+                             {% assign decimal_discount = compare_at_price_value[1] | append: "00" | truncate: 2, "" %}
+                           {item_id:'{{ product.id }}',
+                               item_name:'{{ product.title | handleize | replace: '-', '_' }}',
+                               discount:'{{ product.id }}',
+                               item_brand:'alessi',
+                               item_category:'{{ category_tag | handleize | replace: '-', '_' }}',
+                               item_variant:"{{ variant }}",
+                               price:{{ integral }}.{{ decimal }},
+                               discount:{{ integral_discount }}.{{ decimal_discount }},
+                              },
+                      ],
+                     value: {{ integral }}.{{ decimal }},
+                    };
+                   dataLayer.push(data);
+        console.log("OK1");
+               jQuery("form[action='/cart/add']").submit(data,
+                                                           function(ev){
 
-                         {% assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." %}
-                         {% assign compare_at_price_value = "0,0" | split: ',' %}
-                         {%- if product.selected_or_first_available_variant -%}
-                           {%- assign variant = product.selected_or_first_available_variant.id -%}
-                           {% assign price_value = product.selected_or_first_available_variant.price | divided_by: 100.00 | round: 2 | split: "." %}
-                          {% assign temp = product.selected_or_first_available_variant.compareAtPrice | minus: price_value %}
-                           {% assign compare_at_price_value = temp | divided_by: 100.00 | round: 2 | split: "." %}
-
-                       {%- endif -%}
-                         {% assign integral = price_value[0] %}
-                         {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
-                        {% assign integral_discount = compare_at_price_value[0] %}
-                         {% assign decimal_discount = compare_at_price_value[1] | append: "00" | truncate: 2, "" %}
-                       {item_id:'{{ product.id }}',
-                           item_name:'{{ product.title | handleize | replace: '-', '_' }}',
-                           discount:'{{ product.id }}',
-                           item_brand:'alessi',
-                           item_category:'{{ category_tag | handleize | replace: '-', '_' }}',
-                           item_variant:"{{ variant }}",
-                           price:{{ integral }}.{{ decimal }},
-                           discount:{{ integral_discount }}.{{ decimal_discount }},
-                          },
-                  ],
-                 value: {{ integral }}.{{ decimal }},
-                };
-               dataLayer.push(data);
-    console.log("OK1");
-           jQuery("form[action='/cart/add']").submit(data,
-                                                       function(ev){
-                                                         ev.preventDefault();
-                                                         var event = ev.data.event;
-                                                         event.event = 'add_to_cart';
-                                                         dataLayer = dataLayer || [];
-                                                         dataLayer.push(data);
-
-                                                       });
-        console.log("OK2");
-         };
+                                                             var event = ev.data.event;
+                                                             event.event = 'add_to_cart';
+                                                             dataLayer = dataLayer || [];
+                                                             dataLayer.push(data);
+    ev.preventDefault();
+                                                           });
+            console.log("OK2");
+             };
   </script>
 {% endif %}
 <!-- end view_item + add_to_cart -->
