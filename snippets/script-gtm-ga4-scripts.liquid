@@ -114,3 +114,17 @@
   </script>
 {% endif %}
 <!-- end view_item + add_to_cart -->
+
+<script type="module">
+  import { subscribeToCartAjaxRequests } from '{{ "liquid-ajax-cart-v1.10.3.js" | asset_url }}'
+
+  subscribeToCartAjaxRequests(( requestState, subscribeToResult ) => {
+    // This function will be called before each Shopify Cart API request
+    console.log( 'Before: ', requestState );
+
+    subscribeToResult( requestState => {
+      // This function will be called after the request is finished
+      console.log( 'After: ', requestState );
+    })
+  })
+</script>
