@@ -183,9 +183,9 @@
 <!-- end view_cart -->
 
 <!-- Checkout -->
-{% if template == 'checkout' %}
-  <script>
-    console.log("OK");
-  </script>
-{% endif %}
+
+<script>
+  console.log({{template | json}});
+</script>
+
 <!-- end Checkout -->
