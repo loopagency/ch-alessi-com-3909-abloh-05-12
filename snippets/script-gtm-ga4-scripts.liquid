@@ -105,7 +105,6 @@
            dataLayer.push(data);
        jQuery("form[action='/cart/add']").submit(data,
                                                    function(ev){
-                                                     ev.preventDefault();
                                                      var data = ev.data;
                                                      data.event = 'add_to_cart';
                                                    dataLayer = dataLayer || [];
