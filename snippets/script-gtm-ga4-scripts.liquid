@@ -56,7 +56,7 @@
 <!-- view_item + add_to_cart -->
 {% if template == 'product' %}
   <script defer="defer">
-    document.addEventListener("DOMContentLoaded", function() {
+    window.onload = function() {
          dataLayer = dataLayer || [];
          var data = {
               event: 'view_item',
@@ -116,7 +116,7 @@
 
                                                    });
        console.log("OK2");
-     });
+     };
   </script>
 {% endif %}
 <!-- end view_item + add_to_cart -->
