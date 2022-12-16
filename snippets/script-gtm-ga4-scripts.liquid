@@ -106,11 +106,12 @@
     document.addEventListener("DOMContentLoaded", function(event) {
       jQuery("form[action='/cart/add']").submit(event,
                                                   function(ev){
+                                                    ev.preventDefault();
                                                     var event = ev.data.event;
                                                     event.event = 'add_to_cart';
                                                     dataLayer = dataLayer || [];
                                                     dataLayer.push(data);
-                                                    ev.preventDefault();
+
                                                   });
     });
 
