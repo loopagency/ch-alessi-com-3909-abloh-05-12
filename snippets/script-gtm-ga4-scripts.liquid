@@ -56,7 +56,6 @@
 <!-- view_item -->
 {% if template == 'product' %}
   <script>
-    console.log("OK");
     dataLayer = dataLayer || [];
       dataLayer.push({
          event: 'view_item',
@@ -106,3 +105,150 @@
   </script>
 {% endif %}
 <!-- end view_item -->
+
+<script>
+  // CONFIGURAZIONE DEL CODICE
+
+  var TROVA_PER = 'nome'; //parametri accettati: classe, id, nome | scegli quello con cui identificare il pulsante di Add to Cart
+  var TAG_PULSANTE_ADD_TO_CART = 'add'; //inserire ID o CLASSE del pulsante Add to Cart
+
+
+     function loop_remove_cart(event){
+
+      var targetElement = event.target || event.srcElement;
+
+       var link = targetElement.nodeName === "a" ? targetElement : targetElement.closest("a");
+      var href = link.getAttribute("href");
+
+      const regexpLine = /id=([0-9]+)\:/;
+        const match = href.match(regexpLine);
+        var variant_id = match[1];
+       var line = -1;
+       for(var i in cart.products){
+         if(cart.products[i].variantId == variant_id){
+           line = i;
+           break;
+         }
+       }
+       if(line == -1){
+         return;
+       }
+        cart.product_update = cart.products.splice(line,1);
+        cart.action = 'removed';
+        cart.total_quantity = cart.products.length;
+      _learnq.push(['track', 'Cart Update', cart]);
+    }
+
+    function init_remove_cart_link(){
+      var change_links = document.querySelectorAll('[href*="/cart/change"]');
+      change_links.forEach(link => {
+           link.addEventListener("click", loop_remove_cart);
+      });
+    }
+
+    function off_remove_cart_link(){
+      var change_links = document.querySelectorAll('[href*="/cart/change"]');
+      change_links.forEach(link => {
+          link.removeEventListener("click", loop_remove_cart);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", function(event) {
+  document.querySelector('[href="/cart"]').addEventListener("click", function(e){
+
+    setTimeout(function() {
+      off_remove_cart_link();
+     init_remove_cart_link();
+  }, 300);
+
+    });
+    });
+
+
+
+    {% if template contains 'product' %}
+
+    function getVariantData(variantId){
+
+      var variants = {{product.variants | json}};
+      for(var v in variants){
+        if(variants[v].id == variantId){
+          return variants[v];
+        }
+      }
+      return false;
+    }
+
+    function getUrlParameter(sParam) {
+      var sPageURL = window.location.search.substring(1),
+          sURLVariables = sPageURL.split('&'),
+          sParameterName,
+          i;
+
+      for (i = 0; i < sURLVariables.length; i++) {
+          sParameterName = sURLVariables[i].split('=');
+
+          if (sParameterName[0] === sParam) {
+              return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+          }
+      }
+      return false;
+  };
+
+  var addToCartClic = function() {
+          cart.action = 'added';
+          var variantId = getUrlParameter('variant');
+          var variantData = getVariantData(variantId);
+          var urlProduct = {{ shop.secure_url | append: product.url | json }} +"?variant="+variantId;
+          var product = {
+            item_id: {{ product.id | json }},
+            sku: "",
+            item_variant: variantId,
+            price: {{ product.price | floatformat:2 }}/100,
+            item_brand: 'alessi',
+            category: {{ product.collections|map:'title'|json }},
+            quantity: jQuery('input[name="quantity"]').val(),
+            item_name: {{ product.title | json }},
+          };
+        cart.product_update = product;
+        cart.products.push(product);
+        cart.total_quantity = cart.products.length;
+  dataLayer = dataLayer || [];
+      dataLayer.push({
+         event: 'add_to_cart',
+         currency: {{ shop.currency | json }},
+         items : [product],
+         value: product.price,
+    };
+
+    document.addEventListener("DOMContentLoaded", function(event) {
+
+    if(TROVA_PER == 'classe'){
+  var classname = document.getElementsByClassName( TAG_PULSANTE_ADD_TO_CART );
+    for (var i = 0; i < classname.length; i++) {
+      classname[i].addEventListener('click', addToCartClic, false);
+     }
+  }else if (TROVA_PER == 'id'){
+  document.getElementById(TAG_PULSANTE_ADD_TO_CART).addEventListener('click',addToCartClic);
+  }else if (TROVA_PER == 'nome'){
+  var btn_name = document.getElementsByName( TAG_PULSANTE_ADD_TO_CART );
+    for (var i = 0; i < btn_name.length; i++) {
+      btn_name[i].addEventListener('click', addToCartClic, false);
+     }
+  }else{
+     console.log("ERRORE: controllare il paramentro TROVA_PER");
+    }
+    });
+
+
+
+    {% endif %}
+
+
+    {% if template contains 'cart' %}
+    document.addEventListener("DOMContentLoaded", function(event) {
+    init_remove_cart_link();
+  });
+
+    {% endif %}
+</script>
