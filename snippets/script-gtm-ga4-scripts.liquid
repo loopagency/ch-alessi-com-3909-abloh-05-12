@@ -102,8 +102,9 @@
             value: {{ integral }}.{{ decimal }},
            };
           dataLayer.push(data);
-    console.log("OK1");
+
     document.addEventListener("DOMContentLoaded", function(event) {
+      console.log("OK1");
       jQuery("form[action='/cart/add']").submit(event,
                                                   function(ev){
                                                     ev.preventDefault();
@@ -113,10 +114,8 @@
                                                     dataLayer.push(data);
 
                                                   });
+      console.log("OK2");
     });
-
-
-        console.log("OK2");
   </script>
 {% endif %}
 <!-- end view_item + add_to_cart -->
