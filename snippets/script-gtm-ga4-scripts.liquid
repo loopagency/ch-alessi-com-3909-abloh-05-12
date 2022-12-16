@@ -103,7 +103,8 @@
            };
           dataLayer.push(data);
     console.log("OK1");
-        jQuery("form[action='/cart/add']").submit(event,
+    document.addEventListener("DOMContentLoaded", function(event) {
+      jQuery("form[action='/cart/add']").submit(event,
                                                   function(ev){
                                                     var event = ev.data.event;
                                                     event.event = 'add_to_cart';
@@ -111,6 +112,9 @@
                                                     dataLayer.push(data);
                                                     ev.preventDefault();
                                                   });
+    });
+
+
         console.log("OK2");
   </script>
 {% endif %}
