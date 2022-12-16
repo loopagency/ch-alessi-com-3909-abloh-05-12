@@ -108,8 +108,9 @@
                                                        function(ev){
                                                          ev.preventDefault();
                                                          var data = ev.data.data;
+                                                         console.log(ev.data);
                                                          data.event = 'add_to_cart';
-                                                         console.log(data);
+
                                                          dataLayer = dataLayer || [];
                                                          dataLayer.push(data);
 
