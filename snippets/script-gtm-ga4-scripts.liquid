@@ -164,7 +164,10 @@
                          },
                   {% endfor %}
               ],
-             value: {{ cart.total_price | json }},
+              {% assign price_value = cart.total_price | divided_by: 100.00 | round: 2 | split: "." %}
+              {% assign integral = price_value[0] %}
+              {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
+             value: {{ integral }}.{{ decimal }},
             };
            dataLayer.push(data);
 
