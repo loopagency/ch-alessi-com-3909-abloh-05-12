@@ -115,16 +115,16 @@
 {% endif %}
 <!-- end view_item + add_to_cart -->
 
-<script type="module">
-  import { subscribeToCartAjaxRequests } from '{{ "liquid-ajax-cart-v1.10.3.js" | asset_url }}'
+<!-- view_cart + action cart -->
+{% if template == 'cart' %}
+  <script>
+    window.onload = function() {
+      jQuery('.ajax-cart__remove').click(function(evt){
+        var variant_id = jQuery(this).attr("data-key");
+        variant_id = variant_id.substring(0, variant_id.indexOf(":"));
 
-  subscribeToCartAjaxRequests(( requestState, subscribeToResult ) => {
-    // This function will be called before each Shopify Cart API request
-    console.log( 'Before: ', requestState );
-
-    subscribeToResult( requestState => {
-      // This function will be called after the request is finished
-      console.log( 'After: ', requestState );
-    })
-  })
-</script>
+      });
+    }
+  </script>
+{% endif %}
+<!-- view_cart -->
