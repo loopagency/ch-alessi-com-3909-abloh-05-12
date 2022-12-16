@@ -107,11 +107,11 @@
            jQuery("form[action='/cart/add']").submit(data,
                                                        function(ev){
                                                          ev.preventDefault();
-                                                         var event = ev.data.event;
-                                                         event.event = 'add_to_cart';
-                                                         console.log(event);
+                                                         var data = ev.data.data;
+                                                         data.event = 'add_to_cart';
+                                                         console.log(data);
                                                          dataLayer = dataLayer || [];
-                                                         dataLayer.push(event);
+                                                         dataLayer.push(data);
 
                                                        });
         console.log("OK2");
