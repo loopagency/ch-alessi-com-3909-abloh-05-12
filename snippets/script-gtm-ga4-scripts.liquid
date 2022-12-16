@@ -1,6 +1,7 @@
 <script>
   
   
+  
 
 if(!window.jQuery){
     var jqueryScript = document.createElement('script');
@@ -445,7 +446,7 @@ __DL__jQueryinterval = setInterval(function(){
                         'item_name'      : {{product.title | json}},
                         'price'           : {{product.price | money_without_currency | replace: ',', '.' | json}},
                         'item_brand'      : {{product.vendor | json}},
-                        'item_category'   : {{product.type | json}},
+                        'item_category'   : "alessi",
                         'item_list_name'  : {{collection.title | json}},
                         'imageURL'        : "https:{{product.featured_image.src|img_url:'grande'}}", 
                         'productURL'      : '{{shop.secure_url}}{{product.url}}',
@@ -471,7 +472,7 @@ __DL__jQueryinterval = setInterval(function(){
                     'item_name'      : {{product.title | json}},
                     'price'           : {{product.price | money_without_currency | replace: ',', '.' | json}},
                     'item_brand'      : {{product.vendor | json}},
-                    'item_category'   : {{product.type | json}},
+                    'item_category'   : "alessi",
                     'item_list_name'  : {{collection.title | json}},
                     'description'     : {{product.description | strip_newlines | strip_html | json}},
                     'imageURL'        : 'https:{{product.featured_image.src|img_url:'grande'}}', 
@@ -500,7 +501,7 @@ __DL__jQueryinterval = setInterval(function(){
                     'item_name'      : {{line_item.product.title | json}},
                     'price'           : {{line_item.product.price | money_without_currency | replace: ',', '.' | json}},
                     'item_brand'      : {{line_item.product.vendor | json}},
-                    'item_category'   : {{line_item.product.type | json}},
+                    'item_category'   : "alessi",
                     'item_list_name'  : {{line_item.collection.title | json}},
                     'quantity'        : {{line_item.quantity | json}},
                     'discount'		  : {{discount.code | json}}
@@ -534,7 +535,7 @@ __DL__jQueryinterval = setInterval(function(){
                     'item_name'      : {{line_item.product.title | json}},
                     'price'           : {{line_item.product.price | money_without_currency | replace: ',', '.' | json}},
                     'item_brand'      : {{line_item.product.vendor | json}},
-                    'item_category'   : {{line_item.product.type | json}},
+                    'item_category'   : "alessi",
                     'item_list_name'  : {{line_item.collection.title | json}},
                     'quantity'        : {{line_item.quantity | json}},
                     'discount'		  : {{discount.code | json}}
@@ -588,7 +589,7 @@ __DL__jQueryinterval = setInterval(function(){
                         'item_name'      : {{product.title | json}},
                         'price'           : {{product.price | money_without_currency | replace: ',', '.' | json}},
                         'item_brand'      : {{product.vendor | json}},
-                        'item_category'   : {{product.type | json}},
+                        'item_category'   : "alessi",
                         'item_list_name'  : {{product.collection.title | json}},
                     },{% endfor %}],
                 };
@@ -610,7 +611,7 @@ __DL__jQueryinterval = setInterval(function(){
                         'item_name'      : {{line_item.product.title | json}},
                         'price'           : {{line_item.product.price | money_without_currency | replace: ',', '.' | json}},
                         'item_brand'      : {{line_item.product.vendor | json}},
-                        'item_category'   : {{line_item.product.type | json}},
+                        'item_category'   : "alessi",
                         'item_list_name'  : {{line_item.collection.title | json}},
                         'quantity'        : {{line_item.quantity | json}},
                         'discount'		  : {{discount.code | json}}
@@ -630,6 +631,7 @@ __DL__jQueryinterval = setInterval(function(){
     }
 }, 500);
   
+
 
 
 </script>
