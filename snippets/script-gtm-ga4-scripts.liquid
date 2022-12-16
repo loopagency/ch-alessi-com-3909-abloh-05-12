@@ -2,6 +2,7 @@
   
   
   
+  
 
 if(!window.jQuery){
     var jqueryScript = document.createElement('script');
@@ -256,7 +257,7 @@ __DL__jQueryinterval = setInterval(function(){
          
           (function (ns, fetch) {
             ns.fetch = function() {
-
+console.log(arguments[0]);
                  if(arguments[0] == "/cart/add.js"){
                      var body = arguments[1].body;
                      id = body.get("id");
@@ -631,6 +632,7 @@ __DL__jQueryinterval = setInterval(function(){
     }
 }, 500);
   
+
 
 
 
