@@ -104,9 +104,7 @@
             };
            dataLayer.push(data);
 
-
-       console.log("OK1");
-       jQuery("form[action='/cart/add']").submit(event,
+       jQuery("form[action='/cart/add']").submit(data,
                                                    function(ev){
                                                      ev.preventDefault();
                                                      var event = ev.data.event;
@@ -115,7 +113,6 @@
                                                      dataLayer.push(data);
 
                                                    });
-       console.log("OK2");
      };
   </script>
 {% endif %}
