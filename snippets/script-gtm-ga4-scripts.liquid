@@ -1,10 +1,6 @@
 <script>
   
-  
-      console.log("OK");
-  
-  
-<!-- init cart content -->
+  <!-- init cart content -->
 
 var loop_cart_content = [
 {%- for product in cart.items -%}
@@ -414,26 +410,28 @@ ns.fetch = function() {
             {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
            value: {{ integral }}.{{ decimal }},
           };
-         dataLayer.push(data);
 
-  window.onload = function(){
-        console.log("OK");
-  document.querySelectorAll('input[type=text]').forEach((input) => { 
-    input.addEventListener("input", launch_event_checkout('add_shipping_info'));
-  });
-}
-  function launch_event_checkout(event_name){
-    data.event = event_name;
-    dataLayer.push(data);
-     document.querySelectorAll('input[type=text]').forEach((input) => { 
-       input.removeEventListener("input", launch_event_checkout,)
-  });
+  switch(Shopify.Checkout.step){
+    case "contact_information":
+      data.event = 'begin_checkout';
+      break;
+    case "shipping_method":
+      data.event = 'add_shipping_info';
+      break;
+    case "payment_method":
+      data.event = 'add_payment_info';
+      break
+    default:
+      data.event = false;
   }
+  
+  if(data.event){
+      dataLayer.push(data);
+  }
+
   
       {% endif %}
    {% endif %}
-
-
 
 
 </script>
