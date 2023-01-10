@@ -1,6 +1,7 @@
 <script>
   
   
+  
   <!-- init cart content -->
 
 var loop_cart_content = [
@@ -189,7 +190,7 @@ ns.fetch = function() {
 
 <!-- view_item_list -->
 {% if template == 'collection' %}
-  console.log("OPS?");
+  
   dataLayer = dataLayer || [];
     dataLayer.push({
        event: 'view_item_list',
@@ -243,7 +244,9 @@ ns.fetch = function() {
 <!-- end view_item_list -->
 
 <!-- view_item + add_to_cart -->
+  
 {% if template == 'product' %}
+  console.log("OPS?");
 init_data_layer_view_item();
   function init_data_layer_view_item() {
 if(typeof jQuery === 'undefined'){
@@ -434,6 +437,7 @@ ns.fetch = function() {
   
       {% endif %}
    {% endif %}
+
 
 
 
