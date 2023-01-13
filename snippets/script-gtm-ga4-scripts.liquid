@@ -5,6 +5,7 @@
   
   
   
+  
   dataLayer = dataLayer || [];
   /** 
         * DATALAYER: Log State
@@ -12,8 +13,8 @@
         * 2. Return User specific data. */
         var logState = {
             {% if shop.customer_accounts_enabled %}
-            {% if customer %}
             'user':{
+            {% if customer %}
               'userId'        : {{customer.id | json}},
               'customerEmail' : {{customer.email | json}},
               'logState'      : "Logged In",
@@ -84,7 +85,7 @@
             {% endif %}
             'pageType'      : 'Log State',            
             'event'         : 'logState'
-        }
+        };
         dataLayer.push(logState);
   console.log("***");       
   console.log(logState);
@@ -525,6 +526,7 @@ ns.fetch = function() {
   
       {% endif %}
    {% endif %}
+
 
 
 
