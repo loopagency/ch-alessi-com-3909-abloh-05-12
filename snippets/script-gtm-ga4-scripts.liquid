@@ -7,6 +7,7 @@
   
   
   
+  
   dataLayer = dataLayer || [];
   /** 
         * DATALAYER: Log State
@@ -40,7 +41,7 @@
               {% endif %}
               'customerEmail' : {{customer.email | json}},
               'timestamp'     : Date().replace(/\(.*?\)/g,''),  
-              {% if customer.orders_count > 2 %}
+              {% if customer.orders_count > 1 %}
               'customerType'       : 'Returning',
               'customerTypeNumber' : '0',
               {% else %}
@@ -528,6 +529,7 @@ ns.fetch = function() {
   
       {% endif %}
    {% endif %}
+
 
 
 
