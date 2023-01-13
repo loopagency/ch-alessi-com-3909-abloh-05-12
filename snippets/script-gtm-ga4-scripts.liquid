@@ -6,14 +6,16 @@
   
   
   
+  
   dataLayer = dataLayer || [];
   /** 
         * DATALAYER: Log State
         * 1. Determine if user is logged in or not.
         * 2. Return User specific data. */
         var logState = {
+           'user':{
             {% if shop.customer_accounts_enabled %}
-            'user':{
+            
             {% if customer %}
               'userId'        : {{customer.id | json}},
               'customerEmail' : {{customer.email | json}},
@@ -526,6 +528,7 @@ ns.fetch = function() {
   
       {% endif %}
    {% endif %}
+
 
 
 
