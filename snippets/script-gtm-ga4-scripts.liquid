@@ -1,15 +1,7 @@
 <script>
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  dataLayer = dataLayer || [];
+  var dataLayer = dataLayer || [];
   /** 
         * DATALAYER: Log State
         * 1. Determine if user is logged in or not.
@@ -90,10 +82,7 @@
             'pageType'      : 'Log State',            
             'event'         : 'logState'
         };
-        dataLayer.push(logState);
-  console.log("***");       
-  console.log(logState);
-              console.log("***");
+        dataLayer.push(logState);  
   
   <!-- init cart content -->
 
@@ -530,6 +519,7 @@ ns.fetch = function() {
   
       {% endif %}
    {% endif %}
+
 
 
 
