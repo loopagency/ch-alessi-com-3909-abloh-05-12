@@ -3,6 +3,7 @@
   
   
   
+  
   /** 
         * DATALAYER: Log State
         * 1. Determine if user is logged in or not.
@@ -31,7 +32,6 @@
             'logState' : "Logged Out",
             {% endif %}
             {% endif %}
-            'firstLog'      : firstLog,
             'customerEmail' : {{customer.email | json}},
             'timestamp'     : Date().replace(/\(.*?\)/g,''),  
             {% if customer.orders_count > 2 %}
@@ -521,6 +521,7 @@ ns.fetch = function() {
   
       {% endif %}
    {% endif %}
+
 
 
 
