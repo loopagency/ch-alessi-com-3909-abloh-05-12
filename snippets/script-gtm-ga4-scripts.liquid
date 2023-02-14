@@ -81,7 +81,7 @@ var dataLayer = dataLayer || [];
             'event'         : 'logState'
         };
 
-              {% if  checkout.billing_address.name  %}}
+              {% if  checkout.billing_address.name != null%}}
               logState.shippingInfo = {
                   'fullName'  : {{checkout.shipping_address.name | json}},
                   'firstName' : {{checkout.shipping_address.first_name | json}},
