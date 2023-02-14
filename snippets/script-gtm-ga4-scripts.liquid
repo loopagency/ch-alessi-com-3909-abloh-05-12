@@ -81,7 +81,7 @@ var dataLayer = dataLayer || [];
             'event'         : 'logState'
         };
 
-              {% if  checkout.billing_address.name != null%}}
+              {% if  checkout.billing_address.name != null %}
               logState.shippingInfo = {
                   'fullName'  : {{checkout.shipping_address.name | json}},
                   'firstName' : {{checkout.shipping_address.first_name | json}},
@@ -95,7 +95,7 @@ var dataLayer = dataLayer || [];
                   'country'   : {{checkout.shipping_address.country | json}},
                   'phone'     : {{checkout.shipping_address.phone | json}},
               };
-              {% endif %}}
+              {% endif %}
         dataLayer.push(logState);  
 
   <!-- init cart content -->
