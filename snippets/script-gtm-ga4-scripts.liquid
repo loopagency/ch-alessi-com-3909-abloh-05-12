@@ -225,6 +225,13 @@ console.log("OK");
          dataLayer.push(data);
 }
 
+  window.addEventListener('SCE:add', (event) => {
+      
+      console.log(event);
+      
+    })
+
+
 function on_click_btn_increment(line, quantity){
   change_loop_cart(line, quantity+1);
 }
