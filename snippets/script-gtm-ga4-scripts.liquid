@@ -83,6 +83,7 @@
             'event'         : 'logState'
         };
 
+  console.log("OK");
   {% if checkout.shipping_address.name %}
     logState.shippingInfo = {
                   'fullName'  : {{checkout.shipping_address.name | json}},
@@ -98,7 +99,7 @@
                   'phone'     : {{checkout.shipping_address.phone | json}},
     };
   {% endif %}}
-
+  console.log("OK2");
   
         dataLayer.push(logState);  
   
