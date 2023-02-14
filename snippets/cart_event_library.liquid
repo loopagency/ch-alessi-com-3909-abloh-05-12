@@ -22,6 +22,7 @@
   ];
 
   function isShopifyCartURL(url) {
+    console.log(url);
     if (!url || typeof url != "string") return false;
      const path = url.split("/").pop().split("?")[0];
      return ShopifyCartURLs.includes(`/cart/${path}`);
