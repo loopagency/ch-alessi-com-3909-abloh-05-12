@@ -213,7 +213,6 @@ function change_loop_cart(line, quantity){
     event_name = 'add_to_cart';
     add_loop_cart_content_by_line(line);
   }
-console.log("OK");
    dataLayer = dataLayer || [];
   var data = {
             event: event_name,
@@ -226,12 +225,6 @@ console.log("OK");
          dataLayer.push(data);
 }
 
-  window.addEventListener('SCE:add', (event) => {
-     event.preventDefault();
-          console.log(event);
-      
-
-    })
 
 
 function on_click_btn_increment(line, quantity){
