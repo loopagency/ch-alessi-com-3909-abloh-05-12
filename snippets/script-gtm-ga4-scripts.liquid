@@ -81,21 +81,7 @@ var dataLayer = dataLayer || [];
             'event'         : 'logState'
         };
 
-              {% if  checkout.billing_address.name != null%}}
-              logState.shippingInfo = {
-                  'fullName'  : {{checkout.shipping_address.name | json}},
-                  'firstName' : {{checkout.shipping_address.first_name | json}},
-                  'lastName'  : {{checkout.shipping_address.last_name | json}},
-                  'address1'  : {{checkout.shipping_address.address1 | json}},
-                  'address2'  : {{checkout.shipping_address.address2 | json}},
-                  'street'    : {{checkout.shipping_address.street | json}},
-                  'city'      : {{checkout.shipping_address.city | json}},
-                  'province'  : {{checkout.shipping_address.province | json}},
-                  'zip'       : {{checkout.shipping_address.zip | json}},
-                  'country'   : {{checkout.shipping_address.country | json}},
-                  'phone'     : {{checkout.shipping_address.phone | json}},
-              };
-              {% endif %}}
+             
         dataLayer.push(logState);  
 
   <!-- init cart content -->
