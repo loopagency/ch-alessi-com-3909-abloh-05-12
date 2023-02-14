@@ -1,7 +1,5 @@
 <script>
-  
-    console.log("OK");
-  var dataLayer = dataLayer || [];
+var dataLayer = dataLayer || [];
   /** 
         * DATALAYER: Log State
         * 1. Determine if user is logged in or not.
@@ -42,17 +40,17 @@
               'customerTypeNumber' :'1', 
               {% endif %}
               'shippingInfo' : {
-                  'fullName'  : {{checkout.billing_address.name | json}},
-                  'firstName' : {{checkout.billing_address.first_name | json}},
-                  'lastName'  : {{checkout.billing_address.last_name | json}},
-                  'address1'  : {{checkout.billing_address.address1 | json}},
-                  'address2'  : {{checkout.billing_address.address2 | json}},
-                  'street'    : {{checkout.billing_address.street | json}},
-                  'city'      : {{checkout.billing_address.city | json}},
-                  'province'  : {{checkout.billing_address.province | json}},
-                  'zip'       : {{checkout.billing_address.zip | json}},
-                  'country'   : {{checkout.billing_address.country | json}},
-                  'phone'     : {{checkout.billing_address.phone | json}},
+                  'fullName'  : {{checkout.shipping_address.name | json}},
+                  'firstName' : {{checkout.shipping_address.first_name | json}},
+                  'lastName'  : {{checkout.shipping_address.last_name | json}},
+                  'address1'  : {{checkout.shipping_address.address1 | json}},
+                  'address2'  : {{checkout.shipping_address.address2 | json}},
+                  'street'    : {{checkout.shipping_address.street | json}},
+                  'city'      : {{checkout.shipping_address.city | json}},
+                  'province'  : {{checkout.shipping_address.province | json}},
+                  'zip'       : {{checkout.shipping_address.zip | json}},
+                  'country'   : {{checkout.shipping_address.country | json}},
+                  'phone'     : {{checkout.shipping_address.phone | json}},
               },
               'billingInfo' : {
                   'fullName'  : {{checkout.billing_address.name | json}},
@@ -82,27 +80,8 @@
             'pageType'      : 'Log State',            
             'event'         : 'logState'
         };
-
-
-  {% if checkout.shipping_address.name %}
-    logState.shippingInfo = {
-                  'fullName'  : {{checkout.shipping_address.name | json}},
-                  'firstName' : {{checkout.shipping_address.first_name | json}},
-                  'lastName'  : {{checkout.shipping_address.last_name | json}},
-                  'address1'  : {{checkout.shipping_address.address1 | json}},
-                  'address2'  : {{checkout.shipping_address.address2 | json}},
-                  'street'    : {{checkout.shipping_address.street | json}},
-                  'city'      : {{checkout.shipping_address.city | json}},
-                  'province'  : {{checkout.shipping_address.province | json}},
-                  'zip'       : {{checkout.shipping_address.zip | json}},
-                  'country'   : {{checkout.shipping_address.country | json}},
-                  'phone'     : {{checkout.shipping_address.phone | json}},
-    };
-  {% endif %}}
-  console.log("OK2");
-  
         dataLayer.push(logState);  
-  
+
   <!-- init cart content -->
 
 var loop_cart_content = [
@@ -135,9 +114,9 @@ var loop_cart_content = [
                       {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
                        {% assign integral_discount = compare_at_price_value[0] %}
                       {% assign decimal_discount = compare_at_price_value[1] | append: "00" | truncate: 2, "" %}
-                       {item_id:'{{ product. }}',
+                       {item_id:'{{ product.id }}',
                         item_name:'{{ product.title | handleize | replace: '-', '_' }}',
-                        discount:'{{ integral_discount }}.{{ decimal_discount }}',
+                        discount:'{{ product.id }}',
                         item_brand:'alessi',
                         item_category:'{{ category_tag | handleize | replace: '-', '_' }}',
                         item_variant:"{{ variant }}",
@@ -287,11 +266,8 @@ ns.fetch = function() {
   return response
 }
 }(window, window.fetch))
-
-
 <!-- view_item_list -->
-{% if template == 'collection' %}
-  
+{% if template contains 'collection' %}
   dataLayer = dataLayer || [];
     dataLayer.push({
        event: 'view_item_list',
@@ -328,9 +304,9 @@ ns.fetch = function() {
               {% assign decimal_discount = compare_at_price_value[1] | append: "00" | truncate: 2, "" %}
 
 
-               {item_id:'{{ product.selected_or_first_available_variant.id }}',
+               {item_id:'{{ product.id }}',
                 item_name:'{{ product.title | handleize | replace: '-', '_' }}',
-                discount:'{{ integral_discount }}.{{ decimal_discount }}',
+                discount:'{{ product.id }}',
                 item_brand:'alessi',
                 item_category:'{{ category_tag | handleize | replace: '-', '_' }}',
                 item_variant:"{{ variant }}",
@@ -345,9 +321,7 @@ ns.fetch = function() {
 <!-- end view_item_list -->
 
 <!-- view_item + add_to_cart -->
-  
 {% if template == 'product' %}
-  console.log("OPS?");
 init_data_layer_view_item();
   function init_data_layer_view_item() {
 if(typeof jQuery === 'undefined'){
@@ -388,9 +362,9 @@ return;
                    {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
                   {% assign integral_discount = compare_at_price_value[0] %}
                    {% assign decimal_discount = compare_at_price_value[1] | append: "00" | truncate: 2, "" %}
-                 {item_id:'{{ product.selected_or_first_available_variant.id }}',
+                 {item_id:'{{ product.id }}',
                      item_name:'{{ product.title | handleize | replace: '-', '_' }}',
-                     discount:'{{ integral_discount }}.{{ decimal_discount }}',
+                     discount:'{{ product.id }}',
                      item_brand:'alessi',
                      item_category:'{{ category_tag | handleize | replace: '-', '_' }}',
                      item_variant:"{{ variant }}",
@@ -489,9 +463,9 @@ ns.fetch = function() {
                       {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
                        {% assign integral_discount = compare_at_price_value[0] %}
                       {% assign decimal_discount = compare_at_price_value[1] | append: "00" | truncate: 2, "" %}
-                       {item_id:'{{ product.selected_or_first_available_variant.id }}',
+                       {item_id:'{{ product.id }}',
                         item_name:'{{ product.title | handleize | replace: '-', '_' }}',
-                        discount:'{{ integral_discount }}.{{ decimal_discount }}',
+                        discount:'{{ product.id }}',
                         item_brand:'alessi',
                         item_category:'{{ category_tag | handleize | replace: '-', '_' }}',
                         item_variant:"{{ variant }}",
@@ -538,4 +512,7 @@ ns.fetch = function() {
   
       {% endif %}
    {% endif %}
+
+
+
 </script>
