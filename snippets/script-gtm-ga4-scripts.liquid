@@ -40,17 +40,17 @@ var dataLayer = dataLayer || [];
               'customerTypeNumber' :'1', 
               {% endif %}
               'shippingInfo' : {
-                  'fullName'  : {{checkout.shipping_address.name | json}},
-                  'firstName' : {{checkout.shipping_address.first_name | json}},
-                  'lastName'  : {{checkout.shipping_address.last_name | json}},
-                  'address1'  : {{checkout.shipping_address.address1 | json}},
-                  'address2'  : {{checkout.shipping_address.address2 | json}},
-                  'street'    : {{checkout.shipping_address.street | json}},
-                  'city'      : {{checkout.shipping_address.city | json}},
-                  'province'  : {{checkout.shipping_address.province | json}},
-                  'zip'       : {{checkout.shipping_address.zip | json}},
-                  'country'   : {{checkout.shipping_address.country | json}},
-                  'phone'     : {{checkout.shipping_address.phone | json}},
+                   'fullName'  : {{checkout.billing_address.name | json}},
+                  'firstName' : {{checkout.billing_address.first_name | json}},
+                  'lastName'  : {{checkout.billing_address.last_name | json}},
+                  'address1'  : {{checkout.billing_address.address1 | json}},
+                  'address2'  : {{checkout.billing_address.address2 | json}},
+                  'street'    : {{checkout.billing_address.street | json}},
+                  'city'      : {{checkout.billing_address.city | json}},
+                  'province'  : {{checkout.billing_address.province | json}},
+                  'zip'       : {{checkout.billing_address.zip | json}},
+                  'country'   : {{checkout.billing_address.country | json}},
+                  'phone'     : {{checkout.billing_address.phone | json}},
               },
               'billingInfo' : {
                   'fullName'  : {{checkout.billing_address.name | json}},
@@ -80,6 +80,22 @@ var dataLayer = dataLayer || [];
             'pageType'      : 'Log State',            
             'event'         : 'logState'
         };
+
+              {% if  checkout.billing_address.name  %}}
+              logState.shippingInfo = {
+                  'fullName'  : {{checkout.shipping_address.name | json}},
+                  'firstName' : {{checkout.shipping_address.first_name | json}},
+                  'lastName'  : {{checkout.shipping_address.last_name | json}},
+                  'address1'  : {{checkout.shipping_address.address1 | json}},
+                  'address2'  : {{checkout.shipping_address.address2 | json}},
+                  'street'    : {{checkout.shipping_address.street | json}},
+                  'city'      : {{checkout.shipping_address.city | json}},
+                  'province'  : {{checkout.shipping_address.province | json}},
+                  'zip'       : {{checkout.shipping_address.zip | json}},
+                  'country'   : {{checkout.shipping_address.country | json}},
+                  'phone'     : {{checkout.shipping_address.phone | json}},
+              };
+              {% endif %}}
         dataLayer.push(logState);  
 
   <!-- init cart content -->
