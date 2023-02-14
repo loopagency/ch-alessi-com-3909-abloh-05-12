@@ -1,6 +1,6 @@
 <script>
   
-  
+    console.log("OK");
   var dataLayer = dataLayer || [];
   /** 
         * DATALAYER: Log State
@@ -83,7 +83,7 @@
             'event'         : 'logState'
         };
 
-  console.log("OK");
+
   {% if checkout.shipping_address.name %}
     logState.shippingInfo = {
                   'fullName'  : {{checkout.shipping_address.name | json}},
