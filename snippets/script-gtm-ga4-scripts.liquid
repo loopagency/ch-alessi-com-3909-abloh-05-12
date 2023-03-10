@@ -406,13 +406,6 @@ ns.fetch = function() {
 
 
 {% if template contains 'product' %}
-init_data_layer_view_item();
-  function init_data_layer_view_item() {
-if(typeof jQuery === 'undefined'){
-setTimeout(init_data_layer_view_item, 750);
-return;
-
-}
        dataLayer = dataLayer || [];
        var data = {
             event: 'view_item',
@@ -465,15 +458,7 @@ return;
   }
           };
          dataLayer.push(data);
-  /*
-         jQuery("button[js-product-form='addToCart']").click(function(ev){
-            data.event = 'add_to_cart';
-            dataLayer = dataLayer || [];
-            dataLayer.push(data);
-            add_loop_cart_content(data);
-          });
-*/
-   };
+  
   window.addEventListener('SCE:add', (event) => {
    var item = event.detail;
    var data = {
