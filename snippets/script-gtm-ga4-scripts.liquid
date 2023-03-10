@@ -434,7 +434,7 @@ return;
                   {% assign integral_discount = compare_at_price_value[0] %}
                    {% assign decimal_discount = compare_at_price_value[1] | append: "00" | truncate: 2, "" %}
                  {item_id:  item.variant_id,
-                     item_name: item.title,
+                     item_name: '{{ product.title | handleize | replace: '-', '_' }}',
                      item_brand:'alessi',
                      item_category:'{{ category_tag | handleize | replace: '-', '_' }}',
                      item_variant:"{{ variant }}",
