@@ -289,8 +289,8 @@ ns.fetch = function() {
   return response
 }
 }(window, window.fetch))
-console.log("{{template}}" or "index");
-{% if template contains 'collection' %}
+console.log("{{template}}");
+{% if template contains 'collection'  or template contains 'index'%}
   dataLayer = dataLayer || [];
     dataLayer.push({
        event: 'view_item_list',
