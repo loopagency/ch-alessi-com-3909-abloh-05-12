@@ -98,7 +98,6 @@ var dataLayer = dataLayer || [];
               {% endif %}
         dataLayer.push(logState);  
 
-  <!-- init cart content -->
 
 var loop_cart_content = [
 {%- for product in cart.items -%}
@@ -283,7 +282,7 @@ ns.fetch = function() {
   return response
 }
 }(window, window.fetch))
-<!-- view_item_list -->
+
 {% if template contains 'collection' %}
   dataLayer = dataLayer || [];
     dataLayer.push({
@@ -336,9 +335,9 @@ ns.fetch = function() {
      });
 
 {% endif %}
-<!-- end view_item_list -->
 
-<!-- view_item + add_to_cart -->
+
+
 {% if template contains 'product' %}
 init_data_layer_view_item();
   function init_data_layer_view_item() {
@@ -452,9 +451,7 @@ return;
       }    
     })
 {% endif %}
-<!-- end view_item + add_to_cart -->
 
-<!-- view_cart + action cart -->
 {% if template == 'cart' %}
 
 
@@ -497,7 +494,7 @@ ns.fetch = function() {
 
   }
 {% endif %}
-<!-- end view_cart -->
+
  {% if request.path contains 'checkouts' 'cart' %}
       {% if request.path contains 'thank_you' %}
          console.log("PURCHASE");
