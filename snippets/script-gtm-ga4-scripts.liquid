@@ -98,6 +98,7 @@ var dataLayer = dataLayer || [];
               {% endif %}
         dataLayer.push(logState);  
 
+console.log("****OK5****");
 
 var loop_cart_content = [
 {%- for product in cart.items -%}
@@ -408,12 +409,8 @@ return;
           });
 */
    };
-console.log("****OK1****");
   window.addEventListener('SCE:add', (event) => {
    var item = event.detail;
-    console.log("****OK2****");
-  console.log(item);
-    console.log("****OK****");
    var data = {
             event: 'add_to_cart',
             ecommerce:{
