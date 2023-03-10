@@ -403,10 +403,12 @@ return;
           });
 */
    };
-console.log("****OK****");
+console.log("****OK1****");
   window.addEventListener('SCE:add', (event) => {
    var item = event.detail;
+    console.log("****OK2****");
   console.log(item);
+    console.log("****OK****");
    var data = {
             event: 'add_to_cart',
             ecommerce:{
