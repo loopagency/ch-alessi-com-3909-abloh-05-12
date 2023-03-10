@@ -290,7 +290,7 @@ ns.fetch = function() {
 }
 }(window, window.fetch))
 console.log("{{template}}");
-{% if template contains 'collection'  or template contains 'index'%}
+{% if template contains 'collection'%}
   dataLayer = dataLayer || [];
     dataLayer.push({
        event: 'view_item_list',
