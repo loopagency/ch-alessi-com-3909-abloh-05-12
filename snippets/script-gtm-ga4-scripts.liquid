@@ -122,13 +122,18 @@ var loop_cart_content = [
                          {% assign temp = product.selected_or_first_available_variant.compareAtPrice | minus: price_value %}
                         {% assign compare_at_price_value = temp | divided_by: 100.00 | round: 2 | split: "." %}
                       {%- endif -%}
+                      {% assign product_title = product.title %}
+                      {%- if product.product -%}
+                         {% assign product_title = product.product.title %}  
+                      {%- endif -%}
+
 
                       {% assign integral = price_value[0] %}
                       {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
                        {% assign integral_discount = compare_at_price_value[0] %}
                       {% assign decimal_discount = compare_at_price_value[1] | append: "00" | truncate: 2, "" %}
                        {item_id:"{{ product.variant_id }}",
-                        item_name:'{{ product.title | handleize | replace: '-', '_' }}',
+                        item_name:'{{ product_title | handleize | replace: '-', '_' }}',
                         item_brand:'alessi',
                         item_category:'{{ category_tag | handleize | replace: '-', '_' }}',
                         item_variant:"{{ product.variant_id }}",
