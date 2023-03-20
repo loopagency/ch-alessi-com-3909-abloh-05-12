@@ -253,13 +253,12 @@
      return value;
   }
 
-  console.log("OK");
 
    function findMissingProduct(data){
       var items = data.items;
 
-      for(var i in loop_cart_content.products){
-        var product = loop_cart_content.products[i];
+      for(var i in loop_cart_content){
+        var product = loop_cart_content[i];
         var found = true;
         for(var j in items){
           var item = items[j];
@@ -277,15 +276,16 @@
 
 
    function isMissProductFromCart(data){
-      return data.items.length < loop_cart_content.products.length;
+     
+      return data.items.length < loop_cart_content.length;
     }
 
     function findProductQuantityChange(data){
       var items = data.items;
       for(var i in items){
         var item = items[i];
-        for(var j in loop_cart_content.products){
-          var product = loop_cart_content.products[j];
+        for(var j in loop_cart_content){
+          var product = loop_cart_content[j];
           if(product.id == item.id && product.quantity != item.quantity){
             return [i,j];
           }
