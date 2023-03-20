@@ -233,13 +233,6 @@
 
 
 
-  function on_click_btn_increment(line, quantity){
-    change_loop_cart(line, quantity+1);
-  }
-
-  function on_click_btn_decrement(line, quantity){
-    change_loop_cart(line, quantity-1);
-  }
 
   function remove_loop_cart_content_by_line(line, remove_all){
      var value = 0;
@@ -272,7 +265,7 @@
           if(product.id == item.id){
             found = false;
             break;
-          }          
+          }
         }
         if(found){
             return i;
@@ -281,19 +274,31 @@
       return false;
     }˙
 
-  
+
    function isMissProductFromCart(data){
       return data.items.length < loop_cart_content.products.length;
+    }
+
+    function findProductQuantityChange(data){
+      var items = data.items;
+      for(var i in items){
+        var item = items[i];
+        for(var j in loop_cart_content.products){
+          var product = loop_cart_content.products[j];
+          if(product.id == item.id && product.quantity != item.quantity){
+            return [i,j];
+          }
+        }
+      }
+      return false;
     }
 
 
   function changedCart(data){
         var line = false;
-        cart.action = false;
         var qty = 0;
         if(isMissProductFromCart(data)){
           line = findMissingProduct(data);
-          cart.action = "removed";
         }else{
           index = findProductQuantityChange(data);
           if(!index){
@@ -305,19 +310,7 @@
         if(!line){
           return;
         }
-        var  product = cart.products[line];
-        if(!cart.action){
-          cart.action = qty > product.quantity ? "added" : "removed";
-        }
-        product.quantity = qty;
-        if(qty == 0){
-          cart.products.splice(line,1);
-        }else{
-          cart.products[line] = product;
-        }
-        cart.product_update = product;
-        cart.total_quantity = cart.products.length;
-        klaviyo.push(['track', 'Cart Update', cart]);
+    change_loop_cart(line, qty);
      }˙
 
   {% if template contains 'collection'%}
