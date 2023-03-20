@@ -1,616 +1,633 @@
 <script>
-var dataLayer = dataLayer || [];
-  /** 
-        * DATALAYER: Log State
-        * 1. Determine if user is logged in or not.
-        * 2. Return User specific data. */
-        var logState = {
-           'user':{
-            {% if shop.customer_accounts_enabled %}
-            
-            {% if customer %}
-              'userId'        : {{customer.id | json}},
-              'customerEmail' : {{customer.email | json}},
-              'logState'      : "Logged In",
-              'customerInfo'  : {
-                  'firstName'   : {{customer_address.first_name | json}},
-                  'lastName'    : {{customer_address.last_name | json}},
-                  'address1'    : {{customer_address.address1 | json}},
-                  'address2'    : {{customer_address.address2 | json}},
-                  'street'      : {{customer_address.street | json}},
-                  'city'        : {{customer_address.city | json}},
-                  'province'    : {{customer_address.province | json}},
-                  'zip'         : {{customer_address.zip | json}},
-                  'country'     : {{customer_address.country | json}},
-                  'phone'       : {{customer_address.phone | json}},
-                  'totalOrders' : {{customer.orders_count | json}},
-                  'totalSpent'  : {{customer.total_spent | money_without_currency | remove: "," | json}}
-              },
-              {% else %}
-              'logState' : "Logged Out",
-              {% endif %}
-              {% endif %}
-              'customerEmail' : {{customer.email | json}},
-              'timestamp'     : Date().replace(/\(.*?\)/g,''),  
-              {% if customer.orders_count > 0 %}
-              'customerType'       : 'Returning',
-              'customerTypeNumber' : '0',
-              {% else %}
-              'customerType'       : 'New',
-              'customerTypeNumber' :'1', 
-              {% endif %}
-              'shippingInfo' : {
-                   'fullName'  : {{checkout.billing_address.name | json}},
-                  'firstName' : {{checkout.billing_address.first_name | json}},
-                  'lastName'  : {{checkout.billing_address.last_name | json}},
-                  'address1'  : {{checkout.billing_address.address1 | json}},
-                  'address2'  : {{checkout.billing_address.address2 | json}},
-                  'street'    : {{checkout.billing_address.street | json}},
-                  'city'      : {{checkout.billing_address.city | json}},
-                  'province'  : {{checkout.billing_address.province | json}},
-                  'zip'       : {{checkout.billing_address.zip | json}},
-                  'country'   : {{checkout.billing_address.country | json}},
-                  'phone'     : {{checkout.billing_address.phone | json}},
-              },
-              'billingInfo' : {
-                  'fullName'  : {{checkout.billing_address.name | json}},
-                  'firstName' : {{checkout.billing_address.first_name | json}},
-                  'lastName'  : {{checkout.billing_address.last_name | json}},
-                  'address1'  : {{checkout.billing_address.address1 | json}},
-                  'address2'  : {{checkout.billing_address.address2 | json}},
-                  'street'    : {{checkout.billing_address.street | json}},
-                  'city'      : {{checkout.billing_address.city | json}},
-                  'province'  : {{checkout.billing_address.province | json}},
-                  'zip'       : {{checkout.billing_address.zip | json}},
-                  'country'   : {{checkout.billing_address.country | json}},
-                  'phone'     : {{checkout.billing_address.phone | json}},
-              },
-            },
-            'checkoutEmail' : {{checkout.email | json}},
-            'currency'      : {{shop.currency | json}},
-            {% if cart.item_count > 0 %}
-            'cart':{
-                'total_price': {{cart.total_price | json}}/100,
-                'value': {{cart.total_price | json}}/100,
-                'total_discount': {{cart.total_discount | json}},
-                'original_total_price': {{cart.original_total_price| json}}/100 ,
-                'items': {{cart.items | json}},
-            },
-            {% endif %}
-            'pageType'      : 'Log State',            
-            'event'         : 'logState'
-        };
+  var dataLayer = dataLayer || [];
+    /**
+          * DATALAYER: Log State
+          * 1. Determine if user is logged in or not.
+          * 2. Return User specific data. */
+          var logState = {
+             'user':{
+              {% if shop.customer_accounts_enabled %}
 
-              {% if  checkout.shipping_address.name != null %}
-              logState.shippingInfo = {
-                  'fullName'  : {{checkout.shipping_address.name | json}},
-                  'firstName' : {{checkout.shipping_address.first_name | json}},
-                  'lastName'  : {{checkout.shipping_address.last_name | json}},
-                  'address1'  : {{checkout.shipping_address.address1 | json}},
-                  'address2'  : {{checkout.shipping_address.address2 | json}},
-                  'street'    : {{checkout.shipping_address.street | json}},
-                  'city'      : {{checkout.shipping_address.city | json}},
-                  'province'  : {{checkout.shipping_address.province | json}},
-                  'zip'       : {{checkout.shipping_address.zip | json}},
-                  'country'   : {{checkout.shipping_address.country | json}},
-                  'phone'     : {{checkout.shipping_address.phone | json}},
-              };
+              {% if customer %}
+                'userId'        : {{customer.id | json}},
+                'customerEmail' : {{customer.email | json}},
+                'logState'      : "Logged In",
+                'customerInfo'  : {
+                    'firstName'   : {{customer_address.first_name | json}},
+                    'lastName'    : {{customer_address.last_name | json}},
+                    'address1'    : {{customer_address.address1 | json}},
+                    'address2'    : {{customer_address.address2 | json}},
+                    'street'      : {{customer_address.street | json}},
+                    'city'        : {{customer_address.city | json}},
+                    'province'    : {{customer_address.province | json}},
+                    'zip'         : {{customer_address.zip | json}},
+                    'country'     : {{customer_address.country | json}},
+                    'phone'       : {{customer_address.phone | json}},
+                    'totalOrders' : {{customer.orders_count | json}},
+                    'totalSpent'  : {{customer.total_spent | money_without_currency | remove: "," | json}}
+                },
+                {% else %}
+                'logState' : "Logged Out",
+                {% endif %}
+                {% endif %}
+                'customerEmail' : {{customer.email | json}},
+                'timestamp'     : Date().replace(/\(.*?\)/g,''),
+                {% if customer.orders_count > 0 %}
+                'customerType'       : 'Returning',
+                'customerTypeNumber' : '0',
+                {% else %}
+                'customerType'       : 'New',
+                'customerTypeNumber' :'1',
+                {% endif %}
+                'shippingInfo' : {
+                     'fullName'  : {{checkout.billing_address.name | json}},
+                    'firstName' : {{checkout.billing_address.first_name | json}},
+                    'lastName'  : {{checkout.billing_address.last_name | json}},
+                    'address1'  : {{checkout.billing_address.address1 | json}},
+                    'address2'  : {{checkout.billing_address.address2 | json}},
+                    'street'    : {{checkout.billing_address.street | json}},
+                    'city'      : {{checkout.billing_address.city | json}},
+                    'province'  : {{checkout.billing_address.province | json}},
+                    'zip'       : {{checkout.billing_address.zip | json}},
+                    'country'   : {{checkout.billing_address.country | json}},
+                    'phone'     : {{checkout.billing_address.phone | json}},
+                },
+                'billingInfo' : {
+                    'fullName'  : {{checkout.billing_address.name | json}},
+                    'firstName' : {{checkout.billing_address.first_name | json}},
+                    'lastName'  : {{checkout.billing_address.last_name | json}},
+                    'address1'  : {{checkout.billing_address.address1 | json}},
+                    'address2'  : {{checkout.billing_address.address2 | json}},
+                    'street'    : {{checkout.billing_address.street | json}},
+                    'city'      : {{checkout.billing_address.city | json}},
+                    'province'  : {{checkout.billing_address.province | json}},
+                    'zip'       : {{checkout.billing_address.zip | json}},
+                    'country'   : {{checkout.billing_address.country | json}},
+                    'phone'     : {{checkout.billing_address.phone | json}},
+                },
+              },
+              'checkoutEmail' : {{checkout.email | json}},
+              'currency'      : {{shop.currency | json}},
+              {% if cart.item_count > 0 %}
+              'cart':{
+                  'total_price': {{cart.total_price | json}}/100,
+                  'value': {{cart.total_price | json}}/100,
+                  'total_discount': {{cart.total_discount | json}},
+                  'original_total_price': {{cart.original_total_price| json}}/100 ,
+                  'items': {{cart.items | json}},
+              },
               {% endif %}
-        dataLayer.push(logState);  
+              'pageType'      : 'Log State',
+              'event'         : 'logState'
+          };
+
+                {% if  checkout.shipping_address.name != null %}
+                logState.shippingInfo = {
+                    'fullName'  : {{checkout.shipping_address.name | json}},
+                    'firstName' : {{checkout.shipping_address.first_name | json}},
+                    'lastName'  : {{checkout.shipping_address.last_name | json}},
+                    'address1'  : {{checkout.shipping_address.address1 | json}},
+                    'address2'  : {{checkout.shipping_address.address2 | json}},
+                    'street'    : {{checkout.shipping_address.street | json}},
+                    'city'      : {{checkout.shipping_address.city | json}},
+                    'province'  : {{checkout.shipping_address.province | json}},
+                    'zip'       : {{checkout.shipping_address.zip | json}},
+                    'country'   : {{checkout.shipping_address.country | json}},
+                    'phone'     : {{checkout.shipping_address.phone | json}},
+                };
+                {% endif %}
+          dataLayer.push(logState);
 
 
-var loop_cart_content = [
-{%- for product in cart.items -%}
-                      {%- assign category_tag = '' -%}
-                      {%- assign macro_category_tag = '' -%}
-                      {%- for tag in product.tags -%}
-                        {% assign sanitized_tag = tag | downcase %}
-                        {%- if sanitized_tag contains 'category:' -%}
-                          {%- assign split_tag = sanitized_tag | split: ':' -%}
-                          {%- if split_tag[0] == 'macro_category' -%}
-                            {%- assign macro_category_tag = split_tag | last | strip -%}
-                          {%- else -%}
-                            {%- assign category_tag = split_tag | last | strip -%}
+  var loop_cart_content = [
+  {%- for product in cart.items -%}
+                        {%- assign category_tag = '' -%}
+                        {%- assign macro_category_tag = '' -%}
+                        {%- for tag in product.tags -%}
+                          {% assign sanitized_tag = tag | downcase %}
+                          {%- if sanitized_tag contains 'category:' -%}
+                            {%- assign split_tag = sanitized_tag | split: ':' -%}
+                            {%- if split_tag[0] == 'macro_category' -%}
+                              {%- assign macro_category_tag = split_tag | last | strip -%}
+                            {%- else -%}
+                              {%- assign category_tag = split_tag | last | strip -%}
+                            {%- endif -%}
                           {%- endif -%}
+                        {%- endfor -%}
+
+                        {% assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." %}
+                        {% assign compare_at_price_value = "0,0" | split: ',' %}
+                        {%- if product.selected_or_first_available_variant -%}
+                          {% assign price_value = product.selected_or_first_available_variant.price | divided_by: 100.00 | round: 2 | split: "." %}
+                           {% assign temp = product.selected_or_first_available_variant.compareAtPrice | minus: price_value %}
+                          {% assign compare_at_price_value = temp | divided_by: 100.00 | round: 2 | split: "." %}
                         {%- endif -%}
-                      {%- endfor -%}
-                  
-                      {% assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." %}
-                      {% assign compare_at_price_value = "0,0" | split: ',' %}
-                      {%- if product.selected_or_first_available_variant -%}
-                        {% assign price_value = product.selected_or_first_available_variant.price | divided_by: 100.00 | round: 2 | split: "." %}
-                         {% assign temp = product.selected_or_first_available_variant.compareAtPrice | minus: price_value %}
-                        {% assign compare_at_price_value = temp | divided_by: 100.00 | round: 2 | split: "." %}
-                      {%- endif -%}
-                      {% assign product_title = product.title %}
-                      {%- if product.product -%}
-                         {% assign product_title = product.product.title %}  
-                      {%- endif -%}
+                        {% assign product_title = product.title %}
+                        {%- if product.product -%}
+                           {% assign product_title = product.product.title %}
+                        {%- endif -%}
 
 
-                      {% assign integral = price_value[0] %}
-                      {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
-                       {% assign integral_discount = compare_at_price_value[0] %}
-                      {% assign decimal_discount = compare_at_price_value[1] | append: "00" | truncate: 2, "" %}
+                        {% assign integral = price_value[0] %}
+                        {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
+                         {% assign integral_discount = compare_at_price_value[0] %}
+                        {% assign decimal_discount = compare_at_price_value[1] | append: "00" | truncate: 2, "" %}
 
-  
-                       {item_id:"{{ product.variant_id }}",
-                        item_name:'{{ product_title | handleize | replace: '-', '_' }}',
-                        item_brand:'alessi',
-                        item_category:'{{ category_tag | handleize | replace: '-', '_' }}',
-                        item_variant:"{{ product.variant_id }}",
-                        price:{{ integral }}.{{ decimal }},
-                        discount:{{ integral_discount }}.{{ decimal_discount }},
-                        quantity : {{ product.quantity }},
-                        google_business_vertical: 'retail',
-                        id:'{{ product.variant_id }}',
-                       },
-                {% endfor %}
-                ];
-function add_loop_cart_content(item){
-  var find = false;
-  for(var i in loop_cart_content){
-    var product = loop_cart_content[i];
-    if(product.item_variant == item.variant_id){
-      if(product.quantity >= item.quantity){
-        return false;
+
+                         {item_id:"{{ product.variant_id }}",
+                          item_name:'{{ product_title | handleize | replace: '-', '_' }}',
+                          item_brand:'alessi',
+                          item_category:'{{ category_tag | handleize | replace: '-', '_' }}',
+                          item_variant:"{{ product.variant_id }}",
+                          price:{{ integral }}.{{ decimal }},
+                          discount:{{ integral_discount }}.{{ decimal_discount }},
+                          quantity : {{ product.quantity }},
+                          google_business_vertical: 'retail',
+                          id:'{{ product.variant_id }}',
+                         },
+                  {% endfor %}
+                  ];
+  function add_loop_cart_content(item){
+    var find = false;
+    for(var i in loop_cart_content){
+      var product = loop_cart_content[i];
+      if(product.item_variant == item.variant_id){
+        if(product.quantity >= item.quantity){
+          return false;
+        }
+
+        product.quantity +=1;
+        return true;
       }
-    
-      product.quantity +=1;
-      return true;
     }
+      loop_cart_content.push(item);
+    return true;
   }
-    loop_cart_content.push(item);
-  return true;
-}
 
-function add_loop_cart_content_by_line(line){
-  var product = loop_cart_content[line];
-  product.quantity +=1;
-}
+  function add_loop_cart_content_by_line(line){
+    var product = loop_cart_content[line];
+    product.quantity +=1;
+  }
 
- function remove_loop_cart_content(variant_id, remove_all){
-  var index = -1;
-   var value = 0;
-   var pop = false;
-  for(var i in loop_cart_content){
-    var product = loop_cart_content[i];
-    if(product.item_variant == variant_id){
-      if(remove_all){
-        pop = true;
-        value = product.price * product.quantity;
-      }else{
+   function remove_loop_cart_content(variant_id, remove_all){
+    var index = -1;
+     var value = 0;
+     var pop = false;
+    for(var i in loop_cart_content){
+      var product = loop_cart_content[i];
+      if(product.item_variant == variant_id){
+        if(remove_all){
+          pop = true;
+          value = product.price * product.quantity;
+        }else{
+          product.quantity -=1;
+          pop = product.quantity == 0;
+          value = product.price;
+        }
+        index = i;
+        break;
+      }
+    }
+     if(index == -1 ){
+       return;
+     }
+      dataLayer = dataLayer || [];
+         var data = {
+              event: 'remove_from_cart',
+             currency: {{ shop.currency | json }},
+              items : [
+                      loop_cart_content[index]
+              ],
+             value: value,
+            };
+           dataLayer.push(data);
+     if(pop){
+       loop_cart_content.splice(index, 1);
+     }
+     return value;
+  }
+
+  function change_loop_cart(line, quantity){
+    var event_name = '';
+    var product = loop_cart_content[line];
+    if(product.quantity > quantity){
+      event_name = 'remove_from_cart';
+      remove_loop_cart_content_by_line(line, quantity == 0);
+    }else{
+      event_name = 'add_to_cart';
+      add_loop_cart_content_by_line(line);
+    }
+     dataLayer = dataLayer || [];
+    var data = {
+              event: event_name,
+             ecommerce:{
+             currency: {{ shop.currency | json }},
+              items : [
+                      product,
+              ],
+             value: product.price,
+               }
+            };
+           dataLayer.push(data);
+  }
+
+
+
+  function on_click_btn_increment(line, quantity){
+    change_loop_cart(line, quantity+1);
+  }
+
+  function on_click_btn_decrement(line, quantity){
+    change_loop_cart(line, quantity-1);
+  }
+
+  function remove_loop_cart_content_by_line(line, remove_all){
+     var value = 0;
+     var pop = false;
+     var product = loop_cart_content[line];
+
+     if(remove_all){
+       pop = true;
+       value = product.price * product.quantity;
+     }else{
         product.quantity -=1;
         pop = product.quantity == 0;
         value = product.price;
-      }
-      index = i;
-      break;
+     }
+     if(pop){
+       loop_cart_content.splice(line, 1);
+     }
+     return value;
+  }
+
+   function isMissProductFromCart(data){
+      return data.items.length < loop_cart_content.products.length;
     }
-  }
-   if(index == -1 ){
-     return;
-   }
-    dataLayer = dataLayer || [];
-       var data = {
-            event: 'remove_from_cart',
-           currency: {{ shop.currency | json }},
-            items : [
-                    loop_cart_content[index]
-            ],
-           value: value,
-          };
-         dataLayer.push(data);
-   if(pop){
-     loop_cart_content.splice(index, 1);
-   }
-   return value;
-}
-
-function change_loop_cart(line, quantity){
-  var event_name = '';
-  var product = loop_cart_content[line];
-  if(product.quantity > quantity){
-    event_name = 'remove_from_cart';
-    remove_loop_cart_content_by_line(line, quantity == 0);
-  }else{
-    event_name = 'add_to_cart';
-    add_loop_cart_content_by_line(line);
-  }
-   dataLayer = dataLayer || [];
-  var data = {
-            event: event_name,
-           ecommerce:{
-           currency: {{ shop.currency | json }},
-            items : [
-                    product,
-            ],
-           value: product.price,
-             }
-          };
-         dataLayer.push(data);
-}
 
 
-
-function on_click_btn_increment(line, quantity){
-  change_loop_cart(line, quantity+1);
-}
-
-function on_click_btn_decrement(line, quantity){
-  change_loop_cart(line, quantity-1);
-}
-
-function remove_loop_cart_content_by_line(line, remove_all){
-   var value = 0;
-   var pop = false;
-   var product = loop_cart_content[line];
-   
-   if(remove_all){
-     pop = true;
-     value = product.price * product.quantity;
-   }else{
-      product.quantity -=1;
-      pop = product.quantity == 0;
-      value = product.price;
-   }
-   if(pop){
-     loop_cart_content.splice(line, 1);
-   }
-   return value;
-}
-
-(function (ns, fetch) {
-ns.fetch = function() {
-  const response = fetch.apply(this, arguments);
-  
-  response.then(res => {
-     if (`${window.location.origin}/cart/add.js`
-      .includes(res.url) ||
-        `${window.location.origin}/cart/change.js`
-      .includes(res.url)) {
-      var body = JSON.parse(arguments[1].body);
-      var line = body.line-1;
-      change_loop_cart(line, body.quantity);
-      
-    }
-  });
-  return response
-}
-}(window, window.fetch))
-{% if template contains 'collection'%}
-  dataLayer = dataLayer || [];
-    dataLayer.push({
-       event: 'view_item_list',
-       ecommerce:{
-       item_list_name : {{ collection.title | json }},
-       items : [
-          {%- for product in collection.products -%}
-              {%- assign category_tag = '' -%}
-              {%- assign macro_category_tag = '' -%}
-              {%- for tag in product.tags -%}
-                {% assign sanitized_tag = tag | downcase %}
-                {%- if sanitized_tag contains 'category:' -%}
-                  {%- assign split_tag = sanitized_tag | split: ':' -%}
-                  {%- if split_tag[0] == 'macro_category' -%}
-                    {%- assign macro_category_tag = split_tag | last | strip -%}
-                  {%- else -%}
-                    {%- assign category_tag = split_tag | last | strip -%}
-                  {%- endif -%}
-                {%- endif -%}
-              {%- endfor -%}
-              {%- assign variant = product.id -%}
-
-              {% assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." %}
-              {% assign compare_at_price_value = "0,0" | split: ',' %}
-              {%- if product.selected_or_first_available_variant -%}
-                {%- assign variant = product.selected_or_first_available_variant.id -%}
-                {% assign price_value = product.selected_or_first_available_variant.price | divided_by: 100.00 | round: 2 | split: "." %}
-               {% assign temp = product.selected_or_first_available_variant.compareAtPrice | minus: price_value %}
-                {% assign compare_at_price_value = temp | divided_by: 100.00 | round: 2 | split: "." %}
-
-            {%- endif -%}
-              {% assign integral = price_value[0] %}
-              {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
-             {% assign integral_discount = compare_at_price_value[0] %}
-              {% assign decimal_discount = compare_at_price_value[1] | append: "00" | truncate: 2, "" %}
-
-                {% assign product_title = product.title %}
-                      {%- if product.product -%}
-                         {% assign product_title = product.product.title %}  
-                      {%- endif -%}
-
-               {item_id:"{{ variant }}",
-                item_name:'{{ product_title | handleize | replace: '-', '_' }}',
-                item_brand:'alessi',
-                item_category:'{{ category_tag | handleize | replace: '-', '_' }}',
-                item_variant:"{{ variant }}",
-                price:{{ integral }}.{{ decimal }},
-                discount:{{ integral_discount }}.{{ decimal_discount }},
-               },
-            {% endfor %}
-       ],
-  }
-     });
-
-{% endif %}
-
-  {% if template contains 'index'%}
-  dataLayer = dataLayer || [];
-    dataLayer.push({
-       event: 'view_item_list',
-       ecommerce:{
-       item_list_name : {{ collections['bestsellers'].title | json }},
-       items : [
-          {%- for product in collections['bestsellers'].products -%}
-              {%- assign category_tag = '' -%}
-              {%- assign macro_category_tag = '' -%}
-              {%- for tag in product.tags -%}
-                {% assign sanitized_tag = tag | downcase %}
-                {%- if sanitized_tag contains 'category:' -%}
-                  {%- assign split_tag = sanitized_tag | split: ':' -%}
-                  {%- if split_tag[0] == 'macro_category' -%}
-                    {%- assign macro_category_tag = split_tag | last | strip -%}
-                  {%- else -%}
-                    {%- assign category_tag = split_tag | last | strip -%}
-                  {%- endif -%}
-                {%- endif -%}
-              {%- endfor -%}
-              {%- assign variant = product.id -%}
-
-              {% assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." %}
-              {% assign compare_at_price_value = "0,0" | split: ',' %}
-              {%- if product.selected_or_first_available_variant -%}
-                {%- assign variant = product.selected_or_first_available_variant.id -%}
-                {% assign price_value = product.selected_or_first_available_variant.price | divided_by: 100.00 | round: 2 | split: "." %}
-               {% assign temp = product.selected_or_first_available_variant.compareAtPrice | minus: price_value %}
-                {% assign compare_at_price_value = temp | divided_by: 100.00 | round: 2 | split: "." %}
-
-            {%- endif -%}
-              {% assign integral = price_value[0] %}
-              {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
-             {% assign integral_discount = compare_at_price_value[0] %}
-              {% assign decimal_discount = compare_at_price_value[1] | append: "00" | truncate: 2, "" %}
-
-                {% assign product_title = product.title %}
-                      {%- if product.product -%}
-                         {% assign product_title = product.product.title %}  
-                      {%- endif -%}
-
-               {item_id:"{{ variant }}",
-                item_name:'{{ product_title | handleize | replace: '-', '_' }}',
-                item_brand:'alessi',
-                item_category:'{{ category_tag | handleize | replace: '-', '_' }}',
-                item_variant:"{{ variant }}",
-                price:{{ integral }}.{{ decimal }},
-                discount:{{ integral_discount }}.{{ decimal_discount }},
-               },
-            {% endfor %}
-       ],
-  }
-     });
-
-{% endif %}
-
-
-
-{% if template contains 'product' %}
-       dataLayer = dataLayer || [];
-       var data = {
-            event: 'view_item',
-           ecommerce:{
-           currency: {{ shop.currency | json }},
-            items : [
-                   {%- assign category_tag = '' -%}
-                   {%- assign macro_category_tag = '' -%}
-                   {%- for tag in product.tags -%}
-                     {% assign sanitized_tag = tag | downcase %}
-                     {%- if sanitized_tag contains 'category:' -%}
-                       {%- assign split_tag = sanitized_tag | split: ':' -%}
-                       {%- if split_tag[0] == 'macro_category' -%}
-                         {%- assign macro_category_tag = split_tag | last | strip -%}
-                       {%- else -%}
-                         {%- assign category_tag = split_tag | last | strip -%}
-                       {%- endif -%}
-                     {%- endif -%}
-                   {%- endfor -%}
-                   {%- assign variant = product.id -%}
-
-                   {% assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." %}
-                   {% assign compare_at_price_value = "0,0" | split: ',' %}
-                   {%- if product.selected_or_first_available_variant -%}
-                     {%- assign variant = product.selected_or_first_available_variant.id -%}
-                     {% assign price_value = product.selected_or_first_available_variant.price | divided_by: 100.00 | round: 2 | split: "." %}
-                    {% assign temp = product.selected_or_first_available_variant.compareAtPrice | minus: price_value %}
-                     {% assign compare_at_price_value = temp | divided_by: 100.00 | round: 2 | split: "." %}
-
-                 {%- endif -%}
-                   {% assign integral = price_value[0] %}
-                   {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
-                  {% assign integral_discount = compare_at_price_value[0] %}
-                   {% assign decimal_discount = compare_at_price_value[1] | append: "00" | truncate: 2, "" %}
-                        {% assign product_title = product.title %}
-                      {%- if product.product -%}
-                         {% assign product_title = product.product.title %}  
-                      {%- endif -%}
-                 {item_id:"{{ variant }}",
-                     item_name:'{{ product_title | handleize | replace: '-', '_' }}',
-                     item_brand:'alessi',
-                     item_category:'{{ category_tag | handleize | replace: '-', '_' }}',
-                     item_variant:"{{ variant }}",
-                     price:{{ integral }}.{{ decimal }},
-                     discount:{{ integral_discount }}.{{ decimal_discount }},
-                     quantity: 1,
-                    },
-            ],
-           value: {{ integral }}.{{ decimal }},
-  }
-          };
-         dataLayer.push(data);
-  
-  window.addEventListener('SCE:add', (event) => {
-   var item = event.detail;
-   var data = {
-            event: 'add_to_cart',
-            ecommerce:{
-           currency: {{ shop.currency | json }},
-            items : [
-                   {%- assign category_tag = '' -%}
-                   {%- assign macro_category_tag = '' -%}
-                   {%- for tag in product.tags -%}
-                     {% assign sanitized_tag = tag | downcase %}
-                     {%- if sanitized_tag contains 'category:' -%}
-                       {%- assign split_tag = sanitized_tag | split: ':' -%}
-                       {%- if split_tag[0] == 'macro_category' -%}
-                         {%- assign macro_category_tag = split_tag | last | strip -%}
-                       {%- else -%}
-                         {%- assign category_tag = split_tag | last | strip -%}
-                       {%- endif -%}
-                     {%- endif -%}
-                   {%- endfor -%}
-               
-                   {% assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." %}
-                   {% assign compare_at_price_value = "0,0" | split: ',' %}
-                   
-                   {% assign integral = price_value[0] %}
-                   {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
-                  {% assign integral_discount = compare_at_price_value[0] %}
-                   {% assign decimal_discount = compare_at_price_value[1] | append: "00" | truncate: 2, "" %}
-                           {% assign product_title = product.title %}
-                      {%- if product.product -%}
-                         {% assign product_title = product.product.title %}  
-                      {%- endif -%}
-                 {item_id:  item.variant_id,
-                     item_name: '{{ product_title | handleize | replace: '-', '_' }}',
-                     item_brand:'alessi',
-                     item_category:'{{ category_tag | handleize | replace: '-', '_' }}',
-                     item_variant:"{{ variant }}",
-                     price:{{ integral }}.{{ decimal }},
-                     discount:{{ integral_discount }}.{{ decimal_discount }},
-                     quantity: item.quantity,
-                    },
-            ],
-           value: {{ integral }}.{{ decimal }},
+  function changedCart(data){
+        var line = false;
+        cart.action = false;
+        var qty = 0;
+        if(isMissProductFromCart(data)){
+          line = findMissingProduct(data);
+          cart.action = "removed";
+        }else{
+          index = findProductQuantityChange(data);
+          if(!index){
+            return;
           }
-          };
-      if(add_loop_cart_content(event.detail)){
-            dataLayer = dataLayer || [];
-            dataLayer.push(data);
-      }    
-    })
-{% endif %}
-
-{% if template == 'cart' %}
-
-
-  window.onload = function() {
-    dataLayer = dataLayer || [];
-       var data = {
-            event: 'view_cart',
-          ecommerce:{
-           currency: {{ shop.currency | json }},
-            items : [
-                    loop_cart_content,
-            ],
-            {% assign price_value = cart.total_price | divided_by: 100.00 | round: 2 | split: "." %}
-            {% assign integral = price_value[0] %}
-            {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
-           value: {{ integral }}.{{ decimal }},
-  }
-          };
-         dataLayer.push(data);
-  }
-{% endif %}
-
- {% if request.path contains 'checkouts' 'cart' %}
-      {% if request.path contains 'thank_you' %}
-         console.log("PURCHASE");
-      {% else %}
-        var loop_cart_content = [
-{%- for product in checkout.line_items -%}
-                      {%- assign category_tag = '' -%}
-                      {%- assign macro_category_tag = '' -%}
-                      {%- for tag in product.tags -%}
-                        {% assign sanitized_tag = tag | downcase %}
-                        {%- if sanitized_tag contains 'category:' -%}
-                          {%- assign split_tag = sanitized_tag | split: ':' -%}
-                          {%- if split_tag[0] == 'macro_category' -%}
-                            {%- assign macro_category_tag = split_tag | last | strip -%}
-                          {%- else -%}
-                            {%- assign category_tag = split_tag | last | strip -%}
-                          {%- endif -%}
-                        {%- endif -%}
-                      {%- endfor -%}
-                      {%- assign variant = product.id -%}
-
-                      {% assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." %}
-                      {% assign compare_at_price_value = "0,0" | split: ',' %}
-                      {%- if product.selected_or_first_available_variant -%}
-                        {%- assign variant = product.selected_or_first_available_variant.id -%}
-                        {% assign price_value = product.selected_or_first_available_variant.price | divided_by: 100.00 | round: 2 | split: "." %}
-                         {% assign temp = product.selected_or_first_available_variant.compareAtPrice | minus: price_value %}
-                        {% assign compare_at_price_value = temp | divided_by: 100.00 | round: 2 | split: "." %}
-                      {%- endif -%}
-
-                      {% assign integral = price_value[0] %}
-                      {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
-                       {% assign integral_discount = compare_at_price_value[0] %}
-                      {% assign decimal_discount = compare_at_price_value[1] | append: "00" | truncate: 2, "" %}
-           {% assign product_title = product.title %}
-                      {%- if product.product -%}
-                         {% assign product_title = product.product.title %}  
-                      {%- endif -%}
-                       {item_id:"{{ variant }}",
-                        item_name:'{{ product_title | handleize | replace: '-', '_' }}',
-                        item_brand:'alessi',
-                        item_category:'{{ category_tag | handleize | replace: '-', '_' }}',
-                        item_variant:"{{ variant }}",
-                        price:{{ integral }}.{{ decimal }},
-                        discount:{{ integral_discount }}.{{ decimal_discount }},
-                        quantity : {{ product.quantity }},
-                        google_business_vertical: 'retail',
-                        id:'{{ product.id }}',
-                       },
-                {% endfor %}
-                ];
-
-       var dataLayer = dataLayer || [];
-       var data = {
-            event: 'begin_checkout',
-        ecommerce:{
-           currency: {{ shop.currency | json }},
-            items : [
-                    loop_cart_content,
-            ],
-            {% assign price_value = checkout.total_price | divided_by: 100.00 | round: 2 | split: "." %}
-            {% assign integral = price_value[0] %}
-            {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
-           value: {{ integral }}.{{ decimal }},
+          line = index[1];
+          qty = data.items[index[0]].quantity;
         }
-          };
+        if(!line){
+          return;
+        }
+        var  product = cart.products[line];
+        if(!cart.action){
+          cart.action = qty > product.quantity ? "added" : "removed";
+        }
+        product.quantity = qty;
+        if(qty == 0){
+          cart.products.splice(line,1);
+        }else{
+          cart.products[line] = product;
+        }
+        cart.product_update = product;
+        cart.total_quantity = cart.products.length;
+        klaviyo.push(['track', 'Cart Update', cart]);
+     }˙
 
-  switch(Shopify.Checkout.step){
-    case "contact_information":
-      data.event = 'begin_checkout';
-      break;
-    case "shipping_method":
-      data.event = 'add_shipping_info';
-      break;
-    case "payment_method":
-      data.event = 'add_payment_info';
-      break
-    default:
-      data.event = false;
-  }
-  
-  if(data.event){
-      dataLayer.push(data);
-  }
+  {% if template contains 'collection'%}
+    dataLayer = dataLayer || [];
+      dataLayer.push({
+         event: 'view_item_list',
+         ecommerce:{
+         item_list_name : {{ collection.title | json }},
+         items : [
+            {%- for product in collection.products -%}
+                {%- assign category_tag = '' -%}
+                {%- assign macro_category_tag = '' -%}
+                {%- for tag in product.tags -%}
+                  {% assign sanitized_tag = tag | downcase %}
+                  {%- if sanitized_tag contains 'category:' -%}
+                    {%- assign split_tag = sanitized_tag | split: ':' -%}
+                    {%- if split_tag[0] == 'macro_category' -%}
+                      {%- assign macro_category_tag = split_tag | last | strip -%}
+                    {%- else -%}
+                      {%- assign category_tag = split_tag | last | strip -%}
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- assign variant = product.id -%}
 
-  
-      {% endif %}
-   {% endif %}
+                {% assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." %}
+                {% assign compare_at_price_value = "0,0" | split: ',' %}
+                {%- if product.selected_or_first_available_variant -%}
+                  {%- assign variant = product.selected_or_first_available_variant.id -%}
+                  {% assign price_value = product.selected_or_first_available_variant.price | divided_by: 100.00 | round: 2 | split: "." %}
+                 {% assign temp = product.selected_or_first_available_variant.compareAtPrice | minus: price_value %}
+                  {% assign compare_at_price_value = temp | divided_by: 100.00 | round: 2 | split: "." %}
+
+              {%- endif -%}
+                {% assign integral = price_value[0] %}
+                {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
+               {% assign integral_discount = compare_at_price_value[0] %}
+                {% assign decimal_discount = compare_at_price_value[1] | append: "00" | truncate: 2, "" %}
+
+                  {% assign product_title = product.title %}
+                        {%- if product.product -%}
+                           {% assign product_title = product.product.title %}
+                        {%- endif -%}
+
+                 {item_id:"{{ variant }}",
+                  item_name:'{{ product_title | handleize | replace: '-', '_' }}',
+                  item_brand:'alessi',
+                  item_category:'{{ category_tag | handleize | replace: '-', '_' }}',
+                  item_variant:"{{ variant }}",
+                  price:{{ integral }}.{{ decimal }},
+                  discount:{{ integral_discount }}.{{ decimal_discount }},
+                 },
+              {% endfor %}
+         ],
+    }
+       });
+
+  {% endif %}
+
+    {% if template contains 'index'%}
+    dataLayer = dataLayer || [];
+      dataLayer.push({
+         event: 'view_item_list',
+         ecommerce:{
+         item_list_name : {{ collections['bestsellers'].title | json }},
+         items : [
+            {%- for product in collections['bestsellers'].products -%}
+                {%- assign category_tag = '' -%}
+                {%- assign macro_category_tag = '' -%}
+                {%- for tag in product.tags -%}
+                  {% assign sanitized_tag = tag | downcase %}
+                  {%- if sanitized_tag contains 'category:' -%}
+                    {%- assign split_tag = sanitized_tag | split: ':' -%}
+                    {%- if split_tag[0] == 'macro_category' -%}
+                      {%- assign macro_category_tag = split_tag | last | strip -%}
+                    {%- else -%}
+                      {%- assign category_tag = split_tag | last | strip -%}
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- assign variant = product.id -%}
+
+                {% assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." %}
+                {% assign compare_at_price_value = "0,0" | split: ',' %}
+                {%- if product.selected_or_first_available_variant -%}
+                  {%- assign variant = product.selected_or_first_available_variant.id -%}
+                  {% assign price_value = product.selected_or_first_available_variant.price | divided_by: 100.00 | round: 2 | split: "." %}
+                 {% assign temp = product.selected_or_first_available_variant.compareAtPrice | minus: price_value %}
+                  {% assign compare_at_price_value = temp | divided_by: 100.00 | round: 2 | split: "." %}
+
+              {%- endif -%}
+                {% assign integral = price_value[0] %}
+                {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
+               {% assign integral_discount = compare_at_price_value[0] %}
+                {% assign decimal_discount = compare_at_price_value[1] | append: "00" | truncate: 2, "" %}
+
+                  {% assign product_title = product.title %}
+                        {%- if product.product -%}
+                           {% assign product_title = product.product.title %}
+                        {%- endif -%}
+
+                 {item_id:"{{ variant }}",
+                  item_name:'{{ product_title | handleize | replace: '-', '_' }}',
+                  item_brand:'alessi',
+                  item_category:'{{ category_tag | handleize | replace: '-', '_' }}',
+                  item_variant:"{{ variant }}",
+                  price:{{ integral }}.{{ decimal }},
+                  discount:{{ integral_discount }}.{{ decimal_discount }},
+                 },
+              {% endfor %}
+         ],
+    }
+       });
+
+  {% endif %}
 
 
 
+  {% if template contains 'product' %}
+         dataLayer = dataLayer || [];
+         var data = {
+              event: 'view_item',
+             ecommerce:{
+             currency: {{ shop.currency | json }},
+              items : [
+                     {%- assign category_tag = '' -%}
+                     {%- assign macro_category_tag = '' -%}
+                     {%- for tag in product.tags -%}
+                       {% assign sanitized_tag = tag | downcase %}
+                       {%- if sanitized_tag contains 'category:' -%}
+                         {%- assign split_tag = sanitized_tag | split: ':' -%}
+                         {%- if split_tag[0] == 'macro_category' -%}
+                           {%- assign macro_category_tag = split_tag | last | strip -%}
+                         {%- else -%}
+                           {%- assign category_tag = split_tag | last | strip -%}
+                         {%- endif -%}
+                       {%- endif -%}
+                     {%- endfor -%}
+                     {%- assign variant = product.id -%}
+
+                     {% assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." %}
+                     {% assign compare_at_price_value = "0,0" | split: ',' %}
+                     {%- if product.selected_or_first_available_variant -%}
+                       {%- assign variant = product.selected_or_first_available_variant.id -%}
+                       {% assign price_value = product.selected_or_first_available_variant.price | divided_by: 100.00 | round: 2 | split: "." %}
+                      {% assign temp = product.selected_or_first_available_variant.compareAtPrice | minus: price_value %}
+                       {% assign compare_at_price_value = temp | divided_by: 100.00 | round: 2 | split: "." %}
+
+                   {%- endif -%}
+                     {% assign integral = price_value[0] %}
+                     {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
+                    {% assign integral_discount = compare_at_price_value[0] %}
+                     {% assign decimal_discount = compare_at_price_value[1] | append: "00" | truncate: 2, "" %}
+                          {% assign product_title = product.title %}
+                        {%- if product.product -%}
+                           {% assign product_title = product.product.title %}
+                        {%- endif -%}
+                   {item_id:"{{ variant }}",
+                       item_name:'{{ product_title | handleize | replace: '-', '_' }}',
+                       item_brand:'alessi',
+                       item_category:'{{ category_tag | handleize | replace: '-', '_' }}',
+                       item_variant:"{{ variant }}",
+                       price:{{ integral }}.{{ decimal }},
+                       discount:{{ integral_discount }}.{{ decimal_discount }},
+                       quantity: 1,
+                      },
+              ],
+             value: {{ integral }}.{{ decimal }},
+    }
+            };
+           dataLayer.push(data);
+
+    window.addEventListener('SCE:add', (event) => {
+     var item = event.detail;
+     var data = {
+              event: 'add_to_cart',
+              ecommerce:{
+             currency: {{ shop.currency | json }},
+              items : [
+                     {%- assign category_tag = '' -%}
+                     {%- assign macro_category_tag = '' -%}
+                     {%- for tag in product.tags -%}
+                       {% assign sanitized_tag = tag | downcase %}
+                       {%- if sanitized_tag contains 'category:' -%}
+                         {%- assign split_tag = sanitized_tag | split: ':' -%}
+                         {%- if split_tag[0] == 'macro_category' -%}
+                           {%- assign macro_category_tag = split_tag | last | strip -%}
+                         {%- else -%}
+                           {%- assign category_tag = split_tag | last | strip -%}
+                         {%- endif -%}
+                       {%- endif -%}
+                     {%- endfor -%}
+
+                     {% assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." %}
+                     {% assign compare_at_price_value = "0,0" | split: ',' %}
+
+                     {% assign integral = price_value[0] %}
+                     {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
+                    {% assign integral_discount = compare_at_price_value[0] %}
+                     {% assign decimal_discount = compare_at_price_value[1] | append: "00" | truncate: 2, "" %}
+                             {% assign product_title = product.title %}
+                        {%- if product.product -%}
+                           {% assign product_title = product.product.title %}
+                        {%- endif -%}
+                   {item_id:  item.variant_id,
+                       item_name: '{{ product_title | handleize | replace: '-', '_' }}',
+                       item_brand:'alessi',
+                       item_category:'{{ category_tag | handleize | replace: '-', '_' }}',
+                       item_variant:"{{ variant }}",
+                       price:{{ integral }}.{{ decimal }},
+                       discount:{{ integral_discount }}.{{ decimal_discount }},
+                       quantity: item.quantity,
+                      },
+              ],
+             value: {{ integral }}.{{ decimal }},
+            }
+            };
+        if(add_loop_cart_content(event.detail)){
+              dataLayer = dataLayer || [];
+              dataLayer.push(data);
+        }
+      })
+  {% endif %}
+
+  {% if template == 'cart' %}
+
+
+    window.onload = function() {
+      dataLayer = dataLayer || [];
+         var data = {
+              event: 'view_cart',
+            ecommerce:{
+             currency: {{ shop.currency | json }},
+              items : [
+                      loop_cart_content,
+              ],
+              {% assign price_value = cart.total_price | divided_by: 100.00 | round: 2 | split: "." %}
+              {% assign integral = price_value[0] %}
+              {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
+             value: {{ integral }}.{{ decimal }},
+    }
+            };
+           dataLayer.push(data);
+    }
+  {% endif %}
+
+   {% if request.path contains 'checkouts' 'cart' %}
+        {% if request.path contains 'thank_you' %}
+           console.log("PURCHASE");
+        {% else %}
+          var loop_cart_content = [
+  {%- for product in checkout.line_items -%}
+                        {%- assign category_tag = '' -%}
+                        {%- assign macro_category_tag = '' -%}
+                        {%- for tag in product.tags -%}
+                          {% assign sanitized_tag = tag | downcase %}
+                          {%- if sanitized_tag contains 'category:' -%}
+                            {%- assign split_tag = sanitized_tag | split: ':' -%}
+                            {%- if split_tag[0] == 'macro_category' -%}
+                              {%- assign macro_category_tag = split_tag | last | strip -%}
+                            {%- else -%}
+                              {%- assign category_tag = split_tag | last | strip -%}
+                            {%- endif -%}
+                          {%- endif -%}
+                        {%- endfor -%}
+                        {%- assign variant = product.id -%}
+
+                        {% assign price_value = product.price | divided_by: 100.00 | round: 2 | split: "." %}
+                        {% assign compare_at_price_value = "0,0" | split: ',' %}
+                        {%- if product.selected_or_first_available_variant -%}
+                          {%- assign variant = product.selected_or_first_available_variant.id -%}
+                          {% assign price_value = product.selected_or_first_available_variant.price | divided_by: 100.00 | round: 2 | split: "." %}
+                           {% assign temp = product.selected_or_first_available_variant.compareAtPrice | minus: price_value %}
+                          {% assign compare_at_price_value = temp | divided_by: 100.00 | round: 2 | split: "." %}
+                        {%- endif -%}
+
+                        {% assign integral = price_value[0] %}
+                        {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
+                         {% assign integral_discount = compare_at_price_value[0] %}
+                        {% assign decimal_discount = compare_at_price_value[1] | append: "00" | truncate: 2, "" %}
+             {% assign product_title = product.title %}
+                        {%- if product.product -%}
+                           {% assign product_title = product.product.title %}
+                        {%- endif -%}
+                         {item_id:"{{ variant }}",
+                          item_name:'{{ product_title | handleize | replace: '-', '_' }}',
+                          item_brand:'alessi',
+                          item_category:'{{ category_tag | handleize | replace: '-', '_' }}',
+                          item_variant:"{{ variant }}",
+                          price:{{ integral }}.{{ decimal }},
+                          discount:{{ integral_discount }}.{{ decimal_discount }},
+                          quantity : {{ product.quantity }},
+                          google_business_vertical: 'retail',
+                          id:'{{ product.id }}',
+                         },
+                  {% endfor %}
+                  ];
+
+         var dataLayer = dataLayer || [];
+         var data = {
+              event: 'begin_checkout',
+          ecommerce:{
+             currency: {{ shop.currency | json }},
+              items : [
+                      loop_cart_content,
+              ],
+              {% assign price_value = checkout.total_price | divided_by: 100.00 | round: 2 | split: "." %}
+              {% assign integral = price_value[0] %}
+              {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
+             value: {{ integral }}.{{ decimal }},
+          }
+            };
+
+    switch(Shopify.Checkout.step){
+      case "contact_information":
+        data.event = 'begin_checkout';
+        break;
+      case "shipping_method":
+        data.event = 'add_shipping_info';
+        break;
+      case "payment_method":
+        data.event = 'add_payment_info';
+        break
+      default:
+        data.event = false;
+    }
+
+    if(data.event){
+        dataLayer.push(data);
+    }
+
+
+        {% endif %}
+     {% endif %}
 </script>
