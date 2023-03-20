@@ -314,6 +314,18 @@
     change_loop_cart(line, qty);
      }
 
+   window.addEventListener('SCE:update', (event) => {
+      changedCart(event.detail);
+    })
+
+    window.addEventListener('SCE:change', (event) => {
+      changedCart(event.detail);
+    })
+
+    window.addEventListener('SCE:clear', (event) => {
+      changedCart(event.detail);
+    })
+
   {% if template contains 'collection'%}
     dataLayer = dataLayer || [];
       dataLayer.push({
