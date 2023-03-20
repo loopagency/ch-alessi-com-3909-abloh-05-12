@@ -260,18 +260,6 @@ function remove_loop_cart_content_by_line(line, remove_all){
    return value;
 }
 
-  function init_remove_btn(){    
-    console.log("?????");
-    jQuery('.ajax-cart__remove').unbind('click', remove_all_btn_clicked);
-    jQuery('.ajax-cart__remove').click(remove_all_btn_clicked);
-  }
-
-  function remove_all_btn_clicked(evt){
-          var variant_id = jQuery(this).attr("data-key");
-          variant_id = variant_id.substring(0, variant_id.indexOf(":"));
-          remove_loop_cart_content(variant_id, true);
-        }
-
 (function (ns, fetch) {
 ns.fetch = function() {
   const response = fetch.apply(this, arguments);
@@ -531,27 +519,6 @@ ns.fetch = function() {
   }
           };
          dataLayer.push(data);
-(function (ns, fetch) {
-ns.fetch = function() {
-  const response = fetch.apply(this, arguments);
-  
-  response.then(res => {
-    if (`${window.location.origin}/cart.json`
-      .includes(res.url)) {
-      var quantity_list = jQuery('.quantity-selector__input');
-      for(var i =0; i< quantity_list.length;i++){
-        quantity = quantity_list.eq(i).attr('value');
-        if(loop_cart_content[i].quantity!=quantity){
-          change_loop_cart(i,quantity);
-        }
-      }
-          
-    }
-  });
-  return response
-}
-}(window, window.fetch))
-
   }
 {% endif %}
 
