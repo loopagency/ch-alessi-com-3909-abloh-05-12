@@ -260,7 +260,8 @@ function remove_loop_cart_content_by_line(line, remove_all){
    return value;
 }
 
-  function init_remove_btn(){      
+  function init_remove_btn(){    
+    console.log("?????");
     jQuery('.ajax-cart__remove').unbind('click', remove_all_btn_clicked);
     jQuery('.ajax-cart__remove').click(remove_all_btn_clicked);
   }
