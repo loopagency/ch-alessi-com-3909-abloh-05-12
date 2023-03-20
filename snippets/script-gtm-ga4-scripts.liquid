@@ -260,6 +260,28 @@
      return value;
   }
 
+
+   function findMissingProduct(data){
+      var items = data.items;
+
+      for(var i in loop_cart_content.products){
+        var product = loop_cart_content.products[i];
+        var found = true;
+        for(var j in items){
+          var item = items[j];
+          if(product.id == item.id){
+            found = false;
+            break;
+          }          
+        }
+        if(found){
+            return i;
+          }
+      }
+      return false;
+    }˙
+
+  
    function isMissProductFromCart(data){
       return data.items.length < loop_cart_content.products.length;
     }
