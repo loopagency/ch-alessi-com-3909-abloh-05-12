@@ -557,9 +557,7 @@
               event: 'view_cart',
             ecommerce:{
              currency: {{ shop.currency | json }},
-              items : [
-                      loop_cart_content,
-              ],
+              items : loop_cart_content,
               {% assign price_value = cart.total_price | divided_by: 100.00 | round: 2 | split: "." %}
               {% assign integral = price_value[0] %}
               {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
@@ -627,9 +625,7 @@
               event: 'begin_checkout',
           ecommerce:{
              currency: {{ shop.currency | json }},
-              items : [
-                      loop_cart_content,
-              ],
+              items : loop_cart_content,
               {% assign price_value = checkout.total_price | divided_by: 100.00 | round: 2 | split: "." %}
               {% assign integral = price_value[0] %}
               {% assign decimal = price_value[1] | append: "00" | truncate: 2, "" %}
